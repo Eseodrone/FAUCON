@@ -1,6 +1,7 @@
  /**
   *
   * \file main.c
+
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -41,16 +42,19 @@ int main(void){
 	//INIT DES CAPTEURS
 	//pixy_init();
 	init_pwm_tim1_tim3();
-	//VL53L1X_init();
+	VL53L1X_init();
 
 	//MPU6050_t mpu6050_datastruct;
 	//bool_e mpu6050_initialized = FALSE;
 
+	//on init le mpu, structure et boolean de .h
 	if(MPU6050_Init(&mpu_datas_res, MPU6050_VCC_GPIO, MPU6050_VCC_PIN, MPU6050_Device_0, MPU6050_Accelerometer_8G, MPU6050_Gyroscope_2000s) == MPU6050_Result_Ok)
 		mpu_init_OK = TRUE;
 
-	mpu_test_OK = mpu_init_OK;
-	mpu_test_results = mpu_datas_res;
+	//pour tests________________________
+	//mpu_test_OK = mpu_init_OK;
+	//mpu_test_results = mpu_datas_res;
+	//__________________________________
 
 	TIMER2_run_1ms();
 

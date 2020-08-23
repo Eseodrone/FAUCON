@@ -21,7 +21,7 @@
 uint32_t compt;
 
 
-MPU6050_t mpu_test_results;
+MPU6050_t mpu_test_results_test;
 
 bool_e mpu_test_OK ;
 

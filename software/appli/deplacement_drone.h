@@ -17,4 +17,8 @@ typedef enum{
 
 
 
+
+
+
+
 #endif /* APPLI_DEPLACEMENT_DRONE_H_ */

@@ -158,6 +158,12 @@ void PWM_TIMER_set_duty(TIM_HandleTypeDef tim_handle, int channel, uint16_t duty
 	__HAL_TIM_SET_COMPARE(&tim_handle, channel, (uint32_t) duty);
 }
 
+
+
+//______________________________________________________________________________________________________________
+
+
+
 /*
  * Fonctions de test des pwm/moteurs
  * PWM T=2ms : f=500Hz

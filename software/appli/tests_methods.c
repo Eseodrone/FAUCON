@@ -118,7 +118,7 @@ void test_gyro(MPU6050_t mpu_d){
 		//Alimente gyro
 		HAL_GPIO_WritePin( MPU6050_VCC_GPIO, MPU6050_VCC_PIN, SET);
 
-		MPU6050_ReadAll(&mpu_test_results);
+		MPU6050_ReadAll(&mpu_test_results_test);
 
 		//eteint gyro
 		HAL_GPIO_WritePin( MPU6050_VCC_GPIO, MPU6050_VCC_PIN, RESET);
