@@ -10,15 +10,15 @@
 #include "datas_process.h"
 
 /// INTERROGATION AVEC IT DE TIMER 2   ///
-//IT 1ms, de plus basse priorité que l'IT du systick !
+//IT 1ms, de plus basse prioritï¿½ que l'IT du systick !
 void TIMER2_user_handler_it_1ms(void)
 {
-//compteur declaré dans tests_methods.h
+//compteur declarï¿½ dans tests_methods.h
 	if(compt <= 5000){ compt += 1; }
 	else{ compt = 0; }
 
 //IDEE => Fonction d'interrogation des ToFs toutes les TIME_NO_POOLING_TOF ms, si en communication TOF_OK = 0, sinon, TOF_OK = 1
-//compteur declaré dans datas_process.h
+//compteur declarï¿½ dans datas_process.h
 	static timeslot_e timeslot;
 
 	if(compteur_no_pooling_tof <= TIME_NO_POOLING_TOF && TOF_OK ==1){
@@ -42,9 +42,9 @@ void TIMER2_user_handler_it_1ms(void)
 
 	}
 
-	//switch(timeslot)... //si l'on souhaite conditionner certaines choses aux timeslots des VL_53... pour répartir la charge de calcul dans le temps.
+	//switch(timeslot)... //si l'on souhaite conditionner certaines choses aux timeslots des VL_53... pour rï¿½partir la charge de calcul dans le temps.
 
-	//notamment pour discuter avec le MPU6050 ! (car il utilise le même bus I2C ! donc il faut uniquement lui causer en IT !)
+	//notamment pour discuter avec le MPU6050 ! (car il utilise le mï¿½me bus I2C ! donc il faut uniquement lui causer en IT !)
 }
 
 
@@ -60,7 +60,7 @@ uint8_t data_process_main(){
 			break;
 		case READ_AND_PROCESS_DATA:
 			if(TOF_OK){
-				//maj nos datastrcut réelles dans datas_sensors_pooling
+				//maj nos datastrcut rï¿½elles dans datas_sensors_pooling
 				datas_gyro_maj(&mpu_datas_res);//com avec MPU
 				datas_tof_maj();
 				process_data();
@@ -135,13 +135,13 @@ void datas_acc_maj(MPU6050_t* DataStruct){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void process_data(){
 	//gyor
-	datas_drone_position.angle_X_ROW += datas_sensors_pooling.Gyroscope_X;
+	datas_drone_position.angle_X_ROLL += datas_sensors_pooling.Gyroscope_X;
 	datas_drone_position.angle_Y_PITCH += datas_sensors_pooling.Gyroscope_Y;
 	datas_drone_position.angle_Z_YAW += datas_sensors_pooling.Gyroscope_Z;
 
-	datas_drone_position.angle_X_ROW /= 16400; //convertir en °
-	datas_drone_position.angle_Y_PITCH /= 16400; //convertir en °
-	datas_drone_position.angle_Z_YAW /= 16400; //convertir en °
+	datas_drone_position.angle_X_ROLL /= 16400; //convertir en ï¿½
+	datas_drone_position.angle_Y_PITCH /= 16400; //convertir en ï¿½
+	datas_drone_position.angle_Z_YAW /= 16400; //convertir en ï¿½
 
 	//tofs
 	//datas_drone_position.position_X = datas_sensors_pooling.CAT(dist_, TOF_ID_AXE_X);

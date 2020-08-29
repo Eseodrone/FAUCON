@@ -35,7 +35,7 @@ typedef enum state_e{
 
 }state_e;
 
-//Structure de mpu modifiée automatiquement par fonctions
+//Structure de mpu modifiï¿½e automatiquement par fonctions
 MPU6050_t mpu_datas_res;
 
 bool_e mpu_init_OK ;
@@ -67,7 +67,7 @@ typedef struct{
 	uint16_t position_Y;
 	uint16_t position_Z;
 
-	uint16_t angle_X_ROW;
+	uint16_t angle_X_ROLL;
 	uint16_t angle_Y_PITCH;
 	uint16_t angle_Z_YAW;
 }datas_drone_position_t;
