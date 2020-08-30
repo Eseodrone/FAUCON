@@ -8,7 +8,7 @@
 
 
 #include "tests_methods.h"
-
+#include "motors_control.h"
 
 
 ///   BLUETOOTH   ///
@@ -23,7 +23,7 @@ void test_ble(){
 		if(compt < 2000 && compt >= 0){
 			HAL_GPIO_WritePin(LEDS_GPIO, LED_RED_PIN, SET);
 			HAL_GPIO_WritePin(LEDS_GPIO,LED_BLUE_PIN, RESET);
-			envoiCaractere('c');
+			BLUETOOTH_envoi_caractere('c');
 		}
 		else if(compt < 4000 && compt > 2000){
 			HAL_GPIO_WritePin(LEDS_GPIO, LED_RED_PIN, RESET);
@@ -111,6 +111,51 @@ void test_tof_1_et_2(){
 		}
 }
 
+void TEST_pwms(){
+/*
+	PWM_TIMER_set_duty(TimHandle_1, TIM_CHANNEL_1, 25);
+	PWM_TIMER_set_duty(TimHandle_1, TIM_CHANNEL_2, 50);
+	PWM_TIMER_set_duty(TimHandle_1, TIM_CHANNEL_3, 75);
+	PWM_TIMER_set_duty(TimHandle_1, TIM_CHANNEL_4, 100);
+
+	PWM_TIMER_set_duty(TimHandle_3, TIM_CHANNEL_1, 25);
+	PWM_TIMER_set_duty(TimHandle_3, TIM_CHANNEL_2, 50);
+	PWM_TIMER_set_duty(TimHandle_3, TIM_CHANNEL_3, 75);
+	PWM_TIMER_set_duty(TimHandle_3, TIM_CHANNEL_4, 100);
+*/
+
+	//PWM_TIMER_set_duty(TimHandle_3, TIM_CHANNEL_1, 75);
+
+}
+
+
+void test_moteur_PC6(uint16_t TIME){
+	//PWM_TIMER_set_duty(TimHandle_3, TIM_CHANNEL_1, TIME);
+}
+
+
+
+
+void test_moteur_PC6_2(){
+
+	if(compt < 100 && compt >= 0){
+		test_moteur_PC6(40);
+		HAL_GPIO_WritePin(LEDS_GPIO, LED_RED_PIN, SET);
+		HAL_GPIO_WritePin(LEDS_GPIO,LED_BLUE_PIN, RESET);
+		HAL_GPIO_WritePin(LEDS_GPIO,LED_GREEN_PIN, RESET);
+
+	}
+	else if(compt < 200 && compt > 100){
+		test_moteur_PC6(50);
+		HAL_GPIO_WritePin(LEDS_GPIO, LED_BLUE_PIN, SET);
+		HAL_GPIO_WritePin(LEDS_GPIO,LED_RED_PIN, RESET);
+	}
+	else if(compt < 5000 && compt > 200){
+		test_moteur_PC6(59);
+		HAL_GPIO_WritePin(LEDS_GPIO, LED_RED_PIN, SET);
+		HAL_GPIO_WritePin(LEDS_GPIO,LED_BLUE_PIN, RESET);
+	}
+}
 
 ///   GYRO   ///
 void test_gyro(MPU6050_t mpu_d){

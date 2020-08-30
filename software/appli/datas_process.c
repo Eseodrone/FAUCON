@@ -134,7 +134,7 @@ void datas_acc_maj(MPU6050_t* DataStruct){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void process_data(){
-	//gyor
+	//gyro
 	datas_drone_position.angle_X_ROLL += datas_sensors_pooling.Gyroscope_X;
 	datas_drone_position.angle_Y_PITCH += datas_sensors_pooling.Gyroscope_Y;
 	datas_drone_position.angle_Z_YAW += datas_sensors_pooling.Gyroscope_Z;

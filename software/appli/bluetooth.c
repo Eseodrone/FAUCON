@@ -17,45 +17,47 @@
 		SYS_set_std_usart(UART2_ID, UART2_ID, UART2_ID);
 */
 
+void BLUETOOTH_init(void){
+	UART_init(UART2_ID, 38400);
+}
+//fonction
+//envoie donnée PC sous forme d'une trame de 4 informations
+//Rajouter la fonction UART_puts(..,..,..) dans la librairie de l'UART + definir des variables
 
-		//fonction
-		//envoie donnée PC sous forme d'une trame de 4 informations
-		//Rajouter la fonction UART_puts(..,..,..) dans la librairie de l'UART + definir des variables
+void BLUETOOTH_envoi_trame(uint8_t info1, uint8_t info2, uint8_t info3, uint8_t info4){
+	static uint8_t trame[4];
+	trame[0] = info1;
+	trame[1] = info2;
+	trame[2] = info3;
+	trame[3] = info4;
+	UART_puts(UART2_ID, trame, 4);
+}
 
-		void envoiTrame(uint8_t info1, uint8_t info2, uint8_t info3, uint8_t info4){
-			static uint8_t trame[4];
-			trame[0] = info1;
-			trame[1] = info2;
-			trame[2] = info3;
-			trame[3] = info4;
-			UART_puts(UART2_ID, trame, 4);
-		}
+//envoie un caractère
+void BLUETOOTH_envoi_caractere(uint8_t c){
+	c=UART_get_next_byte(UART2_ID);
+	UART_putc(UART2_ID,c);
+}
 
-		//envoie un caractère
-		void envoiCaractere(uint8_t c){
-			c=UART_get_next_byte(UART2_ID);
-			UART_putc(UART2_ID,c);
-		}
-
-		//reception d'un caractère
-		void receptionCaractere(){
-			if(UART_data_ready(UART2_ID)){
-				uint8_t c;
-				c = UART_get_next_byte(UART2_ID);
-				//printf("%c",c);
-			}
-		}
-		//reception d'une Trame de 4 informations
-		void receptionTrame(){
-			if(UART_data_ready(UART2_ID)){
-				uint8_t trame[4];
-				UART_gets(UART1_ID, trame, 7);
-				uint8_t info1 = *trame;
-				uint8_t info2 =*(trame+1);
-				uint8_t info3 = *(trame+2);
-				uint8_t info4 =*(trame+3);
-				printf("%d %d %d %d",info1,info2,info3,info4);
-			}
-		}
+//reception d'un caractère
+void BLUETOOTH_reception_caractere(void){
+	if(UART_data_ready(UART2_ID)){
+		uint8_t c;
+		c = UART_get_next_byte(UART2_ID);
+		//printf("%c",c);
+	}
+}
+//reception d'une Trame de 4 informations
+void BLUETOOTH_reception_trame(void){
+	if(UART_data_ready(UART2_ID)){
+		uint8_t trame[4];
+		UART_gets(UART1_ID, trame, 7);
+		uint8_t info1 = *trame;
+		uint8_t info2 =*(trame+1);
+		uint8_t info3 = *(trame+2);
+		uint8_t info4 =*(trame+3);
+		printf("%d %d %d %d",info1,info2,info3,info4);
+	}
+}
 
 

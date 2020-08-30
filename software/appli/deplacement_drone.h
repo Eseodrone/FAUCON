@@ -9,7 +9,6 @@
 #define APPLI_DEPLACEMENT_DRONE_H_
 
 #include "datas_process.h"
-#include "init_stm32f4.h"
 #define MINOR_ANGLE		5
 #define INF 55
 #define SUP 65

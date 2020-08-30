@@ -12,7 +12,6 @@
 
 #include "main.h"
 #include "bluetooth.h"
-#include "init_stm32f4.h"
 #include <vl53l1x/vl53l1x.h>
 #include "MPU6050/stm32f4_mpu6050.h"
 
@@ -38,6 +37,8 @@ void test_ble();
 void puiss_mot_test_PC6();
 void test_tof_1_et_2();
 void test_gyro(MPU6050_t mpu_d);
+void test_moteur_PC6(uint16_t TIME);
+void test_moteur_PC6_2();
 
 
 
