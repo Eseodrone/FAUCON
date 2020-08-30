@@ -18,7 +18,7 @@
 #include "stm32f4_spi.h"
 #include "stm32f4_gpio.h"
 #include "stm32f4_timer.h"
-#include "tests_methods.h"
+#include "save_old/tests_methods.h"
 
 
 #define PWM_MOT_11 GPIOC, GPIO_PIN_6

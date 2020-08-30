@@ -17,9 +17,9 @@
 #include "MPU6050/stm32f4_mpu6050.h"
 #include "systick.h"
 #include "init_stm32f4.h"
-#include "pixy.h"
+#include "save_old/pixy.h"
 #include "bluetooth.h"
-#include "tests_methods.h"
+#include "save_old/tests_methods.h"
 #include "datas_process.h"
 
 
