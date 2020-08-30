@@ -25,6 +25,14 @@
 #define	PWM_PRESC_TIM_3	((TIM2_3_4_5_6_7_12_13_14_CLK / PWM_FREQ_TIM) / PWM_PERIOD_TIM)	//Prédiviseur : nombre d'évènements qui provoquent +1 sur le décompte du timer
 #define	PWM_PRESC_TIM_1	((TIM1_8_9_10_11_CLK / PWM_FREQ_TIM) / PWM_PERIOD_TIM)	//Prédiviseur : nombre d'évènements qui provoquent +1 sur le décompte du timer
 
+static void M1_1(uint16_t TIME);
+static void M1_2(uint16_t TIME);
+static void M1_3(uint16_t TIME);
+static void M1_4(uint16_t TIME);
+static void M2_1(uint16_t TIME);
+static void M2_2(uint16_t TIME);
+static void M2_3(uint16_t TIME);
+static void M2_4(uint16_t TIME);
 /*
  * Explications :
  * - Le timer compte des évènements...
@@ -162,7 +170,40 @@ void PWM_TIMER_set_duty(TIM_HandleTypeDef tim_handle, int channel, uint16_t duty
 
 //______________________________________________________________________________________________________________
 
+/*Fonctions pour controler les moteurs
+ */
 
+void M1_1(uint16_t TIME){ // moteur 1_1
+	PWM_TIMER_set_duty(TimHandle_1, TIM_CHANNEL_1, TIME);
+}
+
+void M1_2(uint16_t TIME){
+	PWM_TIMER_set_duty(TimHandle_1, TIM_CHANNEL_2, TIME);
+}
+
+void M1_3(uint16_t TIME){
+	PWM_TIMER_set_duty(TimHandle_1, TIM_CHANNEL_3, TIME);
+}
+
+void M1_4(uint16_t TIME){
+	PWM_TIMER_set_duty(TimHandle_1, TIM_CHANNEL_4, TIME);
+}
+
+void M2_1(uint16_t TIME){
+	PWM_TIMER_set_duty(TimHandle_3, TIM_CHANNEL_1, TIME);
+}
+
+void M2_2(uint16_t TIME){
+	PWM_TIMER_set_duty(TimHandle_3, TIM_CHANNEL_2, TIME);
+}
+
+void M2_3(uint16_t TIME){
+	PWM_TIMER_set_duty(TimHandle_3, TIM_CHANNEL_3, TIME);
+}
+
+void M2_4(uint16_t TIME){
+	PWM_TIMER_set_duty(TimHandle_3, TIM_CHANNEL_4, TIME);
+}
 
 /*
  * Fonctions de test des pwm/moteurs
@@ -193,6 +234,9 @@ void TEST_pwms(){
 void test_moteur_PC6(uint16_t TIME){
 	PWM_TIMER_set_duty(TimHandle_3, TIM_CHANNEL_1, TIME);
 }
+
+
+
 
 void test_moteur_PC6_2(){
 

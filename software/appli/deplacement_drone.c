@@ -78,7 +78,7 @@ void DD_check_angles(void)
 	pitch = datas_drone_position.angle_Y_PITCH;
 	yaw = datas_drone_position.angle_Z_YAW;
 	//ROLL
-	if (!(roll>=-MINOR_ANGLE && roll<=MINOR_ANGLE))
+	if (roll>=MINOR_ANGLE && roll<=360-MINOR_ANGLE)
 	{
 		ROLL_FIXATION = NEED_FIXATION;
 	}
@@ -88,7 +88,7 @@ void DD_check_angles(void)
 		ROLL_FIXATION = FIXATION_OK;
 	}
 	//PITCH
-	if (!(pitch>=-MINOR_ANGLE && pitch<=MINOR_ANGLE))
+	if (pitch>=MINOR_ANGLE && pitch<=360-MINOR_ANGLE)
 	{
 		PITCH_FIXATION = NEED_FIXATION;
 	}
@@ -98,7 +98,7 @@ void DD_check_angles(void)
 		PITCH_FIXATION = FIXATION_OK;
 	}
 	//YAW
-	if (!(yaw>=-MINOR_ANGLE && yaw<=MINOR_ANGLE))
+	if (yaw>=MINOR_ANGLE && yaw<=360-MINOR_ANGLE)
 	{
 		YAW_FIXATION = NEED_FIXATION;
 	}
@@ -116,45 +116,113 @@ void DD_mode_management(void)
 	{
 	case FIXATION_INIT :
 		DD_init();
+		mode=FIXING;
 		break;
 	case FIXING :
 		DD_check_angles();
 		if(PITCH_FIXATION == NEED_FIXATION)
 		{
 			PITCH_FIXATION = FIXATION_IN_PROGRESS;
-			if(pitch > MINOR_ANGLE)
+			if(pitch > MINOR_ANGLE && pitch < 180)
 			{
 				//Combinaison moteurs
+				//Voir google sheet drive
+				//M1_1 : Inf
+				//M1_2 : Inf
+				//M1_3 : Sup
+				//M1_4 : Sup
+				//M2_1 : Sup
+				//M2_2 : Sup
+				//M2_3 : Inf
+				//M2_4 : Inf
+				//Rotation en avant
+
+				M1_1(INF); //55
+				M1_2(INF);
+				M1_3(SUP);
+				M1_4(SUP);
+				M2_1(SUP);
+				M2_2(SUP);
+				M2_3(INF);
+				M2_4(INF);
+
 			}
-			else if(pitch < -MINOR_ANGLE)
+			else if(pitch < 360-MINOR_ANGLE)
 			{
 				//Combinaison moteurs
+				//Rotation en arrière
+
+				M1_1(SUP);
+				M1_2(SUP);
+				M1_3(INF);
+				M1_4(INF);
+				M2_1(INF);
+				M2_2(INF);
+				M2_3(SUP);
+				M2_4(SUP);
 			}
 			break;
 		}
 		if(ROLL_FIXATION == NEED_FIXATION && PITCH_FIXATION == FIXATION_OK)
 		{
 			ROLL_FIXATION = FIXATION_IN_PROGRESS;
-			if(roll > MINOR_ANGLE)
+			if(roll > MINOR_ANGLE && pitch < 180)
 			{
 				//Combinaison moteurs
+				//Rotation à gauche
+				M1_1(SUP);
+				M1_2(INF);
+				M1_3(SUP);
+				M1_4(INF);
+				M2_1(INF);
+				M2_2(SUP);
+				M2_3(INF);
+				M2_4(SUP);
 			}
-			else if(roll < -MINOR_ANGLE)
+			else if(roll < 360-MINOR_ANGLE)
 			{
 				//Combinaison moteurs
+				//Rotation à droite
+				M1_1(INF);
+				M1_2(SUP);
+				M1_3(INF);
+				M1_4(SUP);
+				M2_1(SUP);
+				M2_2(INF);
+				M2_3(SUP);
+				M2_4(INF);
 			}
 			break;
 		}
 		if(YAW_FIXATION == NEED_FIXATION && PITCH_FIXATION == FIXATION_OK && ROLL_FIXATION == FIXATION_OK)
 		{
 			YAW_FIXATION = FIXATION_IN_PROGRESS;
-			if(yaw > MINOR_ANGLE)
+			if(yaw > MINOR_ANGLE && pitch < 180)
 			{
 				//Combinaison moteurs
+				//Rotation à gauche
+				M1_1(INF);
+				M1_2(SUP);
+				M1_3(SUP);
+				M1_4(INF);
+				M2_1(INF);
+				M2_2(SUP);
+				M2_3(SUP);
+				M2_4(INF);
+
 			}
-			else if(yaw < -MINOR_ANGLE)
+			else if(yaw < 360-MINOR_ANGLE)
 			{
 				//Combinaison moteurs
+				//Rotation à droite
+				M1_1(SUP);
+				M1_2(INF);
+				M1_3(INF);
+				M1_4(SUP);
+				M2_1(SUP);
+				M2_2(INF);
+				M2_3(INF);
+				M2_4(SUP);
 			}
 			break;
 		}
@@ -175,6 +243,7 @@ void trans_simple_Z(trans_z_e direction, uint8_t time){
 	}
 	else if (direction == TRANS_Z_HAUT) {
 		//moteurs bas pr aller vers haut
+
 	}
 
 }
