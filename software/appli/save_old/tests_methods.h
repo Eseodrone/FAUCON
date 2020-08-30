@@ -39,6 +39,7 @@ void test_tof_1_et_2();
 void test_gyro(MPU6050_t mpu_d);
 void test_moteur_PC6(uint16_t TIME);
 void test_moteur_PC6_2();
+void test_tof_1();
 
 
 

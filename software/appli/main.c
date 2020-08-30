@@ -36,15 +36,18 @@ int main(void){
 
 	Systick_init();
 
+
 	//INIT DES CAPTEURS (Il faudra en faire une générale ou gérer ça par classe/module)
 	//MC_init_pwm_tim1_tim3();
-	//VL53L1X_init();
+	VL53L1X_init();
 	//MPU_init();
 
-	//TIMER2_run_1ms();
+	TIMER2_run_1ms();
 
 	while (1)
 	{
+		test_tof_1();
+
 
 	}
 }

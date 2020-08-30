@@ -20,7 +20,10 @@ void TIMER2_user_handler_it_1ms(void)
 //IDEE => Fonction d'interrogation des ToFs toutes les TIME_NO_POOLING_TOF ms, si en communication TOF_OK = 0, sinon, TOF_OK = 1
 //compteur declar� dans datas_process.h
 	static timeslot_e timeslot;
+	timeslot = VL53L1X_process_it();
 
+
+	/*
 	if(compteur_no_pooling_tof <= TIME_NO_POOLING_TOF && TOF_OK ==1){
 		compteur_no_pooling_tof++;
 		TOF_OK = 1;
@@ -41,6 +44,10 @@ void TIMER2_user_handler_it_1ms(void)
 		}
 
 	}
+
+
+*/
+
 
 	//switch(timeslot)... //si l'on souhaite conditionner certaines choses aux timeslots des VL_53... pour r�partir la charge de calcul dans le temps.
 

@@ -111,6 +111,27 @@ void test_tof_1_et_2(){
 		}
 }
 
+void test_tof_1(){
+
+		uint16_t dist0 ;
+
+		dist0 = VL53L1X_get_distance(0);
+
+		if(dist0<100 ){
+			HAL_GPIO_WritePin(LEDS_GPIO,LED_RED_PIN, SET);
+			HAL_GPIO_WritePin(LEDS_GPIO,LED_BLUE_PIN, RESET);
+
+		}
+		else{
+			HAL_GPIO_WritePin(LEDS_GPIO,LED_RED_PIN, RESET);
+			HAL_GPIO_WritePin(LEDS_GPIO,LED_BLUE_PIN, SET);
+		}
+
+}
+
+
+
+
 void TEST_pwms(){
 /*
 	PWM_TIMER_set_duty(TimHandle_1, TIM_CHANNEL_1, 25);
