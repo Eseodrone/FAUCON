@@ -23,33 +23,31 @@
 int main(void){
 	HAL_Init();
 	SYS_init();			//initialisation du systeme (horloge...)
-
 	GPIO_Configure();
 	//UART DU BLUETOOTH
 	BLUETOOTH_init();
 	//UNI
-	//SYS_set_std_usart(UART2_ID, UART2_ID, UART2_ID);
-
-
+	SYS_set_std_usart(UART2_ID, UART2_ID, UART2_ID);
+	//LEDs F4
 	BSP_GPIO_PinCfg(LEDS_GPIO, LED_GREEN_PIN | LED_ORANGE_PIN | LED_RED_PIN | LED_BLUE_PIN, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
 	BSP_GPIO_PinCfg(GPIOA, GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
 
-	Systick_init();
+	//Systick_init();
 
 
 	//INIT DES CAPTEURS (Il faudra en faire une générale ou gérer ça par classe/module)
 	//MC_init_pwm_tim1_tim3();
-	VL53L1X_init();
+	//VL53L1X_init();
 	//MPU_init();
 
-	TIMER2_run_1ms();
-
-	while (1)
-	{
-		test_tof_1();
-
-
-	}
+	//TIMER2_run_1ms();
+	//MPU_average_demo();
+	//MPU_test();
+	MPU_int_demo();
+//	while (1)
+//	{
+//
+//	}
 }
 
 

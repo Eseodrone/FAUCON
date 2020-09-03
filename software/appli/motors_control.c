@@ -1,15 +1,5 @@
 #include "motors_control.h"
-//PROTOTYPES DE FONCTIONS PRIVEES
-static void MC_M1_1(uint16_t TIME);
-static void MC_M1_2(uint16_t TIME);
-static void MC_M1_3(uint16_t TIME);
-static void MC_M1_4(uint16_t TIME);
-static void MC_M2_1(uint16_t TIME);
-static void MC_M2_2(uint16_t TIME);
-static void MC_M2_3(uint16_t TIME);
-static void MC_M2_4(uint16_t TIME);
 
-//==========================
 static TIM_HandleTypeDef TimHandle_1;	//Structure contenant les infos concernant l'état du timer 1
 static TIM_HandleTypeDef TimHandle_3;	//Structure contenant les infos concernant l'état du timer 3
 
@@ -119,7 +109,6 @@ void MC_pwm_timer_set_duty(TIM_HandleTypeDef tim_handle, int channel, uint16_t d
 }
 
 
-
 //______________________________________________________________________________________________________________
 
 /*Fonctions pour controler les moteurs
@@ -155,4 +144,16 @@ void MC_M2_3(uint16_t TIME){
 
 void MC_M2_4(uint16_t TIME){
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_4, TIME);
+}
+
+void MC_put_all_motors_off(void)
+{
+	MC_M1_1(0);
+	MC_M1_2(0);
+	MC_M1_3(0);
+	MC_M1_4(0);
+	MC_M2_1(0);
+	MC_M2_2(0);
+	MC_M2_3(0);
+	MC_M2_4(0);
 }

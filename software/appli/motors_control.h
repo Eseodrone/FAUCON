@@ -40,6 +40,15 @@
 //PROTOTYPES DE FONCTION
 void MC_init_pwm_tim1_tim3(void);
 void MC_pwm_timer_set_duty(TIM_HandleTypeDef tim_handle, int channel, uint16_t duty);
+void MC_M1_1(uint16_t TIME);
+void MC_M1_2(uint16_t TIME);
+void MC_M1_3(uint16_t TIME);
+void MC_M1_4(uint16_t TIME);
+void MC_M2_1(uint16_t TIME);
+void MC_M2_2(uint16_t TIME);
+void MC_M2_3(uint16_t TIME);
+void MC_M2_4(uint16_t TIME);
+void MC_put_all_motors_off(void);
 
 #endif /*MOTORS_CONTROL_H*/
 
