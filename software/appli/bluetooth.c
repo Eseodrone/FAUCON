@@ -21,7 +21,7 @@ void BLUETOOTH_init(void){
 	UART_init(UART2_ID, 38400);
 }
 //fonction
-//envoie donnée PC sous forme d'une trame de 4 informations
+//envoie donnï¿½e PC sous forme d'une trame de 4 informations
 //Rajouter la fonction UART_puts(..,..,..) dans la librairie de l'UART + definir des variables
 
 void BLUETOOTH_envoi_trame(uint8_t info1, uint8_t info2, uint8_t info3, uint8_t info4){
@@ -33,13 +33,13 @@ void BLUETOOTH_envoi_trame(uint8_t info1, uint8_t info2, uint8_t info3, uint8_t 
 	UART_puts(UART2_ID, trame, 4);
 }
 
-//envoie un caractère
+//envoie un caractï¿½re
 void BLUETOOTH_envoi_caractere(uint8_t c){
 	c=UART_get_next_byte(UART2_ID);
 	UART_putc(UART2_ID,c);
 }
 
-//reception d'un caractère
+//reception d'un caractï¿½re
 void BLUETOOTH_reception_caractere(void){
 	if(UART_data_ready(UART2_ID)){
 		uint8_t c;

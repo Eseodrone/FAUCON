@@ -12,7 +12,7 @@
 #include "stm32f4_gpio.h"
 #include "stm32f4_timer.h"
 
-///*** PORTS INIT ***///
+/***********************************************************PORTS INIT***********************************************************/
 #define PWM_MOT_11 GPIOC, GPIO_PIN_6
 #define PWM_MOT_12 GPIOC, GPIO_PIN_7
 #define PWM_MOT_13 GPIOC, GPIO_PIN_8
@@ -23,46 +23,51 @@
 #define PWM_MOT_23 GPIOE, GPIO_PIN_13
 #define PWM_MOT_24 GPIOE, GPIO_PIN_14
 
-//PWM
+/***********************************************************PWM***************************************************************/
 //MACROS DE Mr POIRAUD
-#define TIM1_8_9_10_11_CLK    			168000000	//Fréquence des évènements d'horloge pour les timers 1, 8, 9, 10, 11
-#define TIM2_3_4_5_6_7_12_13_14_CLK    	84000000	//Fréquence des évènements d'horloge pour les timers 2, 3, 4, 5, 6, 7, 12, 13 et 14
+#define TIM1_8_9_10_11_CLK    			168000000	//Frï¿½quence des ï¿½vï¿½nements d'horloge pour les timers 1, 8, 9, 10, 11
+#define TIM2_3_4_5_6_7_12_13_14_CLK    	84000000	//Frï¿½quence des ï¿½vï¿½nements d'horloge pour les timers 2, 3, 4, 5, 6, 7, 12, 13 et 14
 
 //L'horloge du timer 3 est a 84MHz
 //Si l'on veut une PWM a 20kHz (inaudible) et 100 pas de rapports cycliques possibles, il faut prediviser par 42 :
 //168MHz/84 = 2MHz -> 500ns par pas... * 100 pas = 20kHz de frequence PWM
-#define PWM_FREQ_TIM	500 	//Fréquence du signal PWM, en Hz
-#define	PWM_PERIOD_TIM	100		//Nombre jusqu'auquel le timer va compter durant une période PWM
+#define PWM_FREQ_TIM	500 	//Frï¿½quence du signal PWM, en Hz
+#define	PWM_PERIOD_TIM	100		//Nombre jusqu'auquel le timer va compter durant une pï¿½riode PWM
 
-#define	PWM_PRESC_TIM_3	((TIM2_3_4_5_6_7_12_13_14_CLK / PWM_FREQ_TIM) / PWM_PERIOD_TIM)	//Prédiviseur : nombre d'évènements qui provoquent +1 sur le décompte du timer
-#define	PWM_PRESC_TIM_1	((TIM1_8_9_10_11_CLK / PWM_FREQ_TIM) / PWM_PERIOD_TIM)	//Prédiviseur : nombre d'évènements qui provoquent +1 sur le décompte du timer
+#define	PWM_PRESC_TIM_3	((TIM2_3_4_5_6_7_12_13_14_CLK / PWM_FREQ_TIM) / PWM_PERIOD_TIM)	//Prï¿½diviseur : nombre d'ï¿½vï¿½nements qui provoquent +1 sur le dï¿½compte du timer
+#define	PWM_PRESC_TIM_1	((TIM1_8_9_10_11_CLK / PWM_FREQ_TIM) / PWM_PERIOD_TIM)	//Prï¿½diviseur : nombre d'ï¿½vï¿½nements qui provoquent +1 sur le dï¿½compte du timer
 
-//PROTOTYPES DE FONCTION
+/********************************************************MACROS********************************************************/
+#define PWM_MIN_MOTOR_OFF	50 //A redÃ©finir
+#define PWM_MAX_MOTOR_ON	80
+
+/********************************************************PROTOTYPES DE FONCTION********************************************************/
 void MC_init_pwm_tim1_tim3(void);
 void MC_pwm_timer_set_duty(TIM_HandleTypeDef tim_handle, int channel, uint16_t duty);
-void MC_M1_1(uint16_t TIME);
-void MC_M1_2(uint16_t TIME);
-void MC_M1_3(uint16_t TIME);
-void MC_M1_4(uint16_t TIME);
-void MC_M2_1(uint16_t TIME);
-void MC_M2_2(uint16_t TIME);
-void MC_M2_3(uint16_t TIME);
-void MC_M2_4(uint16_t TIME);
+void MC_esc_calibration(void);
+void MC_f1_m1_PC6(uint16_t TIME);
+void MC_f1_m2_PC7(uint16_t TIME);
+void MC_f1_m3_PC8(uint16_t TIME);
+void MC_f1_m4_PC9(uint16_t TIME);
+void MC_f2_m1_PE9(uint16_t TIME);
+void MC_f2_m2_PE11(uint16_t TIME);
+void MC_f2_m3_PE13(uint16_t TIME);
+void MC_f2_m4_PE14(uint16_t TIME);
 void MC_put_all_motors_off(void);
 
 #endif /*MOTORS_CONTROL_H*/
 
 /*
  * Explications :
- * - Le timer compte des évènements...
- * - Nous disposons d'une horloge à 84MHz...
- * - Tout les X évènements (les X périodes d'horloge), le timer compte +1.... Ce X est le prédiviseur. (PWM_PRESC)
- * - Le timer va compter jusqu'à "PWM_PERIOD"... Puis revenir à 0. Et ainsi de suite.
- * - La durée qu'il met à compter jusqu'à cette PWM_PERIOD nous donne la période du signal PWM... L'inverse est la fréquence !
- * 				Période du signal PWM 	= (PWM_PERIOD	*	PWM_PRESC)/84MHz
- * 	Exemple :				50µs	 	= (100			*	42)/84MHz
- * 	 			Fréquence du signal PWM = 84MHz/(PWM_PERIOD	*	PWM_PRESC)
- * 	Exemple :				50µs	 	= 84MHz/(100		*	42)
+ * - Le timer compte des ï¿½vï¿½nements...
+ * - Nous disposons d'une horloge ï¿½ 84MHz...
+ * - Tout les X ï¿½vï¿½nements (les X pï¿½riodes d'horloge), le timer compte +1.... Ce X est le prï¿½diviseur. (PWM_PRESC)
+ * - Le timer va compter jusqu'ï¿½ "PWM_PERIOD"... Puis revenir ï¿½ 0. Et ainsi de suite.
+ * - La durï¿½e qu'il met ï¿½ compter jusqu'ï¿½ cette PWM_PERIOD nous donne la pï¿½riode du signal PWM... L'inverse est la frï¿½quence !
+ * 				Pï¿½riode du signal PWM 	= (PWM_PERIOD	*	PWM_PRESC)/84MHz
+ * 	Exemple :				50ï¿½s	 	= (100			*	42)/84MHz
+ * 	 			Frï¿½quence du signal PWM = 84MHz/(PWM_PERIOD	*	PWM_PRESC)
+ * 	Exemple :				50ï¿½s	 	= 84MHz/(100		*	42)
  */
 
 //==========================
@@ -72,8 +77,31 @@ void MC_put_all_motors_off(void);
  PWM_MOT_13 GPIOC, GPIO_PIN_8 => TIM3_CH3
  PWM_MOT_14 GPIOC, GPIO_PIN_9 => TIM3_CH4
 
- PWM_MOT_21 GPIOE, GPIO_PIN_9 => TIM1_CH1
+ PWM_MOT_21 GPIOE, GPIO_PIN_9 =>  TIM1_CH1
  PWM_MOT_22 GPIOE, GPIO_PIN_11 => TIM1_CH2
  PWM_MOT_23 GPIOE, GPIO_PIN_13 => TIM1_CH3
  PWM_MOT_24 GPIOE, GPIO_PIN_14 => TIM1_CH4
 */
+
+//CALIBRATION ESC FONCTIONNELLE DU 9/09/2020
+/*
+  	MC_init_pwm_tim1_tim3();
+	//3 bips = Alim ok
+	HAL_Delay(500);
+	test_moteur_PC6(PWM_MAX_MOTOR_ON);
+	//1 bip = PWM MAX ok
+	HAL_Delay(1000);
+	test_moteur_PC6(PWM_MIN_MOTOR_OFF);
+	//1 bip = PWM MIN ok
+	//On reste entre les PWM MIN et MAX
+	HAL_Delay(1000);
+	test_moteur_PC6(70);
+	HAL_Delay(2000);
+	test_moteur_PC6(50);
+	HAL_Delay(2000);
+	test_moteur_PC6(55);
+	HAL_Delay(2000);
+	test_moteur_PC6(60);
+	HAL_Delay(2000);
+	test_moteur_PC6(70);
+	*/

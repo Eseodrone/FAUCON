@@ -6,13 +6,10 @@
 #include "stm32f4xx_hal.h"
 #include <math.h>
 
-//static float dt;
-//unsigned long t_now, t_last;
-
 void MPU_init(void){
 	//on init le mpu, structure et boolean de .h
 	if(MPU6050_Init(&mpu_datas_res, MPU6050_VCC_GPIO, MPU6050_VCC_PIN, MPU6050_Device_0, MPU6050_Accelerometer_8G, MPU6050_Gyroscope_2000s) == MPU6050_Result_Ok)
-		mpu_init_OK = TRUE;
+		mpu_init_OK = TRUE; //A revoir du coup
 }
 
 void MPU_test(void)
@@ -48,18 +45,6 @@ void MPU_test(void)
 
 }
 
-void average_test(void)
-{
-	float x = 0.0;
-	int8_t i = 10;
-	while(i)
-	{
-		x += 2;
-		i--;
-	}
-	printf("x = %d",(int)x);
-}
-
 void MPU_average_demo(void)
 {
 	MPU6050_t MPU6050_Data;
@@ -79,7 +64,7 @@ void MPU_average_demo(void)
 		/* Infinite loop */
 			while (1);
 	}
-	//Acquisition de 100 valeurs afin d'att�nuer le bruit du capteur
+	//Acquisition de 100 valeurs afin d'att�nuer le bruit du capteur (ça marche pas en vrai pb de cast)
 //	nb_values = 100;
 //	while(nb_values)
 //	{
@@ -89,16 +74,16 @@ void MPU_average_demo(void)
 //		nb_values --;
 //	}
 //	printf("X : %d\n",(int)average_x);
-	average_x = 705;
-	average_y = -5;
-	average_z = 12;
+	average_x = 725; //Les moyennes sont à adapter au tatonnement selon le mpu que nous utiliserons, elles sont spécifiques
+	average_y = -5;	 //à chaque capteur et rendent les mesures plus précises.
+	average_z = 12;	 //
 	printf("Averages : %d\t %d\t %d\t\n",(int)average_x,(int)average_y,(int)average_z);
 	HAL_Delay(2000);
 	while (1) {
 		/* Read all data from sensor */
 		MPU6050_ReadAll(&MPU6050_Data);
 		angle_x += (MPU6050_Data.Gyroscope_X-average_x)*INT_TIME;
-		angle_y += (MPU6050_Data.Gyroscope_Y+average_y)*INT_TIME; //Average n�gatif
+		angle_y += (MPU6050_Data.Gyroscope_Y+average_y)*INT_TIME; //Average n�gatif
 		angle_z += (MPU6050_Data.Gyroscope_Z-average_z)*INT_TIME;
 		printf("X : %d\t\t",((int)angle_x*360)/MPU_RANGE_X);
 		printf("Y : %d\t\t",((int)angle_y*360)/MPU_RANGE_Y);
@@ -106,6 +91,6 @@ void MPU_average_demo(void)
 //		printf("GZ : %d\n",MPU6050_Data.Gyroscope_Z);
 
 		/* Little delay */
-		HAL_Delay(0.1);
+		HAL_Delay(0.1); //Ce temps correspond à celui de l'intégration de la vitesse angulaire
 	}
 }

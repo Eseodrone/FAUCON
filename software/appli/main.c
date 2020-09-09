@@ -19,6 +19,7 @@
 #include "save_old/tests_methods.h"
 #include "datas_process.h"
 #include "mpu6050.h"
+#include "motors_control.h"
 
 int main(void){
 	HAL_Init();
@@ -31,16 +32,13 @@ int main(void){
 	//LEDs F4
 	BSP_GPIO_PinCfg(LEDS_GPIO, LED_GREEN_PIN | LED_ORANGE_PIN | LED_RED_PIN | LED_BLUE_PIN, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
 	BSP_GPIO_PinCfg(GPIOA, GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
-	//Systick_init();
-	//INIT DES CAPTEURS (Il faudra en faire une générale ou gérer ça par classe/module)
+	Systick_init();
 	//MC_init_pwm_tim1_tim3();
-	//VL53L1X_init();
 	//TIMER2_run_1ms();
-	MPU_average_demo();
-//	while (1)
-//	{
-//
-//	}
+	while (1)
+	{
+
+	}
 }
 
 

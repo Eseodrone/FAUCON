@@ -150,9 +150,7 @@ void TEST_pwms(){
 }
 
 
-void test_moteur_PC6(uint16_t TIME){
-	//PWM_TIMER_set_duty(TimHandle_3, TIM_CHANNEL_1, TIME);
-}
+
 
 
 

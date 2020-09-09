@@ -1,7 +1,7 @@
 #include "motors_control.h"
 
-static TIM_HandleTypeDef TimHandle_1;	//Structure contenant les infos concernant l'état du timer 1
-static TIM_HandleTypeDef TimHandle_3;	//Structure contenant les infos concernant l'état du timer 3
+static TIM_HandleTypeDef TimHandle_1;	//Structure contenant les infos concernant l'ï¿½tat du timer 1
+static TIM_HandleTypeDef TimHandle_3;	//Structure contenant les infos concernant l'ï¿½tat du timer 3
 
 
 void MC_init_pwm_tim1_tim3(void){
@@ -35,12 +35,12 @@ void MC_init_pwm_tim1_tim3(void){
 	__HAL_RCC_TIM3_CLK_ENABLE();
 	__HAL_RCC_TIM1_CLK_ENABLE();
 
-	TimHandle_1.Init.Period = PWM_PERIOD_TIM - 1; //0 à periode
+	TimHandle_1.Init.Period = PWM_PERIOD_TIM - 1; //0 ï¿½ periode
 	TimHandle_1.Init.Prescaler = PWM_PRESC_TIM_1 - 1;
 	TimHandle_1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	TimHandle_1.Init.CounterMode = TIM_COUNTERMODE_UP;
 
-	TimHandle_3.Init.Period = PWM_PERIOD_TIM - 1; //0 à periode
+	TimHandle_3.Init.Period = PWM_PERIOD_TIM - 1; //0 ï¿½ periode
 	TimHandle_3.Init.Prescaler = PWM_PRESC_TIM_3 - 1;
 	TimHandle_3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	TimHandle_3.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -88,7 +88,7 @@ void MC_init_pwm_tim1_tim3(void){
 	HAL_TIM_PWM_Start(&TimHandle_3, TIM_CHANNEL_4);
 
 
-	//mise à 0 de tous les timers
+	//mise ï¿½ 0 de tous les timers
 	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_1, 0);
 	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_2, 0);
 	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_3, 0);
@@ -99,7 +99,7 @@ void MC_init_pwm_tim1_tim3(void){
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_3, 0);
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_4, 0);
 
-	//mettre duty à x*PWM_PERIOD_TIM avec x entre 0 et 1 !
+	//mettre duty ï¿½ x*PWM_PERIOD_TIM avec x entre 0 et 1 !
 
 }
 
@@ -108,52 +108,80 @@ void MC_pwm_timer_set_duty(TIM_HandleTypeDef tim_handle, int channel, uint16_t d
 	__HAL_TIM_SET_COMPARE(&tim_handle, channel, (uint32_t) duty);
 }
 
-
-//______________________________________________________________________________________________________________
-
-/*Fonctions pour controler les moteurs
- */
-
-void MC_M1_1(uint16_t TIME){ // moteur 1_1
-	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_1, TIME);
+//CALIBRATION DES ESC
+void MC_esc_calibration(void)
+{
+	//MC_init_pwm_tim1_tim3(); (Penser Ã  appeler cette fonction au prÃ©alabre)
+	//3 bips = Alim ok
+	HAL_Delay(500);
+	MC_f1_m1_PC6(PWM_MAX_MOTOR_ON);
+	MC_f1_m2_PC7(PWM_MAX_MOTOR_ON);
+	MC_f1_m3_PC8(PWM_MAX_MOTOR_ON);
+	MC_f1_m4_PC9(PWM_MAX_MOTOR_ON);
+	MC_f2_m1_PE9(PWM_MAX_MOTOR_ON);
+	MC_f2_m2_PE11(PWM_MAX_MOTOR_ON);
+	MC_f2_m3_PE13(PWM_MAX_MOTOR_ON);
+	MC_f2_m4_PE14(PWM_MAX_MOTOR_ON);
+	//1 bip = PWM MAX ok
+	HAL_Delay(1000);
+	MC_f1_m1_PC6(PWM_MIN_MOTOR_OFF);
+	MC_f1_m2_PC7(PWM_MIN_MOTOR_OFF);
+	MC_f1_m3_PC8(PWM_MIN_MOTOR_OFF);
+	MC_f1_m4_PC9(PWM_MIN_MOTOR_OFF);
+	MC_f2_m1_PE9(PWM_MIN_MOTOR_OFF);
+	MC_f2_m2_PE11(PWM_MIN_MOTOR_OFF);
+	MC_f2_m3_PE13(PWM_MIN_MOTOR_OFF);
+	MC_f2_m4_PE14(PWM_MIN_MOTOR_OFF);
+	//1 bip = PWM MIN ok
+	HAL_Delay(1000);
+	//Il faut ensuite rester entre le PWM Min et Max
 }
 
-void MC_M1_2(uint16_t TIME){
-	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_2, TIME);
-}
-
-void MC_M1_3(uint16_t TIME){
-	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_3, TIME);
-}
-
-void MC_M1_4(uint16_t TIME){
-	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_4, TIME);
-}
-
-void MC_M2_1(uint16_t TIME){
+//FONCTIONS DE CONTROLE MOTEUR
+void test_moteur_PC6(uint16_t TIME){
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_1, TIME);
 }
 
-void MC_M2_2(uint16_t TIME){
+void MC_f1_m1_PC6(uint16_t TIME){ // moteur 1_1
+	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_1, TIME);
+}
+
+void MC_f1_m2_PC7(uint16_t TIME){
+	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_2, TIME);
+}
+
+void MC_f1_m3_PC8(uint16_t TIME){
+	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_3, TIME);
+}
+
+void MC_f1_m4_PC9(uint16_t TIME){
+	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_4, TIME);
+}
+
+void MC_f2_m1_PE9(uint16_t TIME){
+	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_1, TIME);
+}
+
+void MC_f2_m2_PE11(uint16_t TIME){
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_2, TIME);
 }
 
-void MC_M2_3(uint16_t TIME){
+void MC_f2_m3_PE13(uint16_t TIME){
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_3, TIME);
 }
 
-void MC_M2_4(uint16_t TIME){
+void MC_f2_m4_PE14(uint16_t TIME){
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_4, TIME);
 }
 
 void MC_put_all_motors_off(void)
 {
-	MC_M1_1(0);
-	MC_M1_2(0);
-	MC_M1_3(0);
-	MC_M1_4(0);
-	MC_M2_1(0);
-	MC_M2_2(0);
-	MC_M2_3(0);
-	MC_M2_4(0);
+	MC_f1_m1_PC6(PWM_MIN_MOTOR_OFF);
+	MC_f1_m2_PC7(PWM_MIN_MOTOR_OFF);
+	MC_f1_m3_PC8(PWM_MIN_MOTOR_OFF);
+	MC_f1_m4_PC9(PWM_MIN_MOTOR_OFF);
+	MC_f2_m1_PE9(PWM_MIN_MOTOR_OFF);
+	MC_f2_m2_PE11(PWM_MIN_MOTOR_OFF);
+	MC_f2_m3_PE13(PWM_MIN_MOTOR_OFF);
+	MC_f2_m4_PE14(PWM_MIN_MOTOR_OFF);
 }
