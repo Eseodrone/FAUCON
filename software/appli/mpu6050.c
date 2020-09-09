@@ -4,12 +4,27 @@
 #include <stdbool.h>
 #include "main.h"
 #include "stm32f4xx_hal.h"
-#include <math.h>
+
+typedef struct
+{
+	float roll;
+	float pitch;
+	float yaw;
+}angle_struct_t;
+
+static MPU6050_t MPU6050_Data;
+static angle_struct_t angle;
+static uint8_t AVERAGE_X;
+static uint8_t AVERAGE_Y;
+static uint8_t AVERAGE_Z;
 
 void MPU_init(void){
 	//on init le mpu, structure et boolean de .h
 	if(MPU6050_Init(&mpu_datas_res, MPU6050_VCC_GPIO, MPU6050_VCC_PIN, MPU6050_Device_0, MPU6050_Accelerometer_8G, MPU6050_Gyroscope_2000s) == MPU6050_Result_Ok)
 		mpu_init_OK = TRUE; //A revoir du coup
+	AVERAGE_X = 725;
+	AVERAGE_Y = -5;
+	AVERAGE_Z = 12;
 }
 
 void MPU_test(void)
@@ -94,3 +109,32 @@ void MPU_average_demo(void)
 		HAL_Delay(0.1); //Ce temps correspond à celui de l'intégration de la vitesse angulaire
 	}
 }
+
+void MPU_angle_computer(void)
+{
+	//Le MPU doit être préalablement initialisé
+	MPU6050_ReadAll(&MPU6050_Data);
+	angle.roll += (MPU6050_Data.Gyroscope_X-AVERAGE_X)*INT_TIME;
+	angle.pitch += (MPU6050_Data.Gyroscope_Y+AVERAGE_Y)*INT_TIME; //average negatif
+	angle.yaw += (MPU6050_Data.Gyroscope_Z-AVERAGE_Z)*INT_TIME;
+	//angle.roll = (angle.roll*360)/MPU_RANGE_X;
+	//angle.pitch = (angle.pitch*360)/MPU_RANGE_Y;
+	//angle.yaw = (angle.yaw*360)/MPU_RANGE_Z;
+	HAL_Delay(0.1);
+}
+
+int16_t MPU_get_roll(void)
+{
+	return angle.roll;
+}
+
+int16_t MPU_get_pitch(void)
+{
+	return angle.pitch;
+}
+
+int16_t MPU_get_yaw(void)
+{
+	return angle.yaw;
+}
+

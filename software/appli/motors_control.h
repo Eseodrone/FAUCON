@@ -54,6 +54,7 @@ void MC_f2_m2_PE11(uint16_t TIME);
 void MC_f2_m3_PE13(uint16_t TIME);
 void MC_f2_m4_PE14(uint16_t TIME);
 void MC_put_all_motors_off(void);
+void MC_test_all_motors(void);
 
 #endif /*MOTORS_CONTROL_H*/
 

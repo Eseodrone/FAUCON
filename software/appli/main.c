@@ -33,8 +33,14 @@ int main(void){
 	BSP_GPIO_PinCfg(LEDS_GPIO, LED_GREEN_PIN | LED_ORANGE_PIN | LED_RED_PIN | LED_BLUE_PIN, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
 	BSP_GPIO_PinCfg(GPIOA, GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
 	Systick_init();
-	//MC_init_pwm_tim1_tim3();
 	//TIMER2_run_1ms();
+
+	//TESTS MOTEUR
+	//MC_init_pwm_tim1_tim3();
+	//MC_esc_calibration();
+	//MC_test_all_motors();
+	//MC_put_all_motors_off();
+
 	while (1)
 	{
 

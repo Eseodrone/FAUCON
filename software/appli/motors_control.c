@@ -185,3 +185,18 @@ void MC_put_all_motors_off(void)
 	MC_f2_m3_PE13(PWM_MIN_MOTOR_OFF);
 	MC_f2_m4_PE14(PWM_MIN_MOTOR_OFF);
 }
+
+void MC_test_all_motors(void)
+{
+	//MC_init_pwm_tim1_tim3(); (Penser à appeler cette fonction au préalabre)
+	MC_f1_m1_PC6(60);
+	MC_f1_m2_PC7(60);
+	MC_f1_m3_PC8(60);
+	MC_f1_m4_PC9(60);
+	MC_f2_m1_PE9(60);
+	MC_f2_m2_PE11(60);
+	MC_f2_m3_PE13(60);
+	MC_f2_m4_PE14(60);
+}
+
+

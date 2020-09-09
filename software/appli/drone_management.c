@@ -47,20 +47,33 @@ Rappels des moterus :
 //==================================================================================================
 
 
-#include "deplacement_drone.h"
+#include <drone_management.h>
+#include "motors_control.h"
 #include "stdbool.h"
 
-static double roll;
-static double pitch;
-static double yaw;
+typedef struct
+{
+	float x_pos;
+	float y_pos;
+	float z_pos;
+}drone_position_t;
+
+static float roll;
+static float pitch;
+static float yaw;
+static drone_position_t drone_position;
 static uint8_t ROLL_FIXATION;
 static uint8_t PITCH_FIXATION;
 static uint8_t YAW_FIXATION;
 static bool STABILISATION_OK;
-static void DD_check_angles(void);
+static void DM_check_angles(void);
+
+
+
+
 
 //FONCTIONS DE STABILISATION
-void DD_init(void)
+void DM_init(void)
 {
 	roll = 0;
 	pitch = 0;
@@ -72,11 +85,11 @@ void DD_init(void)
 	//Init des moteurs
 }
 
-void DD_check_angles(void)
+void DM_check_angles(void)
 {
-	roll = datas_drone_position.angle_X_ROLL;
-	pitch = datas_drone_position.angle_Y_PITCH;
-	yaw = datas_drone_position.angle_Z_YAW;
+	roll = MPU_get_roll();
+	pitch = MPU_get_pitch();
+	yaw = MPU_get_yaw();
 	//ROLL
 	if (roll>=MINOR_ANGLE && roll<=360-MINOR_ANGLE)
 	{
@@ -109,7 +122,7 @@ void DD_check_angles(void)
 	}
 }
 
-void DD_mode_management(void)
+void DM_mode_management(void)
 {
 	static fixes_e mode = FIXATION_INIT;
 	switch(mode)
@@ -150,7 +163,7 @@ void DD_mode_management(void)
 			else if(pitch < 360-MINOR_ANGLE)
 			{
 				//Combinaison moteurs
-				//Rotation en arrière
+				//Rotation en arriï¿½re
 
 				M1_1(SUP);
 				M1_2(SUP);
@@ -169,7 +182,7 @@ void DD_mode_management(void)
 			if(roll > MINOR_ANGLE && pitch < 180)
 			{
 				//Combinaison moteurs
-				//Rotation à gauche
+				//Rotation ï¿½ gauche
 				M1_1(SUP);
 				M1_2(INF);
 				M1_3(SUP);
@@ -182,7 +195,7 @@ void DD_mode_management(void)
 			else if(roll < 360-MINOR_ANGLE)
 			{
 				//Combinaison moteurs
-				//Rotation à droite
+				//Rotation ï¿½ droite
 				M1_1(INF);
 				M1_2(SUP);
 				M1_3(INF);
@@ -200,7 +213,7 @@ void DD_mode_management(void)
 			if(yaw > MINOR_ANGLE && pitch < 180)
 			{
 				//Combinaison moteurs
-				//Rotation à gauche
+				//Rotation ï¿½ gauche
 				M1_1(INF);
 				M1_2(SUP);
 				M1_3(SUP);
@@ -214,7 +227,7 @@ void DD_mode_management(void)
 			else if(yaw < 360-MINOR_ANGLE)
 			{
 				//Combinaison moteurs
-				//Rotation à droite
+				//Rotation ï¿½ droite
 				M1_1(SUP);
 				M1_2(INF);
 				M1_3(INF);
@@ -236,6 +249,119 @@ void DD_mode_management(void)
 		break;
 	}
 }
+
+int8_t DM_stabilise_drone(void)
+{
+	//ROLL
+	if(roll > 10 || roll < -10)
+	{
+		DM_correct_roll_angle();
+	}
+	else
+	{
+		ROLL_FIXATION = TRUE;
+	}
+	//PITCH
+	if(pitch > 10 || pitch < -10)
+	{
+		DM_correct_pitch_angle();
+	}
+	else
+	{
+		PITCH_FIXATION = TRUE;
+	}
+	//YAW
+	if(yaw > 10 || yaw < -10)
+	{
+		DM_correct_yaw_angle();
+	}
+	else
+	{
+		YAW_FIXATION = TRUE;
+	}
+	if(ROLL_FIXATION && PITCH_FIXATION && YAW_FIXATION)
+		return 1;
+	else
+		return 0;
+}
+
+
+void DM_correct_roll_angle(void)
+{
+	if(roll > 10)
+	{
+		//Combi moteurs ON
+		HAL_Delay(IMPULSION_TIME);
+		//Combi moteurs OFF
+	}
+	else if(roll < -10)
+	{
+		HAL_Delay(IMPULSION_TIME);
+	}
+}
+
+void DM_correct_pitch_angle(void)
+{
+	if(pitch > 10)
+	{
+		//Combi moteurs ON
+		HAL_Delay(IMPULSION_TIME);
+		//Combi moteurs OFF
+	}
+	else if(pitch < -10)
+	{
+		HAL_Delay(IMPULSION_TIME);
+	}
+}
+
+void DM_correct_yaw_angle(void)
+{
+	if(yaw > 10)
+	{
+		//Combi moteurs ON
+		HAL_Delay(IMPULSION_TIME);
+		//Combi moteurs OFF
+	}
+	else if(yaw < -10)
+	{
+		HAL_Delay(IMPULSION_TIME);
+	}
+}
+
+void DM_correct_altitude(void)
+{
+	//if(drone_position.z_pos < )
+	//Moteurs sup mÃªme vitesse
+	MC_f1_m1_PC6(PWM_MAX_MOTOR_ON);
+	MC_f1_m2_PC7(PWM_MAX_MOTOR_ON);
+	MC_f1_m3_PC8(PWM_MAX_MOTOR_ON);
+	MC_f1_m4_PC9(PWM_MAX_MOTOR_ON);
+	HAL_Delay(IMPULSION_TIME);
+	MC_f1_m1_PC6(PWM_MIN_MOTOR_OFF);
+	MC_f1_m2_PC7(PWM_MIN_MOTOR_OFF);
+	MC_f1_m3_PC8(PWM_MIN_MOTOR_OFF);
+	MC_f1_m4_PC9(PWM_MIN_MOTOR_OFF);
+	//else if(drone_position.z_pos > )
+	//Moteurs inf mÃªme vitesse
+	MC_f2_m1_PE9(PWM_MAX_MOTOR_ON);
+	MC_f2_m2_PE11(PWM_MAX_MOTOR_ON);
+	MC_f2_m3_PE13(PWM_MAX_MOTOR_ON);
+	MC_f2_m4_PE14(PWM_MAX_MOTOR_ON);
+	HAL_Delay(IMPULSION_TIME);
+	MC_f2_m1_PE9(PWM_MIN_MOTOR_OFF);
+	MC_f2_m2_PE11(PWM_MIN_MOTOR_OFF);
+	MC_f2_m3_PE13(PWM_MIN_MOTOR_OFF);
+	MC_f2_m4_PE14(PWM_MIN_MOTOR_OFF);
+}
+
+void DM_compute_position(void)
+{
+	drone_position.x_pos = TOF_get_sensor_3_dist(); //A voir quel capteur mesure quel axe
+	drone_position.y_pos = TOF_get_sensor_2_dist();
+	drone_position.z_pos = TOF_get_sensor_1_dist();
+
+}
+
 // FONCTIONS DE TRANSLATION
 void trans_simple_Z(trans_z_e direction, uint8_t time){
 	if(direction == TRANS_Z_BAS){

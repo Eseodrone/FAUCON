@@ -1,4 +1,4 @@
-/*Ce fichier doit contenir la machine à états générale qui sera lancée dans le main*/
+/*Ce fichier doit contenir la machine ï¿½ ï¿½tats gï¿½nï¿½rale qui sera lancï¿½e dans le main*/
 #include "main_program_file.h"
 
 typedef enum
@@ -16,13 +16,23 @@ void MPF_state_machine(void)
 	case SENSORS_INIT :
 		//Appeler ici toutes les fonctions d'init des capteurs
 		//MPU,TOFs,HC-05...
+		//MPU_init();
+		//VL53L1X_init();
+		//BLUETOOTH_init();
 		state = MAIN_PROCESS;
 		break;
 	case MAIN_PROCESS :
 		//Organiser l'appel des fonctions vennant des diffs modules
+		//MPU_angle_computer();
+		//if(DM_stabilise_drone())
+		//{
+			//TOF_attribute_distances();
+			//DM_compute_position();
+			//Tente translation ?
+		//}
 		break;
 	case ERROR :
-		//Prévoir un état de sécu avec une extinction de tous les moteurs ?
+		//Prï¿½voir un ï¿½tat de sï¿½cu avec une extinction de tous les moteurs ?
 		//MC_put_all_motors_off();
 		break;
 	default :
