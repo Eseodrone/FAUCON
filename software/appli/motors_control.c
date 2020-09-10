@@ -199,4 +199,69 @@ void MC_test_all_motors(void)
 	MC_f2_m4_PC9(65);
 }
 
+void MC_test_motor_one_by_one(void)
+{
+	//Moteur 1
+	MC_f1_m1_PE9(65);
+	HAL_Delay(1500);
+	MC_f1_m1_PE9(PWM_MIN_MOTOR_OFF);
+	//Moteur 2
+	MC_f1_m2_PE11(65);
+	HAL_Delay(1500);
+	MC_f1_m2_PE11(PWM_MIN_MOTOR_OFF);
+	//Moteur 3
+	MC_f1_m3_PE13(65);
+	HAL_Delay(1500);
+	MC_f1_m3_PE13(PWM_MIN_MOTOR_OFF);
+	//Moteur 4
+	MC_f1_m4_PE14(65);
+	HAL_Delay(1500);
+	MC_f1_m4_PE14(PWM_MIN_MOTOR_OFF);
+	//Moteur 1
+	MC_f2_m1_PC6(65);
+	HAL_Delay(1500);
+	MC_f2_m1_PC6(PWM_MIN_MOTOR_OFF);
+	//Moteur 2
+	MC_f2_m2_PC7(65);
+	HAL_Delay(1500);
+	MC_f2_m2_PC7(PWM_MIN_MOTOR_OFF);
+	//Moteur 3
+	MC_f2_m3_PC8(65);
+	HAL_Delay(1500);
+	MC_f2_m3_PC8(PWM_MIN_MOTOR_OFF);
+	//Moteur 4
+	MC_f2_m4_PC9(65);
+	HAL_Delay(1500);
+	MC_f2_m4_PC9(PWM_MIN_MOTOR_OFF);
+}
 
+void MC_test_progressive_pwm(void)
+{
+	for(int i=50; i<100;i++)
+	{
+		MC_f2_m1_PC6(i);
+		HAL_Delay(100);
+	}
+	MC_f2_m1_PC6(PWM_MIN_MOTOR_OFF);
+	HAL_Delay(1000);
+	for(int j=50; j<100;j++)
+	{
+		MC_f2_m2_PC7(j);
+		HAL_Delay(100);
+	}
+	MC_f2_m2_PC7(PWM_MIN_MOTOR_OFF);
+	HAL_Delay(1000);
+	for(int k=50; k<100;k++)
+	{
+		MC_f2_m3_PC8(k);
+		HAL_Delay(100);
+	}
+	MC_f2_m3_PC8(PWM_MIN_MOTOR_OFF);
+	HAL_Delay(1000);
+	for(int x=50; x<100;x++)
+	{
+		MC_f2_m4_PC9(x);
+		HAL_Delay(100);
+	}
+	MC_f2_m4_PC9(PWM_MIN_MOTOR_OFF);
+}
