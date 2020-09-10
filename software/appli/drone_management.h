@@ -12,7 +12,7 @@
 #define MINOR_ANGLE		5
 #define INF 55
 #define SUP 65
-#define IMPULSION_TIME	1500 //1s
+#define IMPULSION_TIME	1500 //1,5s
 
 typedef enum
 {

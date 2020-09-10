@@ -39,20 +39,20 @@
 
 /********************************************************MACROS********************************************************/
 #define PWM_MIN_MOTOR_OFF	50 //A redéfinir
-#define PWM_MAX_MOTOR_ON	80
+#define PWM_MAX_MOTOR_ON	70
 
 /********************************************************PROTOTYPES DE FONCTION********************************************************/
 void MC_init_pwm_tim1_tim3(void);
 void MC_pwm_timer_set_duty(TIM_HandleTypeDef tim_handle, int channel, uint16_t duty);
 void MC_esc_calibration(void);
-void MC_f1_m1_PC6(uint16_t TIME);
-void MC_f1_m2_PC7(uint16_t TIME);
-void MC_f1_m3_PC8(uint16_t TIME);
-void MC_f1_m4_PC9(uint16_t TIME);
-void MC_f2_m1_PE9(uint16_t TIME);
-void MC_f2_m2_PE11(uint16_t TIME);
-void MC_f2_m3_PE13(uint16_t TIME);
-void MC_f2_m4_PE14(uint16_t TIME);
+void MC_f1_m1_PE9(uint16_t TIME);
+void MC_f1_m2_PE11(uint16_t TIME);
+void MC_f1_m3_PE13(uint16_t TIME);
+void MC_f1_m4_PE14(uint16_t TIME);
+void MC_f2_m1_PC6(uint16_t TIME);
+void MC_f2_m2_PC7(uint16_t TIME);
+void MC_f2_m3_PC8(uint16_t TIME);
+void MC_f2_m4_PC9(uint16_t TIME);
 void MC_put_all_motors_off(void);
 void MC_test_all_motors(void);
 
