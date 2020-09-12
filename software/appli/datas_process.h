@@ -10,6 +10,8 @@
 #define APPLI_DATAS_PROCESS_H_
 
 #include "save_old/tests_methods.h"
+#include "mpu6050.h"
+#include "tof.h"
 
 #define CAT(A, B) A ## B
 
@@ -38,9 +40,9 @@ typedef enum state_e{
 //Structure de mpu modifi�e automatiquement par fonctions
 MPU6050_t mpu_datas_res;
 
-bool_e mpu_init_OK ;
-static uint32_t compteur_no_pooling_tof = 0;
-static bool_e TOF_OK = 0;
+extern uint32_t compteur_no_pooling_tof;
+extern bool_e TOF_OK;
+
 
 
 typedef struct{
@@ -72,8 +74,10 @@ typedef struct{
 	uint16_t angle_Z_YAW;
 }datas_drone_position_t;
 
-datas_sensors_pooling_t datas_sensors_pooling;
-datas_drone_position_t datas_drone_position;
+
+extern datas_sensors_pooling_t* p_datas_sensors_pooling;
+extern datas_drone_position_t* p_datas_drone_position;
+
 
 void TIMER2_user_handler_it_1ms(void);
 void datas_tof_maj();

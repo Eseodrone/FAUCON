@@ -9,8 +9,12 @@
 #define MPU_RANGE_Y			1100
 #define MPU_RANGE_Z			1000
 
+
+//
+extern bool_e mpu_init_OK;
+
 //PROTOTYPES
-void MPU_init(void);
+bool_e MPU_init(void);
 void MPU_test(void);
 void MPU_average_demo(void);
 void MPU_angle_computer(void);
@@ -21,3 +25,6 @@ int16_t MPU_get_yaw(void);
 
 
 #endif /*MPU6050_H*/
+
+
+

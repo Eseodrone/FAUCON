@@ -12,19 +12,26 @@ typedef struct
 	float yaw;
 }angle_struct_t;
 
+
+//* boolean de l'init du mpu
+bool_e mpu_init_OK;
+
+
 static MPU6050_t MPU6050_Data;
 static angle_struct_t angle;
 static uint8_t AVERAGE_X;
 static uint8_t AVERAGE_Y;
 static uint8_t AVERAGE_Z;
 
-void MPU_init(void){
+bool_e MPU_init(void){
 	//on init le mpu, structure et boolean de .h
 	if(MPU6050_Init(&mpu_datas_res, MPU6050_VCC_GPIO, MPU6050_VCC_PIN, MPU6050_Device_0, MPU6050_Accelerometer_8G, MPU6050_Gyroscope_2000s) == MPU6050_Result_Ok)
 		mpu_init_OK = TRUE; //A revoir du coup
 	AVERAGE_X = 725;
 	AVERAGE_Y = -5;
 	AVERAGE_Z = 12;
+
+	return mpu_init_OK;
 }
 
 void MPU_test(void)

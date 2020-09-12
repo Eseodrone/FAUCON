@@ -9,6 +9,19 @@
 
 #include "datas_process.h"
 
+
+
+datas_sensors_pooling_t datas_sensors_pooling;
+datas_drone_position_t datas_drone_position;
+
+datas_sensors_pooling_t* p_datas_sensors_pooling = &datas_sensors_pooling;
+datas_drone_position_t* p_datas_drone_position = &datas_drone_position;
+
+bool_e TOF_OK = 0;
+uint32_t compteur_no_pooling_tof;
+
+
+
 /// INTERROGATION AVEC IT DE TIMER 2   ///
 //IT 1ms, de plus basse priorit� que l'IT du systick !
 void TIMER2_user_handler_it_1ms(void)
@@ -17,13 +30,9 @@ void TIMER2_user_handler_it_1ms(void)
 	if(compt <= 5000){ compt += 1; }
 	else{ compt = 0; }
 
-//IDEE => Fonction d'interrogation des ToFs toutes les TIME_NO_POOLING_TOF ms, si en communication TOF_OK = 0, sinon, TOF_OK = 1
-//compteur declar� dans datas_process.h
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Fonction d'interrogation des ToFs toutes les TIME_NO_POOLING_TOF ms, si en communication TOF_OK = 0, sinon, TOF_OK = 1
 	static timeslot_e timeslot;
-	timeslot = VL53L1X_process_it();
-
-
-	/*
 	if(compteur_no_pooling_tof <= TIME_NO_POOLING_TOF && TOF_OK ==1){
 		compteur_no_pooling_tof++;
 		TOF_OK = 1;
@@ -44,9 +53,9 @@ void TIMER2_user_handler_it_1ms(void)
 		}
 
 	}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-*/
 
 
 	//switch(timeslot)... //si l'on souhaite conditionner certaines choses aux timeslots des VL_53... pour r�partir la charge de calcul dans le temps.
@@ -78,7 +87,6 @@ uint8_t data_process_main(){
 			break;
 		case STOP :
 			break;
-
 
 	}
 

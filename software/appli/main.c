@@ -20,20 +20,34 @@
 #include "datas_process.h"
 #include "mpu6050.h"
 #include "motors_control.h"
+#include "tof.h"
 
 int main(void){
 	HAL_Init();
 	SYS_init();			//initialisation du systeme (horloge...)
 	GPIO_Configure();
-	//UART DU BLUETOOTH
+
+	//* UART DU BLUETOOTH
 	BLUETOOTH_init();
-	//UNI
-	SYS_set_std_usart(UART2_ID, UART2_ID, UART2_ID);
-	//LEDs F4
+
+	//* UART DU PRINTF ==> Activation SEULEMENT si on utilise pas le bluetooth
+	//SYS_set_std_usart(UART2_ID, UART2_ID, UART2_ID);
+
+	//* LEDs F4
 	BSP_GPIO_PinCfg(LEDS_GPIO, LED_GREEN_PIN | LED_ORANGE_PIN | LED_RED_PIN | LED_BLUE_PIN, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
 	BSP_GPIO_PinCfg(GPIOA, GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
 	Systick_init();
-	//TIMER2_run_1ms();
+
+	//* INIT du mpu
+	mpu_init_OK = MPU_init();
+
+	//* INIT des tofs
+	tof_init_OK = VL53L1X_init();
+
+
+
+	//*
+	TIMER2_run_1ms();
 
 	//TESTS MOTEUR
 	//MC_init_pwm_tim1_tim3();
@@ -43,8 +57,9 @@ int main(void){
 	//MC_test_all_motors();
 	//HAL_Delay(4000);
 	//MC_put_all_motors_off();
-	while (1)
-	{
+	while (1){
+
+		test_I2C_mpu_and_tof();
 
 	}
 }

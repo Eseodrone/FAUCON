@@ -9,6 +9,9 @@
 
 #include "tests_methods.h"
 #include "motors_control.h"
+#include "mpu6050.h"
+#include "tof.h"
+
 
 
 ///   BLUETOOTH   ///
@@ -176,27 +179,39 @@ void test_moteur_PC6_2(){
 	}
 }
 
-///   GYRO   ///
-void test_gyro(MPU6050_t mpu_d){
-	if(mpu_test_OK != FALSE){
-		//Alimente gyro
-		HAL_GPIO_WritePin( MPU6050_VCC_GPIO, MPU6050_VCC_PIN, SET);
 
-		MPU6050_ReadAll(&mpu_test_results_test);
 
-		//eteint gyro
-		HAL_GPIO_WritePin( MPU6050_VCC_GPIO, MPU6050_VCC_PIN, RESET);
+///   GYRO + TOF  ///
+uint8_t test_I2C_mpu_and_tof(){
+
+	if(!mpu_init_OK || !tof_init_OK){
+		return 0;
 	}
 
-	Gyroscope_X += mpu_d.Gyroscope_X;
-	Gyroscope_Y += mpu_d.Gyroscope_Y;
-	Gyroscope_Z += mpu_d.Gyroscope_Z;
+	/*
+	 * Interrogation des tofs dans la fonction du timer 1, toutes les 150ms
+	 */
+	if(TOF_OK){
+		datas_tof_maj();
+	}
 
-	Gyroscope_X /= 16400;
-	Gyroscope_Y /= 16400;
-	Gyroscope_Z /= 16400;
+	uint16_t tof1 = TOF_get_sensor_1_dist();
+	uint16_t tof2 = TOF_get_sensor_2_dist();
+	uint16_t tof3 = TOF_get_sensor_3_dist();
+
+	//rajout du code de mpu (florentin)
+
+
+	//ajout de printf pour afficher les données tofs et données mpu
+
+
+
+
+
+
+
+	return 1;
 }
-
 
 
 

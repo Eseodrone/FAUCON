@@ -14,6 +14,9 @@
 #include "bluetooth.h"
 #include <vl53l1x/vl53l1x.h>
 #include "MPU6050/stm32f4_mpu6050.h"
+#include "mpu6050.h"
+#include "tof.h"
+#include "datas_process.h"
 
 
 //Compteur incrémenté ttes les ms par le TIM2 => pratique pour les tests
@@ -22,7 +25,6 @@ uint32_t compt;
 
 MPU6050_t mpu_test_results_test;
 
-bool_e mpu_test_OK ;
 
 int16_t Accelerometer_X; /*!< Accelerometer value X axis */
 int16_t Accelerometer_Y; /*!< Accelerometer value Y axis */
@@ -40,6 +42,7 @@ void test_gyro(MPU6050_t mpu_d);
 void test_moteur_PC6(uint16_t TIME);
 void test_moteur_PC6_2();
 void test_tof_1();
+uint8_t test_I2C_mpu_and_tof();
 
 
 
