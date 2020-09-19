@@ -50,8 +50,8 @@ int main(void){
 	TIMER2_run_1ms();
 
 	//TESTS MOTEUR
-	MC_init_pwm_tim1_tim3();
-	MC_esc_calibration();
+	//MC_init_pwm_tim1_tim3();
+	//MC_esc_calibration();
 	//MC_test_motor_one_by_one();
 	//MC_test_progressive_pwm();
 	//MC_test_all_motors();
