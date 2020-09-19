@@ -24,7 +24,10 @@
 #define TOF_ID_AXE_Y 1
 #define TOF_ID_AXE_Z 2
 
-#define TIME_NO_POOLING_TOF 150
+#define TIME_MS_POOLING_TOF 150
+#define TIME_MS_POOLING_MPU 3
+
+
 #define MESURE_HAUEUR_DRONE_CM 10
 #define MESURE_LARGEUR_DRONE_CM 30
 
@@ -39,8 +42,11 @@ typedef enum state_e{
 
 //Structure de mpu modifi�e automatiquement par fonctions
 MPU6050_t mpu_datas_res;
+MPU6050_t* p_mpu_datas_res;
 
 extern uint32_t compteur_no_pooling_tof;
+extern uint32_t compteur_no_pooling_mpu;
+
 extern bool_e TOF_OK;
 
 
@@ -81,11 +87,9 @@ extern datas_drone_position_t* p_datas_drone_position;
 
 void TIMER2_user_handler_it_1ms(void);
 void datas_tof_maj();
-void datas_gyro_maj();
-void datas_acc_maj();
 void send_datas_tof_bluetooth();
 uint8_t data_process_main();
-void process_data();
+
 
 
 

@@ -18,7 +18,8 @@ datas_sensors_pooling_t* p_datas_sensors_pooling = &datas_sensors_pooling;
 datas_drone_position_t* p_datas_drone_position = &datas_drone_position;
 
 bool_e TOF_OK = 0;
-uint32_t compteur_no_pooling_tof;
+uint32_t compteur_no_pooling_tof = 0;
+uint32_t compteur_no_pooling_mpu = 0;
 
 
 
@@ -26,20 +27,23 @@ uint32_t compteur_no_pooling_tof;
 //IT 1ms, de plus basse priorit� que l'IT du systick !
 void TIMER2_user_handler_it_1ms(void)
 {
+
+	static timeslot_e timeslot;
+
 //compteur declar� dans tests_methods.h
 	if(compt <= 5000){ compt += 1; }
 	else{ compt = 0; }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Fonction d'interrogation des ToFs toutes les TIME_NO_POOLING_TOF ms, si en communication TOF_OK = 0, sinon, TOF_OK = 1
-	static timeslot_e timeslot;
-	if(compteur_no_pooling_tof <= TIME_NO_POOLING_TOF && TOF_OK ==1){
+
+	if(compteur_no_pooling_tof <= TIME_MS_POOLING_TOF && TOF_OK ==1){
 		compteur_no_pooling_tof++;
 		TOF_OK = 1;
 	}
 
 
-	if(compteur_no_pooling_tof > TIME_NO_POOLING_TOF || TOF_OK == 0){
+	if(compteur_no_pooling_tof > TIME_MS_POOLING_TOF || TOF_OK == 0){
 		TOF_OK = 0;
 		compteur_no_pooling_tof = 0;
 
@@ -54,7 +58,13 @@ void TIMER2_user_handler_it_1ms(void)
 
 	}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+	if(compteur_no_pooling_mpu <= TIME_MS_POOLING_MPU){
+		compteur_no_pooling_mpu++;
+	}
+	else{
+		MPU_angle_computer();
+		compteur_no_pooling_mpu = 0;
+	}
 
 
 
@@ -77,7 +87,6 @@ uint8_t data_process_main(){
 		case READ_AND_PROCESS_DATA:
 			if(TOF_OK){
 				//maj nos datastrcut r�elles dans datas_sensors_pooling
-				datas_gyro_maj(&mpu_datas_res);//com avec MPU
 				datas_tof_maj();
 				process_data();
 			}
@@ -107,43 +116,6 @@ void datas_tof_maj(){
  *@brief
  *
  */
-
-void datas_gyro_maj(MPU6050_t* DataStruct){
-	if(mpu_init_OK != FALSE){
-		//Alimente gyro
-		HAL_GPIO_WritePin( MPU6050_VCC_GPIO, MPU6050_VCC_PIN, SET);
-
-		MPU6050_ReadGyroscope(DataStruct);
-
-		//eteint gyro
-		HAL_GPIO_WritePin( MPU6050_VCC_GPIO, MPU6050_VCC_PIN, RESET);
-	}
-
-//  maj la sruct de datas des mouvements
-	datas_sensors_pooling.Gyroscope_X = DataStruct->Gyroscope_X;
-	datas_sensors_pooling.Gyroscope_Y = DataStruct->Gyroscope_Y;
-	datas_sensors_pooling.Gyroscope_Z = DataStruct->Gyroscope_Z;
-
-}
-
-
-void datas_acc_maj(MPU6050_t* DataStruct){
-	if(mpu_init_OK != FALSE){
-		//Alimente gyro
-		HAL_GPIO_WritePin( MPU6050_VCC_GPIO, MPU6050_VCC_PIN, SET);
-
-		MPU6050_ReadAccelerometer(DataStruct);
-
-		//eteint gyro
-		HAL_GPIO_WritePin( MPU6050_VCC_GPIO, MPU6050_VCC_PIN, RESET);
-	}
-
-	//  maj la sruct de datas des mouvements
-	datas_sensors_pooling.Accelerometer_X = DataStruct->Accelerometer_X;
-	datas_sensors_pooling.Accelerometer_Y = DataStruct->Accelerometer_Y;
-	datas_sensors_pooling.Accelerometer_Z = DataStruct->Accelerometer_Z;
-
-}
 
 
 
@@ -180,15 +152,6 @@ void init_datas(){
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-void send_datas_tof_bluetooth(){
-	if(compt == 1000){
-		//UART_puts(UART2_ID, "tof_1: ", 7);
-		//envoiCaractere(datas_tof.dist_1);
-
-		envoiCaractere('g');
-	}
-}
 
 
 

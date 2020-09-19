@@ -5,20 +5,11 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 
-typedef struct
-{
-	float roll;
-	float pitch;
-	float yaw;
-}angle_struct_t;
-
 
 //* boolean de l'init du mpu
 bool_e mpu_init_OK;
 
 
-static MPU6050_t MPU6050_Data;
-static angle_struct_t angle;
 static uint8_t AVERAGE_X;
 static uint8_t AVERAGE_Y;
 static uint8_t AVERAGE_Z;
@@ -120,28 +111,16 @@ void MPU_average_demo(void)
 void MPU_angle_computer(void)
 {
 	//Le MPU doit être préalablement initialisé
-	MPU6050_ReadAll(&MPU6050_Data);
-	angle.roll += (MPU6050_Data.Gyroscope_X-AVERAGE_X)*INT_TIME;
-	angle.pitch += (MPU6050_Data.Gyroscope_Y+AVERAGE_Y)*INT_TIME; //average negatif
-	angle.yaw += (MPU6050_Data.Gyroscope_Z-AVERAGE_Z)*INT_TIME;
-	//angle.roll = (angle.roll*360)/MPU_RANGE_X;
-	//angle.pitch = (angle.pitch*360)/MPU_RANGE_Y;
-	//angle.yaw = (angle.yaw*360)/MPU_RANGE_Z;
+	MPU6050_ReadAll(p_mpu_datas_res);
+	p_datas_sensors_pooling->Gyroscope_X += (p_mpu_datas_res->Gyroscope_X-AVERAGE_X)*INT_TIME;
+	p_datas_sensors_pooling->Gyroscope_Y += (p_mpu_datas_res->Gyroscope_Y+AVERAGE_Y)*INT_TIME; //average negatif
+	p_datas_sensors_pooling->Gyroscope_Z += (p_mpu_datas_res->Gyroscope_Z-AVERAGE_Z)*INT_TIME;
+
+	p_datas_sensors_pooling->Gyroscope_X = (p_datas_sensors_pooling->Gyroscope_X)/MPU_RANGE_X*360;
+	p_datas_sensors_pooling->Gyroscope_Y = (p_datas_sensors_pooling->Gyroscope_Y)/MPU_RANGE_Y*360;
+	p_datas_sensors_pooling->Gyroscope_Z = (p_datas_sensors_pooling->Gyroscope_Z)/MPU_RANGE_Z*360;
 	HAL_Delay(0.1);
 }
 
-int16_t MPU_get_roll(void)
-{
-	return angle.roll;
-}
 
-int16_t MPU_get_pitch(void)
-{
-	return angle.pitch;
-}
-
-int16_t MPU_get_yaw(void)
-{
-	return angle.yaw;
-}
 

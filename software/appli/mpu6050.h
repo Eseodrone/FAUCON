@@ -18,9 +18,7 @@ bool_e MPU_init(void);
 void MPU_test(void);
 void MPU_average_demo(void);
 void MPU_angle_computer(void);
-int16_t MPU_get_roll(void);
-int16_t MPU_get_pitch(void);
-int16_t MPU_get_yaw(void);
+
 
 
 
