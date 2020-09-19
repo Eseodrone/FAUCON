@@ -39,10 +39,10 @@ int main(void){
 	Systick_init();
 
 	//* INIT du mpu
-	mpu_init_OK = MPU_init();
+	//mpu_init_OK = MPU_init();
 
 	//* INIT des tofs
-	tof_init_OK = VL53L1X_init();
+	//tof_init_OK = VL53L1X_init();
 
 
 
@@ -50,8 +50,8 @@ int main(void){
 	TIMER2_run_1ms();
 
 	//TESTS MOTEUR
-	//MC_init_pwm_tim1_tim3();
-	//MC_esc_calibration();
+	MC_init_pwm_tim1_tim3();
+	MC_esc_calibration();
 	//MC_test_motor_one_by_one();
 	//MC_test_progressive_pwm();
 	//MC_test_all_motors();
@@ -59,7 +59,6 @@ int main(void){
 	//MC_put_all_motors_off();
 	while (1){
 
-		test_I2C_mpu_and_tof();
 
 	}
 }

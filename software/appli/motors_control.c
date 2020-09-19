@@ -1,4 +1,5 @@
 #include "motors_control.h"
+#include "config.h"
 
 static TIM_HandleTypeDef TimHandle_1;	//Structure contenant les infos concernant l'�tat du timer 1
 static TIM_HandleTypeDef TimHandle_3;	//Structure contenant les infos concernant l'�tat du timer 3
@@ -139,38 +140,47 @@ void MC_esc_calibration(void)
 
 //FONCTIONS DE CONTROLE MOTEUR
 void test_moteur_PC6(uint16_t TIME){
+	TIME = MIN(TIME, PWM_LIMIT);
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_1, TIME);
 }
 
 void MC_f1_m1_PE9(uint16_t TIME){ // moteur 1_1
+	TIME = MIN(TIME, PWM_LIMIT);
 	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_1, TIME);
 }
 
 void MC_f1_m2_PE11(uint16_t TIME){
+	TIME = MIN(TIME, PWM_LIMIT);
 	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_2, TIME);
 }
 
 void MC_f1_m3_PE13(uint16_t TIME){
+	TIME = MIN(TIME, PWM_LIMIT);
 	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_3, TIME);
 }
 
 void MC_f1_m4_PE14(uint16_t TIME){
+	TIME = MIN(TIME, PWM_LIMIT);
 	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_4, TIME);
 }
 
 void MC_f2_m1_PC6(uint16_t TIME){
+	TIME = MIN(TIME, PWM_LIMIT);
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_1, TIME);
 }
 
 void MC_f2_m2_PC7(uint16_t TIME){
+	TIME = MIN(TIME, PWM_LIMIT);
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_2, TIME);
 }
 
 void MC_f2_m3_PC8(uint16_t TIME){
+	TIME = MIN(TIME, PWM_LIMIT);
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_3, TIME);
 }
 
 void MC_f2_m4_PC9(uint16_t TIME){
+	TIME = MIN(TIME, PWM_LIMIT);
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_4, TIME);
 }
 
@@ -189,10 +199,10 @@ void MC_put_all_motors_off(void)
 void MC_test_all_motors(void)
 {
 	//MC_init_pwm_tim1_tim3(); (Penser à appeler cette fonction au préalabre)
-	MC_f1_m1_PE9(65);
+	/*MC_f1_m1_PE9(65);
 	MC_f1_m2_PE11(65);
 	MC_f1_m3_PE13(65);
-	MC_f1_m4_PE14(65);
+	MC_f1_m4_PE14(65);*/
 	MC_f2_m1_PC6(65);
 	MC_f2_m2_PC7(65);
 	MC_f2_m3_PC8(65);
@@ -201,6 +211,7 @@ void MC_test_all_motors(void)
 
 void MC_test_motor_one_by_one(void)
 {
+	/*
 	//Moteur 1
 	MC_f1_m1_PE9(65);
 	HAL_Delay(1500);
@@ -217,20 +228,23 @@ void MC_test_motor_one_by_one(void)
 	MC_f1_m4_PE14(65);
 	HAL_Delay(1500);
 	MC_f1_m4_PE14(PWM_MIN_MOTOR_OFF);
+	*/
+
+	uint16_t val = 75;
 	//Moteur 1
-	MC_f2_m1_PC6(65);
+	MC_f2_m1_PC6(val);
 	HAL_Delay(1500);
 	MC_f2_m1_PC6(PWM_MIN_MOTOR_OFF);
 	//Moteur 2
-	MC_f2_m2_PC7(65);
+	MC_f2_m2_PC7(val);
 	HAL_Delay(1500);
 	MC_f2_m2_PC7(PWM_MIN_MOTOR_OFF);
 	//Moteur 3
-	MC_f2_m3_PC8(65);
+	MC_f2_m3_PC8(val);
 	HAL_Delay(1500);
 	MC_f2_m3_PC8(PWM_MIN_MOTOR_OFF);
 	//Moteur 4
-	MC_f2_m4_PC9(65);
+	MC_f2_m4_PC9(val);
 	HAL_Delay(1500);
 	MC_f2_m4_PC9(PWM_MIN_MOTOR_OFF);
 }

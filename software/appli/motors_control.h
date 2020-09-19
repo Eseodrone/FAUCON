@@ -39,7 +39,8 @@
 
 /********************************************************MACROS********************************************************/
 #define PWM_MIN_MOTOR_OFF	50 //A redéfinir
-#define PWM_MAX_MOTOR_ON	70
+#define PWM_MAX_MOTOR_ON	100
+#define PWM_LIMIT			67
 
 /********************************************************PROTOTYPES DE FONCTION********************************************************/
 void MC_init_pwm_tim1_tim3(void);
