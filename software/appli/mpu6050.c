@@ -119,7 +119,7 @@ void MPU_angle_computer(void)
 	p_datas_sensors_pooling->Gyroscope_X = (p_datas_sensors_pooling->Gyroscope_X)/MPU_RANGE_X*360;
 	p_datas_sensors_pooling->Gyroscope_Y = (p_datas_sensors_pooling->Gyroscope_Y)/MPU_RANGE_Y*360;
 	p_datas_sensors_pooling->Gyroscope_Z = (p_datas_sensors_pooling->Gyroscope_Z)/MPU_RANGE_Z*360;
-	HAL_Delay(0.1);
+	//HAL_Delay(0.1);
 }
 
 

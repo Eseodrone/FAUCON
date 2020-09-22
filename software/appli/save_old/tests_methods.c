@@ -90,28 +90,29 @@ void puiss_mot_test_PC6(){
 }
 
 
-///   MOTEURS PWM   ///
 void test_tof_1_et_2(){
 
 		uint16_t dist0 ;
 		uint16_t dist1 ;
+		uint16_t dist2 ;
+		uint16_t dist3 ;
+		uint16_t dist4 ;
 
 		dist0 = VL53L1X_get_distance(0);
 		dist1 = VL53L1X_get_distance(1);
+		dist2 = VL53L1X_get_distance(2);
+		dist3 = VL53L1X_get_distance(3);
+		dist4 = VL53L1X_get_distance(4);
 
-		if(dist0<100 && dist0 > 0){
+		if( (dist0<100 && dist0 > 0) || (dist1<100 && dist1 > 0) || (dist2<100 && dist2 > 0) ||( dist3<100 && dist3 > 0)|| ( dist4<100 && dist4 > 0)){
 			HAL_GPIO_WritePin(LEDS_GPIO,LED_RED_PIN, SET);
+			HAL_GPIO_WritePin(LEDS_GPIO,LED_BLUE_PIN, RESET);
 		}
 		else{
 			HAL_GPIO_WritePin(LEDS_GPIO,LED_RED_PIN, RESET);
+			HAL_GPIO_WritePin(LEDS_GPIO,LED_BLUE_PIN, SET);
 		}
 
-		if(dist1<100 && dist1 > 0){
-			HAL_GPIO_WritePin(LEDS_GPIO,LED_GREEN_PIN, SET);
-		}
-		else{
-			HAL_GPIO_WritePin(LEDS_GPIO,LED_GREEN_PIN, RESET);
-		}
 }
 
 void test_tof_1(){
