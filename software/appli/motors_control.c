@@ -142,10 +142,7 @@ void MC_esc_calibration(void)
 }
 
 //FONCTIONS DE CONTROLE MOTEUR
-void test_moteur_PC6(uint16_t TIME){
-	TIME = MIN(TIME, PWM_LIMIT);
-	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_1, TIME);
-}
+
 
 void MC_f1_m1_PE9(uint16_t TIME){ // moteur 1_1
 	TIME = MIN(TIME, PWM_LIMIT);
@@ -187,7 +184,7 @@ void MC_f2_m4_PC9(uint16_t TIME){
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_4, TIME);
 }
 
-void MC_PID_correction(uint16_t roll_pid, uint16_t pitch_pid, uint16_t yaw_pid){
+void MC_PID_correction(float roll_pid, float pitch_pid, float yaw_pid){//TODO a finir
 	//TODO revoir les signes en fonction du positionnement moteur
 	//TODO ajouter les pid tofs.
 	motor_cmd[0] = -roll_pid - pitch_pid + yaw_pid;
@@ -201,7 +198,7 @@ void MC_PID_correction(uint16_t roll_pid, uint16_t pitch_pid, uint16_t yaw_pid){
 	motor_cmd[7] = roll_pid + pitch_pid + yaw_pid;
 }
 
-void MC_update_motors(){
+void MC_update_motors(void){
 	//TODO a modifier en fonction de MC_PID_correction
 	MC_f1_m1_PE9(motor_cmd[0]);
 	MC_f1_m2_PE11(motor_cmd[1]);
@@ -311,4 +308,9 @@ void MC_test_progressive_pwm(void)
 		HAL_Delay(100);
 	}
 	MC_f2_m4_PC9(PWM_MIN_MOTOR_OFF);
+}
+
+void test_moteur_PC6(uint16_t TIME){
+	TIME = MIN(TIME, PWM_LIMIT);
+	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_1, TIME);
 }

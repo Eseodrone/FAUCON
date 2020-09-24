@@ -20,7 +20,6 @@
 #include "datas_process.h"
 #include "mpu6050.h"
 #include "motors_control.h"
-#include "tof.h"
 
 int main(void){
 	HAL_Init();
@@ -36,30 +35,27 @@ int main(void){
 	//* LEDs F4
 	BSP_GPIO_PinCfg(LEDS_GPIO, LED_GREEN_PIN | LED_ORANGE_PIN | LED_RED_PIN | LED_BLUE_PIN, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
 	BSP_GPIO_PinCfg(GPIOA, GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
+
+
+
 	Systick_init();
 
-	//* INIT du mpu
-	//mpu_init_OK = MPU_init();
+	drone_data_t drone;
 
-	//* INIT des tofs
-	//tof_init_OK = VL53L1X_init();
-
-
-
-	//*
-	TIMER2_run_1ms();
+	//* init de la lecture des capteurs, utilise TIMER2
+	data_process_init(&drone);
 
 	//TESTS MOTEUR
 	//MC_init_pwm_tim1_tim3();
 	//MC_esc_calibration();
+	//test_moteur_PC6(60);
 	//MC_test_motor_one_by_one();
 	//MC_test_progressive_pwm();
 	//MC_test_all_motors();
 	//HAL_Delay(4000);
 	//MC_put_all_motors_off();
 	while (1){
-
-
+		//test_tofs();
 	}
 }
 

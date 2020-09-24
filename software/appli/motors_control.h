@@ -55,6 +55,8 @@ void MC_f2_m2_PC7(uint16_t TIME);
 void MC_f2_m3_PC8(uint16_t TIME);
 void MC_f2_m4_PC9(uint16_t TIME);
 void MC_put_all_motors_off(void);
+void MC_update_motors(void);
+void MC_PID_correction(float roll_pid, float pitch_pid, float yaw_pid);
 void MC_test_progressive_pwm(void);
 void MC_test_all_motors(void);
 
