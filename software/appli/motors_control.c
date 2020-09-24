@@ -4,6 +4,9 @@
 static TIM_HandleTypeDef TimHandle_1;	//Structure contenant les infos concernant l'�tat du timer 1
 static TIM_HandleTypeDef TimHandle_3;	//Structure contenant les infos concernant l'�tat du timer 3
 
+static uint16_t motor_cmd[8];
+
+
 
 void MC_init_pwm_tim1_tim3(void){
 
@@ -184,6 +187,33 @@ void MC_f2_m4_PC9(uint16_t TIME){
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_4, TIME);
 }
 
+void MC_PID_correction(uint16_t roll_pid, uint16_t pitch_pid, uint16_t yaw_pid){
+	//TODO revoir les signes en fonction du positionnement moteur
+	//TODO ajouter les pid tofs.
+	motor_cmd[0] = -roll_pid - pitch_pid + yaw_pid;
+	motor_cmd[1] = roll_pid - pitch_pid - yaw_pid;
+	motor_cmd[2] = -roll_pid + pitch_pid - yaw_pid;
+	motor_cmd[3] = roll_pid + pitch_pid + yaw_pid;
+
+	motor_cmd[4] = -roll_pid - pitch_pid + yaw_pid;
+	motor_cmd[5] = roll_pid - pitch_pid - yaw_pid;
+	motor_cmd[6] = -roll_pid + pitch_pid - yaw_pid;
+	motor_cmd[7] = roll_pid + pitch_pid + yaw_pid;
+}
+
+void MC_update_motors(){
+	//TODO a modifier en fonction de MC_PID_correction
+	MC_f1_m1_PE9(motor_cmd[0]);
+	MC_f1_m2_PE11(motor_cmd[1]);
+	MC_f1_m3_PE13(motor_cmd[2]);
+	MC_f1_m4_PE14(motor_cmd[3]);
+
+	MC_f2_m1_PC6(motor_cmd[4]);
+	MC_f2_m2_PC7(motor_cmd[5]);
+	MC_f2_m3_PC8(motor_cmd[6]);
+	MC_f2_m4_PC9(motor_cmd[7]);
+}
+
 void MC_put_all_motors_off(void)
 {
 	MC_f1_m1_PE9(PWM_MIN_MOTOR_OFF);
@@ -199,38 +229,39 @@ void MC_put_all_motors_off(void)
 void MC_test_all_motors(void)
 {
 	//MC_init_pwm_tim1_tim3(); (Penser à appeler cette fonction au préalabre)
-	/*MC_f1_m1_PE9(65);
+	MC_f1_m1_PE9(65);
 	MC_f1_m2_PE11(65);
 	MC_f1_m3_PE13(65);
-	MC_f1_m4_PE14(65);*/
+	MC_f1_m4_PE14(65);
+	/*
 	MC_f2_m1_PC6(65);
 	MC_f2_m2_PC7(65);
 	MC_f2_m3_PC8(65);
-	MC_f2_m4_PC9(65);
+	MC_f2_m4_PC9(65);*/
 }
 
 void MC_test_motor_one_by_one(void)
 {
-	/*
+	uint16_t val = 75;
+
 	//Moteur 1
-	MC_f1_m1_PE9(65);
+	MC_f1_m1_PE9(val);
 	HAL_Delay(1500);
 	MC_f1_m1_PE9(PWM_MIN_MOTOR_OFF);
 	//Moteur 2
-	MC_f1_m2_PE11(65);
+	MC_f1_m2_PE11(val);
 	HAL_Delay(1500);
 	MC_f1_m2_PE11(PWM_MIN_MOTOR_OFF);
 	//Moteur 3
-	MC_f1_m3_PE13(65);
+	MC_f1_m3_PE13(val);
 	HAL_Delay(1500);
 	MC_f1_m3_PE13(PWM_MIN_MOTOR_OFF);
 	//Moteur 4
-	MC_f1_m4_PE14(65);
+	MC_f1_m4_PE14(val);
 	HAL_Delay(1500);
 	MC_f1_m4_PE14(PWM_MIN_MOTOR_OFF);
-	*/
 
-	uint16_t val = 75;
+
 	//Moteur 1
 	MC_f2_m1_PC6(val);
 	HAL_Delay(1500);
@@ -248,6 +279,8 @@ void MC_test_motor_one_by_one(void)
 	HAL_Delay(1500);
 	MC_f2_m4_PC9(PWM_MIN_MOTOR_OFF);
 }
+
+
 
 void MC_test_progressive_pwm(void)
 {

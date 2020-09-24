@@ -37,7 +37,7 @@ int16_t Gyroscope_Z;     /*!< Gyroscope value Z axis */
 
 void test_ble();
 void puiss_mot_test_PC6();
-void test_tof_1_et_2();
+void test_tofs();
 void test_gyro(MPU6050_t mpu_d);
 void test_moteur_PC6(uint16_t TIME);
 void test_moteur_PC6_2();

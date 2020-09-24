@@ -24,8 +24,8 @@
 #define TOF_ID_AXE_Y 1
 #define TOF_ID_AXE_Z 2
 
-#define TIME_MS_POOLING_TOF 150
-#define TIME_MS_POOLING_MPU 3
+#define TIME_MS_POOLING_TOF 4 //frequence de 250Hz
+#define TIME_MS_POOLING_MPU 4
 
 
 #define MESURE_HAUEUR_DRONE_CM 10

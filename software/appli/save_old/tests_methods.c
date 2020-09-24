@@ -90,7 +90,7 @@ void puiss_mot_test_PC6(){
 }
 
 
-void test_tof_1_et_2(){
+void test_tofs(){
 
 		uint16_t dist0 ;
 		uint16_t dist1 ;
