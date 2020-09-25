@@ -20,6 +20,7 @@
 #include "datas_process.h"
 #include "mpu6050.h"
 #include "motors_control.h"
+#include "drone_def.h"
 
 int main(void){
 	HAL_Init();
@@ -30,7 +31,7 @@ int main(void){
 	BLUETOOTH_init();
 
 	//* UART DU PRINTF ==> Activation SEULEMENT si on utilise pas le bluetooth
-	//SYS_set_std_usart(UART2_ID, UART2_ID, UART2_ID);
+	SYS_set_std_usart(UART2_ID, UART2_ID, UART2_ID);
 
 	//* LEDs F4
 	BSP_GPIO_PinCfg(LEDS_GPIO, LED_GREEN_PIN | LED_ORANGE_PIN | LED_RED_PIN | LED_BLUE_PIN, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
@@ -43,8 +44,8 @@ int main(void){
 	drone_data_t drone;
 
 	//* init de la lecture des capteurs, utilise TIMER2
-	data_process_init(&drone);
-
+	//data_process_init(&drone);
+	MPU_init(&drone);
 	//TESTS MOTEUR
 	//MC_init_pwm_tim1_tim3();
 	//MC_esc_calibration();
@@ -54,8 +55,11 @@ int main(void){
 	//MC_test_all_motors();
 	//HAL_Delay(4000);
 	//MC_put_all_motors_off();
+	printf("Printf OK\n");
 	while (1){
-		//test_tofs();
+		HAL_Delay(4);
+		MPU_angle_computer();
+		printf("Roll angle : %d\n",(int)drone.datas_sensors_pooling.roll_angle);
 	}
 }
 
