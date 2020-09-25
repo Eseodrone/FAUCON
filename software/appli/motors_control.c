@@ -118,26 +118,28 @@ void MC_esc_calibration(void)
 	//MC_init_pwm_tim1_tim3(); (Penser à appeler cette fonction au préalabre)
 	//3 bips = Alim ok
 	HAL_Delay(500);
-	MC_f1_m1_PE9(PWM_MAX_MOTOR_ON);
-	MC_f1_m2_PE11(PWM_MAX_MOTOR_ON);
-	MC_f1_m3_PE13(PWM_MAX_MOTOR_ON);
-	MC_f1_m4_PE14(PWM_MAX_MOTOR_ON);
-	MC_f2_m1_PC6(PWM_MAX_MOTOR_ON);
-	MC_f2_m2_PC7(PWM_MAX_MOTOR_ON);
-	MC_f2_m3_PC8(PWM_MAX_MOTOR_ON);
-	MC_f2_m4_PC9(PWM_MAX_MOTOR_ON);
+	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_1, PWM_MAX_MOTOR_ON);
+	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_2, PWM_MAX_MOTOR_ON);
+	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_3, PWM_MAX_MOTOR_ON);
+	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_4, PWM_MAX_MOTOR_ON);
+	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_1, PWM_MAX_MOTOR_ON);
+	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_2, PWM_MAX_MOTOR_ON);
+	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_3, PWM_MAX_MOTOR_ON);
+	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_4, PWM_MAX_MOTOR_ON);
+
+
 	//1 bip = PWM MAX ok
-	HAL_Delay(1000);
-	MC_f1_m1_PE9(PWM_MIN_MOTOR_OFF);
-	MC_f1_m2_PE11(PWM_MIN_MOTOR_OFF);
-	MC_f1_m3_PE13(PWM_MIN_MOTOR_OFF);
-	MC_f1_m4_PE14(PWM_MIN_MOTOR_OFF);
-	MC_f2_m1_PC6(PWM_MIN_MOTOR_OFF);
-	MC_f2_m2_PC7(PWM_MIN_MOTOR_OFF);
-	MC_f2_m3_PC8(PWM_MIN_MOTOR_OFF);
-	MC_f2_m4_PC9(PWM_MIN_MOTOR_OFF);
+	HAL_Delay(3000);
+	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_1, PWM_MIN_MOTOR_OFF);
+	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_2, PWM_MIN_MOTOR_OFF);
+	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_3, PWM_MIN_MOTOR_OFF);
+	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_4, PWM_MIN_MOTOR_OFF);
+	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_1, PWM_MIN_MOTOR_OFF);
+	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_2, PWM_MIN_MOTOR_OFF);
+	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_3, PWM_MIN_MOTOR_OFF);
+	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_4, PWM_MIN_MOTOR_OFF);
 	//1 bip = PWM MIN ok
-	HAL_Delay(1000);
+	HAL_Delay(3000);
 	//Il faut ensuite rester entre le PWM Min et Max
 }
 
@@ -239,7 +241,7 @@ void MC_test_all_motors(void)
 
 void MC_test_motor_one_by_one(void)
 {
-	uint16_t val = 75;
+	uint16_t val = 1150;
 
 	//Moteur 1
 	MC_f1_m1_PE9(val);

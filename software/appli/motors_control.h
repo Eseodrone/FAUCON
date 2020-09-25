@@ -31,16 +31,16 @@
 //L'horloge du timer 3 est a 84MHz
 //Si l'on veut une PWM a 20kHz (inaudible) et 100 pas de rapports cycliques possibles, il faut prediviser par 42 :
 //168MHz/84 = 2MHz -> 500ns par pas... * 100 pas = 20kHz de frequence PWM
-#define PWM_FREQ_TIM	500 	//Fr�quence du signal PWM, en Hz
-#define	PWM_PERIOD_TIM	100		//Nombre jusqu'auquel le timer va compter durant une p�riode PWM
+#define PWM_FREQ_TIM	10000 	//Fr�quence du signal PWM, en Hz
+#define	PWM_PERIOD_TIM	2000	//Nombre jusqu'auquel le timer va compter durant une p�riode PWM
 
 #define	PWM_PRESC_TIM_3	((TIM2_3_4_5_6_7_12_13_14_CLK / PWM_FREQ_TIM) / PWM_PERIOD_TIM)	//Pr�diviseur : nombre d'�v�nements qui provoquent +1 sur le d�compte du timer
 #define	PWM_PRESC_TIM_1	((TIM1_8_9_10_11_CLK / PWM_FREQ_TIM) / PWM_PERIOD_TIM)	//Pr�diviseur : nombre d'�v�nements qui provoquent +1 sur le d�compte du timer
 
 /********************************************************MACROS********************************************************/
-#define PWM_MIN_MOTOR_OFF	50 //A redéfinir
-#define PWM_MAX_MOTOR_ON	70
-#define PWM_LIMIT			67
+#define PWM_MIN_MOTOR_OFF	1000 //A redéfinir
+#define PWM_MAX_MOTOR_ON	2000
+#define PWM_LIMIT			1200
 
 /********************************************************PROTOTYPES DE FONCTION********************************************************/
 void MC_init_pwm_tim1_tim3(void);
