@@ -43,7 +43,7 @@ int main(void){
 	drone_data_t drone;
 
 	//* init de la lecture des capteurs, utilise TIMER2
-	data_process_init(&drone);
+	//data_process_init(&drone);
 
 	//TESTS MOTEUR
 	MC_init_pwm_tim1_tim3();
@@ -52,7 +52,7 @@ int main(void){
 	//MC_f1_m1_PE9(1100);
 	//MC_test_progressive_pwm();
 	//MC_test_all_motors();
-	//HAL_Delay(4000);
+
 	//MC_put_all_motors_off();
 	while (1){
 		//test_tofs();

@@ -117,7 +117,7 @@ void MC_esc_calibration(void)
 {
 	//MC_init_pwm_tim1_tim3(); (Penser à appeler cette fonction au préalabre)
 	//3 bips = Alim ok
-	HAL_Delay(500);
+	HAL_Delay(100);
 	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_1, PWM_MAX_MOTOR_ON);
 	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_2, PWM_MAX_MOTOR_ON);
 	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_3, PWM_MAX_MOTOR_ON);
@@ -129,7 +129,7 @@ void MC_esc_calibration(void)
 
 
 	//1 bip = PWM MAX ok
-	HAL_Delay(3000);
+	HAL_Delay(100);
 	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_1, PWM_MIN_MOTOR_OFF);
 	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_2, PWM_MIN_MOTOR_OFF);
 	MC_pwm_timer_set_duty(TimHandle_1, TIM_CHANNEL_3, PWM_MIN_MOTOR_OFF);
@@ -241,7 +241,7 @@ void MC_test_all_motors(void)
 
 void MC_test_motor_one_by_one(void)
 {
-	uint16_t val = 1150;
+	uint16_t val = 1200;
 
 	//Moteur 1
 	MC_f1_m1_PE9(val);
