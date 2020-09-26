@@ -55,11 +55,10 @@ int main(void){
 	//MC_test_all_motors();
 	//HAL_Delay(4000);
 	//MC_put_all_motors_off();
-	printf("Printf OK\n");
 	while (1){
 		HAL_Delay(4);
 		MPU_angle_computer();
-		printf("Roll angle : %d\n",(int)drone.datas_sensors_pooling.roll_angle);
+//		printf("Gyro x : %d\n",p_mpu_datas_res->Gyroscope_X);
 	}
 }
 
