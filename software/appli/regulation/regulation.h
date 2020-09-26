@@ -9,6 +9,7 @@
 #define APPLI_REGULATION_REGULATION_H_
 
 #include "../../lib/btm/Pid.h"
+#include "drone_def.h"
 
 // COMMENT CA MARCHE
 //On modifi les coefs des pids dans le regulation.c il y a les tableaux en haut
@@ -25,30 +26,9 @@ typedef enum{
 	PID_COUNT
 }PID_names_t;
 
-//Structure temporaires pour les angles
-typedef struct{
-	float x;
-	float y;
-	float z;
-}angles_t;
-
-//Structure temporaires pour les consignes
-typedef struct{
-	float roll_target;
-	float pitch_target;
-	float yaw_target;
-}consignes_t;
-
-//Structure temporaires pour les sorties de pid
-typedef struct{
-	float pid_roll ;
-	float pid_pitch ;
-	float pid_yaw ;
-}pids_outputs_t;
-
 
 //Init du module, on repère où sont les structures que l'on va utiliser par la suite
-void REGULATION_init(angles_t * angles,consignes_t * consignes,  pids_outputs_t * pid_outputs);
+void REGULATION_init(datas_sensors_pooling_t * datas_sensors_pooling_,target_values_t * target_values_,  PID_correction_t * PID_correction_);
 
 //Process des pids et mise à jour structures pid_outputs_t
 void REGULATION_process_angle(void);

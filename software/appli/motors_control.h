@@ -11,6 +11,7 @@
 #include "stm32f4_spi.h"
 #include "stm32f4_gpio.h"
 #include "stm32f4_timer.h"
+#include "drone_def.h"
 
 /***********************************************************PORTS INIT***********************************************************/
 #define PWM_MOT_11 GPIOC, GPIO_PIN_6
@@ -43,7 +44,7 @@
 #define PWM_LIMIT			1200
 
 /********************************************************PROTOTYPES DE FONCTION********************************************************/
-void MC_init_pwm_tim1_tim3(void);
+void MC_init_pwm_tim1_tim3(drone_data_t * drone_data_);
 void MC_pwm_timer_set_duty(TIM_HandleTypeDef tim_handle, int channel, uint16_t duty);
 void MC_esc_calibration(void);
 void MC_f1_m1_PE9(uint16_t TIME);
@@ -56,7 +57,7 @@ void MC_f2_m3_PC8(uint16_t TIME);
 void MC_f2_m4_PC9(uint16_t TIME);
 void MC_put_all_motors_off(void);
 void MC_update_motors(void);
-void MC_PID_correction(float roll_pid, float pitch_pid, float yaw_pid);
+void MC_PID_correction(void);
 void MC_test_progressive_pwm(void);
 void MC_test_all_motors(void);
 

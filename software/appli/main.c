@@ -42,20 +42,25 @@ int main(void){
 
 	drone_data_t drone;
 
-	//* init de la lecture des capteurs, utilise TIMER2
-	//data_process_init(&drone);
+
 
 	//TESTS MOTEUR
-	MC_init_pwm_tim1_tim3();
-	MC_esc_calibration();
-	MC_test_motor_one_by_one();
+	//* init de la lecture des capteurs, utilise TIMER2
+	data_process_init(&drone);
+
+	//MC_init_pwm_tim1_tim3(&drone);
+	//MC_esc_calibration();
+	//MC_test_motor_one_by_one();
 	//MC_f1_m1_PE9(1100);
 	//MC_test_progressive_pwm();
+
+
+
 	//MC_test_all_motors();
 
 	//MC_put_all_motors_off();
 	while (1){
-		//test_tofs();
+		test_tofs();
 	}
 }
 

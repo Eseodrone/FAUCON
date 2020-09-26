@@ -24,7 +24,6 @@ uint32_t compteur_no_pooling_mpu = 0;
 //IT 1ms, de plus basse priorit� que l'IT du systick !
 void TIMER2_user_handler_it_1ms(void)
 {
-
 	static timeslot_e timeslot;
 
 //compteur declar� dans tests_methods.h
@@ -61,6 +60,10 @@ void TIMER2_user_handler_it_1ms(void)
 		MPU_angle_computer();
 		compteur_no_pooling_mpu = 0;
 	}
+
+	REGULATION_process_angle();
+	MC_PID_correction();
+	//MC_update_motors();
 }
 
 
@@ -68,6 +71,7 @@ void data_process_init(drone_data_t * drone){
 	drone_data = drone;
 	MPU_init(drone_data);
 	VL53L1X_init();
+	REGULATION_init(&(drone->datas_sensors_pooling),&(drone->target_values),&(drone->target_values));
 	TIMER2_run_1ms();
 }
 

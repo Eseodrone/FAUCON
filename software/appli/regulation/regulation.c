@@ -6,12 +6,13 @@
  */
 
 #include "regulation.h"
+#include "drone_def.h"
 
 
 //Pointeurs sur les structure utilisées par la régulation
-static angles_t * angles;
-static consignes_t * consignes;
-static pids_outputs_t * pid_outputs;
+static datas_sensors_pooling_t * datas_sensors_pooling;
+static target_values_t * target_values;
+static PID_correction_t * PID_correction;
 //Paramètres pour les pid
 #define PID_ANGLE_FREQUENCY 250
 #define PID_ANGLE_MAX_OUTPUT 200	//En admettant que mon signal moteur vari de 0 à 1000
@@ -26,11 +27,11 @@ PID_t pids[PID_COUNT] ;
 
 
 //Init du module, on repère où sont les structures que l'on va utiliser par la suite
-void REGULATION_init(angles_t * angles_,consignes_t * consignes_,  pids_outputs_t * pid_outputs_){
+void REGULATION_init(datas_sensors_pooling_t * datas_sensors_pooling_,target_values_t * target_values_,  PID_correction_t * PID_correction_){
 	//On mémorise nos structures de données que l on va utiliser
-	angles = angles_ ;
-	consignes = consignes_ ;
-	pid_outputs = pid_outputs_ ;
+	datas_sensors_pooling = datas_sensors_pooling_;
+	target_values = target_values_;
+	PID_correction = PID_correction_;
 
 	//Configuration de nos pid
 	PID_init(&pids[PID_ANGLE_ROLL], PID_Settings_Roll);
@@ -41,9 +42,9 @@ void REGULATION_init(angles_t * angles_,consignes_t * consignes_,  pids_outputs_
 //Process des pids et mise à jour structures pid_outputs_t
 void REGULATION_process_angle(void){
 	//On admet que le roll corespond au x le y au pitch et z au yaw
-	pid_outputs->pid_roll = PID_compute(&pids[PID_ANGLE_ROLL], consignes->roll_target, angles->x);
-	pid_outputs->pid_pitch = PID_compute(&pids[PID_ANGLE_PITCH], consignes->pitch_target, angles->y);
-	pid_outputs->pid_yaw = PID_compute(&pids[PID_ANGLE_YAW], consignes->yaw_target, angles->z);
+	PID_correction->roll_pid = PID_compute(&pids[PID_ANGLE_ROLL], target_values->roll_target, datas_sensors_pooling->Gyroscope_X);
+	PID_correction->pitch_pid = PID_compute(&pids[PID_ANGLE_PITCH], target_values->pitch_target, datas_sensors_pooling->Gyroscope_Y);
+	PID_correction->yaw_pid = PID_compute(&pids[PID_ANGLE_YAW], target_values->yaw_target, datas_sensors_pooling->Gyroscope_Z);
 }
 
 

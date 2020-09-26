@@ -4,12 +4,11 @@
 static TIM_HandleTypeDef TimHandle_1;	//Structure contenant les infos concernant l'�tat du timer 1
 static TIM_HandleTypeDef TimHandle_3;	//Structure contenant les infos concernant l'�tat du timer 3
 
-static uint16_t motor_cmd[8];
+drone_data_t * drone_data;
 
+void MC_init_pwm_tim1_tim3(drone_data_t * drone_data_){
 
-
-void MC_init_pwm_tim1_tim3(void){
-
+	drone_data = drone_data_;
 	TimHandle_1.Instance = TIM1;
 	TimHandle_3.Instance = TIM3;
 	TIM_OC_InitTypeDef TIM_OCInitStruct;
@@ -17,7 +16,7 @@ void MC_init_pwm_tim1_tim3(void){
 	// mode AF (Alternate Function)
 	BSP_GPIO_PinCfg(PWM_MOT_11,GPIO_MODE_AF_PP, GPIO_NOPULL, GPIO_SPEED_FAST, GPIO_AF2_TIM3);
 	BSP_GPIO_PinCfg(PWM_MOT_12,GPIO_MODE_AF_PP, GPIO_NOPULL, GPIO_SPEED_FAST, GPIO_AF2_TIM3);
-	BSP_GPIO_PinCfg(PWM_MOT_13, GPIO_MODE_AF_PP, GPIO_NOPULL, GPIO_SPEED_FAST, GPIO_AF2_TIM3);
+	BSP_GPIO_PinCfg(PWM_MOT_13,GPIO_MODE_AF_PP, GPIO_NOPULL, GPIO_SPEED_FAST, GPIO_AF2_TIM3);
 	BSP_GPIO_PinCfg(PWM_MOT_14,GPIO_MODE_AF_PP, GPIO_NOPULL, GPIO_SPEED_FAST, GPIO_AF2_TIM3);
 
 	BSP_GPIO_PinCfg(PWM_MOT_21, GPIO_MODE_AF_PP, GPIO_NOPULL, GPIO_SPEED_FAST, GPIO_AF1_TIM1);
@@ -186,31 +185,31 @@ void MC_f2_m4_PC9(uint16_t TIME){
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_4, TIME);
 }
 
-void MC_PID_correction(float roll_pid, float pitch_pid, float yaw_pid){//TODO a finir
+void MC_PID_correction(void){
 	//TODO revoir les signes en fonction du positionnement moteur
 	//TODO ajouter les pid tofs.
-	motor_cmd[0] = -roll_pid - pitch_pid + yaw_pid;
-	motor_cmd[1] = roll_pid - pitch_pid - yaw_pid;
-	motor_cmd[2] = -roll_pid + pitch_pid - yaw_pid;
-	motor_cmd[3] = roll_pid + pitch_pid + yaw_pid;
+	drone_data->motor_cmd.m11 = -drone_data->pid_correction.roll_pid - drone_data->pid_correction.pitch_pid + drone_data->pid_correction.yaw_pid;
+	drone_data->motor_cmd.m12 = drone_data->pid_correction.roll_pid - drone_data->pid_correction.pitch_pid - drone_data->pid_correction.yaw_pid;
+	drone_data->motor_cmd.m13 = -drone_data->pid_correction.roll_pid + drone_data->pid_correction.pitch_pid - drone_data->pid_correction.yaw_pid;
+	drone_data->motor_cmd.m14 = drone_data->pid_correction.roll_pid + drone_data->pid_correction.pitch_pid + drone_data->pid_correction.yaw_pid;
 
-	motor_cmd[4] = -roll_pid - pitch_pid + yaw_pid;
-	motor_cmd[5] = roll_pid - pitch_pid - yaw_pid;
-	motor_cmd[6] = -roll_pid + pitch_pid - yaw_pid;
-	motor_cmd[7] = roll_pid + pitch_pid + yaw_pid;
+	drone_data->motor_cmd.m21 = -drone_data->pid_correction.roll_pid - drone_data->pid_correction.pitch_pid + drone_data->pid_correction.yaw_pid;
+	drone_data->motor_cmd.m22 = drone_data->pid_correction.roll_pid - drone_data->pid_correction.pitch_pid - drone_data->pid_correction.yaw_pid;
+	drone_data->motor_cmd.m23 = -drone_data->pid_correction.roll_pid + drone_data->pid_correction.pitch_pid - drone_data->pid_correction.yaw_pid;
+	drone_data->motor_cmd.m24 = drone_data->pid_correction.roll_pid + drone_data->pid_correction.pitch_pid + drone_data->pid_correction.yaw_pid;
 }
 
 void MC_update_motors(void){
 	//TODO a modifier en fonction de MC_PID_correction
-	MC_f1_m1_PE9(motor_cmd[0]);
-	MC_f1_m2_PE11(motor_cmd[1]);
-	MC_f1_m3_PE13(motor_cmd[2]);
-	MC_f1_m4_PE14(motor_cmd[3]);
+	MC_f1_m1_PE9(drone_data->motor_cmd.m11 + PWM_MIN_MOTOR_OFF);
+	MC_f1_m2_PE11(drone_data->motor_cmd.m12 + PWM_MIN_MOTOR_OFF);
+	MC_f1_m3_PE13(drone_data->motor_cmd.m13 + PWM_MIN_MOTOR_OFF);
+	MC_f1_m4_PE14(drone_data->motor_cmd.m14 + PWM_MIN_MOTOR_OFF);
 
-	MC_f2_m1_PC6(motor_cmd[4]);
-	MC_f2_m2_PC7(motor_cmd[5]);
-	MC_f2_m3_PC8(motor_cmd[6]);
-	MC_f2_m4_PC9(motor_cmd[7]);
+	MC_f2_m1_PC6(drone_data->motor_cmd.m21);
+	MC_f2_m2_PC7(drone_data->motor_cmd.m22);
+	MC_f2_m3_PC8(drone_data->motor_cmd.m23);
+	MC_f2_m4_PC9(drone_data->motor_cmd.m24);
 }
 
 void MC_put_all_motors_off(void)
@@ -227,16 +226,20 @@ void MC_put_all_motors_off(void)
 
 void MC_test_all_motors(void)
 {
+	uint16_t val = 1100;
 	//MC_init_pwm_tim1_tim3(); (Penser à appeler cette fonction au préalabre)
-	MC_f1_m1_PE9(65);
-	MC_f1_m2_PE11(65);
-	MC_f1_m3_PE13(65);
-	MC_f1_m4_PE14(65);
-	/*
-	MC_f2_m1_PC6(65);
-	MC_f2_m2_PC7(65);
-	MC_f2_m3_PC8(65);
-	MC_f2_m4_PC9(65);*/
+	MC_f1_m1_PE9(val);
+	MC_f1_m2_PE11(val);
+	MC_f1_m3_PE13(val);
+	MC_f1_m4_PE14(val);
+	HAL_Delay(3000);
+	MC_put_all_motors_off();
+	MC_f2_m1_PC6(val);
+	MC_f2_m2_PC7(val);
+	MC_f2_m3_PC8(val);
+	MC_f2_m4_PC9(val);
+	HAL_Delay(3000);
+	MC_put_all_motors_off();
 }
 
 void MC_test_motor_one_by_one(void)
