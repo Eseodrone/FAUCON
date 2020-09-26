@@ -32,10 +32,6 @@
 #define MESURE_LARGEUR_DRONE_CM 30
 
 
-//Structure de mpu modifi�e automatiquement par fonctions
-MPU6050_t mpu_datas_res;
-MPU6050_t* p_mpu_datas_res;
-
 extern uint32_t compteur_no_pooling_tof;
 extern uint32_t compteur_no_pooling_mpu;
 

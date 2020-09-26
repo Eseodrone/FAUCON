@@ -5,21 +5,27 @@
 #include "drone_def.h"
 
 //MACROS
-#define INT_TIME			0.001
-#define MPU_RANGE_X			1100
-#define MPU_RANGE_Y			1100
-#define MPU_RANGE_Z			1000
+#define RAD_TO_DEG		((float)57.3)
+#define FREQUENCY 		((float)250)
+
+#define INT_TIME		((float)0.004) //4ms
+#define MPU_RANGE_X		((float)2500)
+#define MPU_RANGE_Y		((float)1100)
+#define MPU_RANGE_Z		((float)1000)
 
 
-//
 extern bool_e mpu_init_OK;
 
 //PROTOTYPES
 bool_e MPU_init(drone_data_t* drone);
-void MPU_test(void);
-void MPU_average_demo(void);
+void MPU_demo(void);
 void MPU_angle_computer(void);
 
+typedef struct{
+	float Gyro_X;
+	float Gyro_Y;
+	float Gyro_Z;
+}Gyro_datas_t; //Stocke les vitesses angulaires
 
 
 

@@ -9,9 +9,9 @@
 #define APPLI_DRONE_DEF_H_
 
 typedef struct{
-	int16_t Gyroscope_X;     /*!< Gyroscope value X axis */
-	int16_t Gyroscope_Y;     /*!< Gyroscope value Y axis */
-	int16_t Gyroscope_Z;     /*!< Gyroscope value Z axis */
+	float roll_angle;
+	float pitch_angle;
+	float yaw_angle;
 
 	uint16_t dist_0;
 	uint16_t dist_1;
@@ -19,6 +19,7 @@ typedef struct{
 	uint16_t dist_3;
 	uint16_t dist_4;
 }datas_sensors_pooling_t;
+
 
 typedef struct{
 	float roll_pid;
