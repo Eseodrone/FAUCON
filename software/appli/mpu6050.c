@@ -38,9 +38,9 @@ void MPU_angle_computer(void)
 	angular_speed.Gyro_Y += ((float)(MPU6050_Data.Gyroscope_Y+AVERAGE_Y)*INT_TIME); //Average negatif
 	angular_speed.Gyro_Z += ((float)(MPU6050_Data.Gyroscope_Z+AVERAGE_Z )*INT_TIME);
 	//printf("intégration (float) X : %d\n",(int)angular_speed.Gyro_X);
-	drone_data->datas_sensors_pooling.roll_angle = (float)(angular_speed.Gyro_X/MPU_RANGE_X*360);
-	drone_data->datas_sensors_pooling.pitch_angle = (float)(angular_speed.Gyro_Y/MPU_RANGE_X*360);
-	drone_data->datas_sensors_pooling.yaw_angle = (float)(angular_speed.Gyro_Z/MPU_RANGE_X*360);
+	drone_data->datas_sensors_pooling.roll_angle = (float)(angular_speed.Gyro_Y/MPU_RANGE_X*360);
+	drone_data->datas_sensors_pooling.pitch_angle = (float)(angular_speed.Gyro_X/MPU_RANGE_X*360);
+	drone_data->datas_sensors_pooling.yaw_angle = -(float)(angular_speed.Gyro_Z/MPU_RANGE_X*360);
 	//printf("Roll angle : %d\n",(int)drone_data->datas_sensors_pooling.roll_angle);
 }
 
