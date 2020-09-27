@@ -78,5 +78,58 @@ void TIMER2_run_1ms(void)
 	__HAL_TIM_ENABLE(&Tim2_Handle);
 }
 
+
+
+
+
+static TIM_HandleTypeDef Tim5_Handle;
+
+
+void TIM5_IRQHandler(void){
+	if(__HAL_TIM_GET_IT_SOURCE(&Tim5_Handle, TIM_IT_UPDATE) != RESET) 	//Si le flag est levé...
+	{
+		__HAL_TIM_CLEAR_IT(&Tim5_Handle, TIM_IT_UPDATE);				//...On l'acquitte...
+		TIMER5_user_handler_it_1ms();									//...Et on appelle la fonction qui nous intéresse
+	}
+	HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_15);
+}
+
+
+__weak void TIMER5_user_handler_it_1ms(void){
+
+}
+
+
+void TIMER5_run_1ms(void){
+	// On active l'horloge du TIM12
+	__HAL_RCC_TIM5_CLK_ENABLE();
+
+	// On fixe les priorités des interruptions du timer2 PreemptionPriority = 0, SubPriority = 1 et on autorise les interruptions
+	HAL_NVIC_SetPriority( TIM5_IRQn, 5, 1);
+	HAL_NVIC_EnableIRQ(TIM5_IRQn);
+
+	// Time base configuration
+	Tim5_Handle.Instance = TIM5; //On donne le timer 2 en instance à notre gestionnaire (Handle)
+	Tim5_Handle.Init.Period = 1000; //period_us - période choisie en us : Min = 1us, Max = 65535 us
+	Tim5_Handle.Init.Prescaler = TIM2_3_4_5_6_7_12_13_14_CLK / (1000000) - 1; //divise notre clock de timer par 84 (afin d'augmenter la période maximale)
+	Tim5_Handle.Init.ClockDivision = 0;
+	Tim5_Handle.Init.CounterMode = TIM_COUNTERMODE_UP;
+
+	// On applique les paramètres d'initialisation
+	HAL_TIM_Base_Init(&Tim5_Handle);
+
+	// On autorise les interruptions
+	HAL_TIM_Base_Start_IT(&Tim5_Handle);
+
+	// On lance le timer2
+	__HAL_TIM_ENABLE(&Tim5_Handle);
+}
+
+
+
+
+
+
+
 #endif
 

@@ -18,7 +18,7 @@
  * @post	Le timer 2 et son horloge sont activés, ses interruptions autorisées, et son décompte lancé.
  */
 void TIMER2_run_1ms(void);
-
+void TIMER5_run_1ms(void);
 
 /**
  * @brief	Fonction de l'utilisateur appelée par la routine d'interruption du timer 2.
@@ -27,6 +27,7 @@ void TIMER2_run_1ms(void);
  * @post	Le timer 2 et son horloge sont activés, ses interruptions autorisées, et son décompte lancé.
  */
 void TIMER2_user_handler_it_1ms(void);
+void TIMER5_user_handler_it_1ms(void);
 
 #endif
 #endif /* TIMER_H_ */

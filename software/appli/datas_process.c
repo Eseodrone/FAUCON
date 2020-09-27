@@ -10,7 +10,7 @@
 #include "datas_process.h"
 #include "stm32f4_timer.h"
 
-
+uint32_t compteur_TIM_5 = 0;
 
 drone_data_t* drone_data;
 
@@ -22,7 +22,7 @@ uint32_t compteur_no_pooling_mpu = 0;
 
 /// INTERROGATION AVEC IT DE TIMER 2   ///
 //IT 1ms, de plus basse priorit� que l'IT du systick !
-void TIMER2_user_handler_it_1ms(void)
+void TIMER5_user_handler_it_1ms(void)
 {
 	static timeslot_e timeslot;
 
@@ -45,11 +45,11 @@ void TIMER2_user_handler_it_1ms(void)
 
 		if(timeslot == TIMESLOT_ASK_END){ //Si fin de com avec les ToFs
 			TOF_OK = 1; //Alors TOF_OK = 1, on peut alors parler en I2C au gyro et lire les valeurs des tofs
+			datas_tof_maj();
 		}
 		else{
 			TOF_OK = 0; //sinon communication pas finie =>
 		}
-		datas_tof_maj();
 
 	}
 
@@ -67,12 +67,15 @@ void TIMER2_user_handler_it_1ms(void)
 }
 
 
+
 void data_process_init(drone_data_t * drone){
 	drone_data = drone;
 	MPU_init(drone_data);
 	VL53L1X_init();
-	REGULATION_init(&(drone->datas_sensors_pooling),&(drone->target_values),&(drone->target_values));
-	TIMER2_run_1ms();
+	//REGULATION_init(&(drone->datas_sensors_pooling),&(drone->target_values),&(drone->target_values));
+	//TIMER2_run_1ms();
+	TIMER5_run_1ms();
+
 }
 
 
@@ -88,7 +91,9 @@ void datas_tof_maj(){
 
 
 
-
+uint8_t uint16_to_uint8(uint16_t data16){
+	return data16 >> 8;
+}
 
 
 
