@@ -48,6 +48,8 @@ int main(void){
 	drone.target_values.roll_target = 0.0f;
 	drone.target_values.yaw_target = 0.0f;
 
+	drone.process_data = 1;
+
 
 
 
