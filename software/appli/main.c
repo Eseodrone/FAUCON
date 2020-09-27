@@ -48,7 +48,7 @@ int main(void){
 	drone.target_values.roll_target = 0.0f;
 	drone.target_values.yaw_target = 0.0f;
 
-	drone.process_data = 1;
+	drone.process_data = 0;
 
 
 
@@ -70,6 +70,7 @@ int main(void){
 
 	//MC_put_all_motors_off();
 	while (1){
+		main_bluetooth();
 		test_tofs();
 		HAL_Delay(4);
 	}

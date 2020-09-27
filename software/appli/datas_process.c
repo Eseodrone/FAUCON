@@ -52,16 +52,16 @@ void TIMER5_user_handler_it_1ms(void)
 				}
 
 			}
-
-			if(compteur_no_pooling_mpu <= TIME_MS_POOLING_MPU){
-				compteur_no_pooling_mpu++;
-			}
-			else{
-				MPU_angle_computer();
-				compteur_no_pooling_mpu = 0;
-			}
-			REGULATION_process_angle();
 			if(drone_data->process_data == 1){
+				if(compteur_no_pooling_mpu <= TIME_MS_POOLING_MPU){
+					compteur_no_pooling_mpu++;
+				}
+				else{
+					MPU_angle_computer();
+					compteur_no_pooling_mpu = 0;
+				}
+				REGULATION_process_angle();
+
 				MC_PID_correction();
 				MC_update_motors();
 			}else{

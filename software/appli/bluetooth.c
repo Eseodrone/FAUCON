@@ -10,6 +10,7 @@
 
 #include "bluetooth.h"
 #include "drone_def.h"
+#include "datas_process.h"
 
 
 
@@ -91,17 +92,20 @@ void main_bluetooth (void){
 
 	char c = BLUETOOTH_reception_caractere();
 	if(c=='s'){
-		HAL_GPIO_WritePin(LEDS_GPIO, LED_GREEN_PIN, SET);
+		data_process_start();
 		//mettre fonction pour allumer le drone
 	}
 	if(c=='u'){
-		HAL_GPIO_WritePin(LEDS_GPIO, LED_GREEN_PIN, RESET);
+		data_process_stop();
 		//mettre foncion pour éteindre le drone
 	}
 
+
+
+
 	/* envoie trames avec toutes les infos */
 
-
+	/*
 	drone_data_t info_envoie;
 
 	info_envoie.datas_sensors_pooling.roll_angle;
@@ -140,7 +144,7 @@ void main_bluetooth (void){
 // foncrion envoie trames
 
 	BLUETOOTH_envoi_trame3(info1,info2,info3);
-	BLUETOOTH_envoi_trame5(info4,info5,info6,info7,info8);
+	BLUETOOTH_envoi_trame5(info4,info5,info6,info7,info8); */
 }
 
 
