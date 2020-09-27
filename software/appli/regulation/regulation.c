@@ -31,6 +31,7 @@ void REGULATION_init(datas_sensors_pooling_t * datas_sensors_pooling_,target_val
 	//On mémorise nos structures de données que l on va utiliser
 	datas_sensors_pooling = datas_sensors_pooling_;
 	target_values = target_values_;
+	printf("Init Angle target: %d\n",(int) target_values->pitch_target);
 	PID_correction = PID_correction_;
 
 	//Configuration de nos pid
@@ -42,9 +43,10 @@ void REGULATION_init(datas_sensors_pooling_t * datas_sensors_pooling_,target_val
 //Process des pids et mise à jour structures pid_outputs_t
 void REGULATION_process_angle(void){
 	//On admet que le roll corespond au x le y au pitch et z au yaw
-	PID_correction->roll_pid = PID_compute(&pids[PID_ANGLE_ROLL], target_values->roll_target, datas_sensors_pooling->Gyroscope_X);
-	PID_correction->pitch_pid = PID_compute(&pids[PID_ANGLE_PITCH], target_values->pitch_target, datas_sensors_pooling->Gyroscope_Y);
-	PID_correction->yaw_pid = PID_compute(&pids[PID_ANGLE_YAW], target_values->yaw_target, datas_sensors_pooling->Gyroscope_Z);
+	//PID_correction->roll_pid = PID_compute(&pids[PID_ANGLE_ROLL], target_values->roll_target, datas_sensors_pooling->roll_angle);
+	//printf("Angle : %d\n",(int)  datas_sensors_pooling->pitch_angle);
+	PID_correction->pitch_pid = PID_compute(&pids[PID_ANGLE_PITCH], target_values->pitch_target, datas_sensors_pooling->pitch_angle);
+	//PID_correction->yaw_pid = PID_compute(&pids[PID_ANGLE_YAW], target_values->yaw_target, datas_sensors_pooling->yaw_angle);
 }
 
 

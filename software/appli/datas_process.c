@@ -9,6 +9,8 @@
 
 #include "datas_process.h"
 #include "stm32f4_timer.h"
+#include "regulation/regulation.h"
+#include "motors_control.h"
 
 uint32_t compteur_TIM_5 = 0;
 
@@ -75,7 +77,6 @@ void data_process_init(drone_data_t * drone){
 	//REGULATION_init(&(drone->datas_sensors_pooling),&(drone->target_values),&(drone->target_values));
 	//TIMER2_run_1ms();
 	TIMER5_run_1ms();
-
 }
 
 
