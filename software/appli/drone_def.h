@@ -49,6 +49,7 @@ typedef struct{
 	PID_correction_t pid_correction;
 	target_values_t target_values;
 	motor_cmd_t motor_cmd;
+	bool_e process_data;
 }drone_data_t;
 
 

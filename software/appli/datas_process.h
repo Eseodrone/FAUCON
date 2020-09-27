@@ -39,8 +39,11 @@ extern bool_e TOF_OK;
 
 
 void TIMER2_user_handler_it_1ms(void);
-void datas_tof_maj();
+void datas_tof_maj(void);
 void data_process_init(drone_data_t * drone_data);
+void data_process_stop(void);
+void data_process_start(void);
+
 
 
 
