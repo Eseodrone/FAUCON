@@ -39,14 +39,18 @@ void BLUETOOTH_envoi_caractere(uint8_t c){
 	UART_putc(UART2_ID,c);
 }
 
-//reception d'un caract�re
-void BLUETOOTH_reception_caractere(void){
+
+char BLUETOOTH_reception_caractere(void){
 	if(UART_data_ready(UART2_ID)){
-		uint8_t c;
-		c = UART_get_next_byte(UART2_ID);
-		//printf("%c",c);
+		char c;
+		c = UART_getc(UART2_ID);
+		return c;
+	}
+	else{
+		return 0;
 	}
 }
+
 //reception d'une Trame de 4 informations
 void BLUETOOTH_reception_trame(void){
 	if(UART_data_ready(UART2_ID)){

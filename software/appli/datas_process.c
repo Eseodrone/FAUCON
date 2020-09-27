@@ -12,8 +12,6 @@
 #include "regulation/regulation.h"
 #include "motors_control.h"
 
-uint32_t compteur_TIM_5 = 0;
-
 drone_data_t* drone_data;
 
 bool_e TOF_OK = 0;
@@ -62,10 +60,9 @@ void TIMER5_user_handler_it_1ms(void)
 		MPU_angle_computer();
 		compteur_no_pooling_mpu = 0;
 	}
-
 	REGULATION_process_angle();
 	MC_PID_correction();
-	//MC_update_motors();
+	MC_update_motors();
 }
 
 
@@ -74,12 +71,9 @@ void data_process_init(drone_data_t * drone){
 	drone_data = drone;
 	MPU_init(drone_data);
 	VL53L1X_init();
-	//REGULATION_init(&(drone->datas_sensors_pooling),&(drone->target_values),&(drone->target_values));
-	//TIMER2_run_1ms();
+	REGULATION_init(&(drone->datas_sensors_pooling),&(drone->target_values),&(drone->pid_correction));
 	TIMER5_run_1ms();
 }
-
-
 
 
 void datas_tof_maj(){
@@ -88,12 +82,6 @@ void datas_tof_maj(){
 	drone_data->datas_sensors_pooling.dist_2 = VL53L1X_get_distance(2);
 	drone_data->datas_sensors_pooling.dist_3 = VL53L1X_get_distance(3);
 	drone_data->datas_sensors_pooling.dist_4 = VL53L1X_get_distance(4);
-}
-
-
-
-uint8_t uint16_to_uint8(uint16_t data16){
-	return data16 >> 8;
 }
 
 

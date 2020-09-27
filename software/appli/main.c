@@ -49,16 +49,18 @@ int main(void){
 	drone.target_values.yaw_target = 0.0f;
 
 
+
+
 	//TESTS MOTEUR
-	//* init de la lecture des capteurs, utilise TIMER2
-	data_process_init(&drone);
-
-
 	MC_init_pwm_tim1_tim3(&drone);
 	MC_esc_calibration();
 	//MC_test_motor_one_by_one();
 	//MC_f1_m1_PE9(1100);
 	//MC_test_progressive_pwm();
+
+	//TESTS MOTEUR
+	//* init de la lecture des capteurs, utilise TIMER2
+	data_process_init(&drone);
 
 
 
@@ -66,12 +68,6 @@ int main(void){
 
 	//MC_put_all_motors_off();
 	while (1){
-		VL53L1X_process_it();
-		datas_tof_maj();
-		MPU_angle_computer();
-		REGULATION_process_angle();
-		MC_PID_correction();
-		MC_update_motors();
 		test_tofs();
 		HAL_Delay(4);
 	}
