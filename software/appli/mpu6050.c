@@ -23,9 +23,9 @@ bool_e MPU_init(drone_data_t* drone){
 	//on init le mpu, structure et boolean de .h
 	if(MPU6050_Init(&MPU6050_Data, MPU6050_VCC_GPIO, MPU6050_VCC_PIN, MPU6050_Device_0, MPU6050_Accelerometer_8G, MPU6050_Gyroscope_2000s) == MPU6050_Result_Ok)
 		mpu_init_OK = TRUE; //A revoir du coup
-	AVERAGE_X = 93;
-	AVERAGE_Y = -150;
-	AVERAGE_Z = -110;
+	AVERAGE_X = 36;
+	AVERAGE_Y = 8;
+	AVERAGE_Z = 16; //normalement OK
 	return mpu_init_OK;
 }
 
@@ -35,13 +35,13 @@ void MPU_angle_computer(void)
 	MPU6050_ReadGyroscope(&MPU6050_Data);
 	//printf("Brut value (int) X : %d\n",MPU6050_Data.Gyroscope_X);
 	angular_speed.Gyro_X += ((float)(MPU6050_Data.Gyroscope_X+AVERAGE_X)*INT_TIME);
-	angular_speed.Gyro_Y += ((float)(MPU6050_Data.Gyroscope_Y+AVERAGE_Z)*INT_TIME); //Average negatif
-	angular_speed.Gyro_Z += ((float)(MPU6050_Data.Gyroscope_Z+AVERAGE_Y)*INT_TIME);
+	angular_speed.Gyro_Y += ((float)(MPU6050_Data.Gyroscope_Y+AVERAGE_Y)*INT_TIME); //Average negatif
+	angular_speed.Gyro_Z += ((float)(MPU6050_Data.Gyroscope_Z+AVERAGE_Z )*INT_TIME);
 	//printf("intégration (float) X : %d\n",(int)angular_speed.Gyro_X);
 	drone_data->datas_sensors_pooling.roll_angle = (float)(angular_speed.Gyro_X/MPU_RANGE_X*360);
 	drone_data->datas_sensors_pooling.pitch_angle = (float)(angular_speed.Gyro_Y/MPU_RANGE_X*360);
 	drone_data->datas_sensors_pooling.yaw_angle = (float)(angular_speed.Gyro_Z/MPU_RANGE_X*360);
-	printf("Roll angle : %d\n",(int)drone_data->datas_sensors_pooling.roll_angle);
+	//printf("Roll angle : %d\n",(int)drone_data->datas_sensors_pooling.roll_angle);
 }
 
 /*

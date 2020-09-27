@@ -9,6 +9,8 @@
 
 #include "datas_process.h"
 #include "stm32f4_timer.h"
+#include "regulation/regulation.h"
+#include "motors_control.h"
 
 
 
@@ -71,8 +73,8 @@ void data_process_init(drone_data_t * drone){
 	drone_data = drone;
 	MPU_init(drone_data);
 	VL53L1X_init();
-	REGULATION_init(&(drone->datas_sensors_pooling),&(drone->target_values),&(drone->target_values));
-	TIMER2_run_1ms();
+	REGULATION_init(&(drone->datas_sensors_pooling),&(drone->target_values),&(drone->pid_correction));
+	//TIMER2_run_1ms();
 }
 
 

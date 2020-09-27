@@ -12,6 +12,9 @@ float PID_compute(PID_t * pid, float consigne, float measurement){
 	//Calcul de l'erreur
 	pid->error = measurement - consigne ;
 
+	//printf("PID error : %d\n",(int) pid->error);
+
+
 	//Calcul des P I D
 	pid->P = pid->settings[PID_KP] * pid->error ;
 	pid->I += pid->settings[PID_KI] * pid->error / pid->settings[PID_FREQUENCY];
