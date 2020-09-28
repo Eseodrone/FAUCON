@@ -12,6 +12,7 @@
 #include "macro_types.h"
 #include "stm32f4_uart.h"
 #include "stm32f4_sys.h"
+#include "dialog.h"
 
 
 void BLUETOOTH_init(void);

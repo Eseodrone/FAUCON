@@ -10,7 +10,7 @@
 
 #include "bluetooth.h"
 #include "drone_def.h"
-
+#include "motors_control.h"
 
 
 void BLUETOOTH_init(void){
@@ -86,22 +86,56 @@ void BLUETOOTH_envoi_trame2(uint8_t info1, uint8_t info2){
 }
 
 
+
+
 void main_bluetooth (void){
 	/* reception du caractere start et stop : analyse de la trame */
 
 	char c = BLUETOOTH_reception_caractere();
 	if(c=='s'){
 		HAL_GPIO_WritePin(LEDS_GPIO, LED_GREEN_PIN, SET);
-		//mettre fonction pour allumer le drone
+		drone_data->process_data = 1;
 	}
 	if(c=='u'){
 		HAL_GPIO_WritePin(LEDS_GPIO, LED_GREEN_PIN, RESET);
-		//mettre foncion pour éteindre le drone
+		MC_put_all_motors_off();
 	}
 
 	/* envoie trames avec toutes les infos */
 
 
+	uint16_t backward_X = drone_data->datas_sensors_pooling.dist_backward_X;
+	uint16_t side_Y = drone_data->datas_sensors_pooling.dist_side_Y;
+	uint16_t forward_X = drone_data->datas_sensors_pooling.dist_forward_X;
+	uint16_t low_Z = drone_data->datas_sensors_pooling.dist_low_Z;
+	uint16_t high_Z = drone_data->datas_sensors_pooling.dist_high_Z;
+
+
+	float roll_angle = drone_data->datas_sensors_pooling.roll_angle;
+	float pitch_angle = drone_data->datas_sensors_pooling.pitch_angle;
+	float yaw_angle = drone_data->datas_sensors_pooling.yaw_angle;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 	drone_data_t info_envoie;
 
 	info_envoie.datas_sensors_pooling.roll_angle;
@@ -125,6 +159,8 @@ void main_bluetooth (void){
 	uint16_t info7 = info_envoie.datas_sensors_pooling.dist_3;
 	uint16_t info8 = info_envoie.datas_sensors_pooling.dist_4;
 
+
+
 	//convert en 0 à 250
 
 	info1 = info1/1,44;
@@ -139,8 +175,11 @@ void main_bluetooth (void){
 
 // foncrion envoie trames
 
+
 	BLUETOOTH_envoi_trame3(info1,info2,info3);
 	BLUETOOTH_envoi_trame5(info4,info5,info6,info7,info8);
+*/
+
 }
 
 
