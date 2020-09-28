@@ -31,7 +31,7 @@ int main(void){
 	GPIO_Configure();
 
 	//* UART DU PRINTF ==> Activation SEULEMENT si on utilise pas le bluetooth
-	//SYS_set_std_usart(UART2_ID, UART2_ID, UART2_ID);
+	SYS_set_std_usart(UART2_ID, UART2_ID, UART2_ID);
 
 	//* LEDs F4
 	BSP_GPIO_PinCfg(LEDS_GPIO, LED_GREEN_PIN | LED_ORANGE_PIN | LED_RED_PIN | LED_BLUE_PIN, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
@@ -44,7 +44,7 @@ int main(void){
 	drone.target_values.pitch_target = 0.0f;
 	drone.target_values.roll_target = 0.0f;
 	drone.target_values.yaw_target = 0.0f;
-	drone.target_values.z_target = 150;
+	drone.target_values.z_target = 1000;
 
 	drone.process_data = 1;
 
