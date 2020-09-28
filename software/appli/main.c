@@ -8,6 +8,7 @@
 
 #include <vl53l1x/vl53l1x.h>
 #include "stm32f4xx_hal.h"
+
 #include "macro_types.h"
 #include "main.h"
 #include "stm32f4_uart.h"
@@ -22,17 +23,22 @@
 #include "motors_control.h"
 #include "drone_def.h"
 #include "regulation/regulation.h"
+#include "dialog.h"
 
 int main(void){
 	HAL_Init();
 	SYS_init();			//initialisation du systeme (horloge...)
 	GPIO_Configure();
 
-	//* UART DU BLUETOOTH
-	BLUETOOTH_init();
+
+
+
+	//* dialog
+	DIALOG_init(&DIALOG_callback_send_byte);
+
 
 	//* UART DU PRINTF ==> Activation SEULEMENT si on utilise pas le bluetooth
-	SYS_set_std_usart(UART2_ID, UART2_ID, UART2_ID);
+	//SYS_set_std_usart(UART2_ID, UART2_ID, UART2_ID);
 
 	//* LEDs F4
 	BSP_GPIO_PinCfg(LEDS_GPIO, LED_GREEN_PIN | LED_ORANGE_PIN | LED_RED_PIN | LED_BLUE_PIN, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
@@ -47,30 +53,30 @@ int main(void){
 	drone.target_values.pitch_target = 0.0f;
 	drone.target_values.roll_target = 0.0f;
 	drone.target_values.yaw_target = 0.0f;
-
 	drone.target_values.z_target = 150;
 
 	drone.process_data = 1;
 
 
-
-
+	//* UART DU BLUETOOTH
+	BLUETOOTH_init(&drone);
 	//TESTS MOTEUR
 	MC_init_pwm_tim1_tim3(&drone);
 	MC_esc_calibration();
+	//test_moteur_PC6(60);
 	//MC_test_motor_one_by_one();
 	//MC_f1_m1_PE9(1100);
 	//MC_test_progressive_pwm();
+
 
 	//TESTS MOTEUR
 	//* init de la lecture des capteurs, utilise TIMER2
 	data_process_init(&drone);
 
 
-
 	//MC_test_all_motors();
-
 	//MC_put_all_motors_off();
+
 	while (1){
 		main_bluetooth();
 		//test_tofs();

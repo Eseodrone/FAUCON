@@ -13,11 +13,11 @@ typedef struct{
 	float pitch_angle;
 	float yaw_angle;
 
-	uint16_t dist_0;
-	uint16_t dist_1;
-	uint16_t dist_2;
-	uint16_t dist_3;
-	uint16_t dist_4;
+	uint16_t dist_backward_X;
+	uint16_t dist_side_Y;
+	uint16_t dist_forward_X;
+	uint16_t dist_low_Z;
+	uint16_t dist_high_Z;
 }datas_sensors_pooling_t;
 
 

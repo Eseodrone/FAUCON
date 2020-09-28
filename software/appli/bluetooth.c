@@ -13,9 +13,12 @@
 #include "datas_process.h"
 
 
+static drone_data_t * drone_data;
 
-void BLUETOOTH_init(void){
+
+void BLUETOOTH_init(drone_data_t * drone_data_){
 	UART_init(UART2_ID, 38400);
+	drone_data = drone_data_;
 }
 
 //envoie un caractï¿½re
@@ -87,7 +90,9 @@ void BLUETOOTH_envoi_trame2(uint8_t info1, uint8_t info2){
 }
 
 
-void main_bluetooth (void){
+
+
+void main_bluetooth (){
 	/* reception du caractere start et stop : analyse de la trame */
 
 	char c = BLUETOOTH_reception_caractere();
@@ -103,9 +108,22 @@ void main_bluetooth (void){
 
 
 
-	/* envoie trames avec toutes les infos */
+	uint16_t backward_X = drone_data->datas_sensors_pooling.dist_backward_X;
+	uint16_t side_Y = drone_data->datas_sensors_pooling.dist_side_Y;
+	uint16_t forward_X = drone_data->datas_sensors_pooling.dist_forward_X;
+	uint16_t low_Z = drone_data->datas_sensors_pooling.dist_low_Z;
+	uint16_t high_Z = drone_data->datas_sensors_pooling.dist_high_Z;
 
-	/*
+
+	float roll_angle = drone_data->datas_sensors_pooling.roll_angle;
+	float pitch_angle = drone_data->datas_sensors_pooling.pitch_angle;
+	float yaw_angle = drone_data->datas_sensors_pooling.yaw_angle;
+
+
+
+
+
+/*
 	drone_data_t info_envoie;
 
 	info_envoie.datas_sensors_pooling.roll_angle;
@@ -129,6 +147,8 @@ void main_bluetooth (void){
 	uint16_t info7 = info_envoie.datas_sensors_pooling.dist_3;
 	uint16_t info8 = info_envoie.datas_sensors_pooling.dist_4;
 
+
+
 	//convert en 0 à 250
 
 	info1 = info1/1,44;
@@ -140,11 +160,7 @@ void main_bluetooth (void){
 	info6 = info6/16;
 	info7 = info7/16;
 	info8 = info8/16;
-
-// foncrion envoie trames
-
-	BLUETOOTH_envoi_trame3(info1,info2,info3);
-	BLUETOOTH_envoi_trame5(info4,info5,info6,info7,info8); */
+*/
 }
 
 

@@ -4,7 +4,7 @@
 static TIM_HandleTypeDef TimHandle_1;	//Structure contenant les infos concernant l'�tat du timer 1
 static TIM_HandleTypeDef TimHandle_3;	//Structure contenant les infos concernant l'�tat du timer 3
 
-drone_data_t * drone_data;
+static drone_data_t * drone_data;
 
 void MC_init_pwm_tim1_tim3(drone_data_t * drone_data_){
 
@@ -213,8 +213,7 @@ void MC_update_motors(void){
 	MC_f2_m4_PC9(drone_data->motor_cmd.m24 + PWM_MIN_MOTOR_OFF);
 }
 
-void MC_put_all_motors_off(void)
-{
+void MC_put_all_motors_off(void){
 	MC_f1_m1_PE9(PWM_MIN_MOTOR_OFF);
 	MC_f1_m2_PE11(PWM_MIN_MOTOR_OFF);
 	MC_f1_m3_PE13(PWM_MIN_MOTOR_OFF);

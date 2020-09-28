@@ -13,6 +13,7 @@
 #include "stm32f4_timer.h"
 #include "drone_def.h"
 
+
 /***********************************************************PORTS INIT***********************************************************/
 #define PWM_MOT_11 GPIOC, GPIO_PIN_6
 #define PWM_MOT_12 GPIOC, GPIO_PIN_7

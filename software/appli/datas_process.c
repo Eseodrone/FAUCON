@@ -12,7 +12,8 @@
 #include "regulation/regulation.h"
 #include "motors_control.h"
 
-drone_data_t* drone_data;
+static drone_data_t * drone_data;
+
 
 bool_e TOF_OK = 0;
 uint32_t compteur_no_pooling_tof = 0;
@@ -83,11 +84,11 @@ void data_process_init(drone_data_t * drone){
 
 
 void datas_tof_maj(){
-	drone_data->datas_sensors_pooling.dist_0 = VL53L1X_get_distance(0);
-	drone_data->datas_sensors_pooling.dist_1 = VL53L1X_get_distance(1);
-	drone_data->datas_sensors_pooling.dist_2 = VL53L1X_get_distance(2);
-	drone_data->datas_sensors_pooling.dist_3 = VL53L1X_get_distance(3);
-	drone_data->datas_sensors_pooling.dist_4 = VL53L1X_get_distance(4);
+	drone_data->datas_sensors_pooling.dist_backward_X = VL53L1X_get_distance(0);
+	drone_data->datas_sensors_pooling.dist_side_Y = VL53L1X_get_distance(1);
+	drone_data->datas_sensors_pooling.dist_forward_X = VL53L1X_get_distance(2);
+	drone_data->datas_sensors_pooling.dist_low_Z = VL53L1X_get_distance(3);
+	drone_data->datas_sensors_pooling.dist_high_Z = VL53L1X_get_distance(4);
 }
 
 void data_process_start(){

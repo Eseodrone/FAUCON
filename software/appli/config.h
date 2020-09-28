@@ -1,13 +1,13 @@
 /*
  * config.h
-
-
  *  Created on: 8 nov. 2016
  *      Author: Nirgal
  */
 
 #ifndef APPLI_CONFIG_H_
 #define APPLI_CONFIG_H_
+
+#define USE_DIALOG				1
 
 #define USE_SCREEN_TFT_ILI9341 	0
 
