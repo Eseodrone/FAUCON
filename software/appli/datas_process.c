@@ -12,6 +12,8 @@
 #include "regulation/regulation.h"
 #include "motors_control.h"
 
+static drone_data_t * drone_data;
+
 
 bool_e TOF_OK = 0;
 uint32_t compteur_no_pooling_tof = 0;

@@ -4,7 +4,7 @@
 static TIM_HandleTypeDef TimHandle_1;	//Structure contenant les infos concernant l'�tat du timer 1
 static TIM_HandleTypeDef TimHandle_3;	//Structure contenant les infos concernant l'�tat du timer 3
 
-drone_data_t * drone_data;
+static drone_data_t * drone_data;
 
 void MC_init_pwm_tim1_tim3(drone_data_t * drone_data_){
 

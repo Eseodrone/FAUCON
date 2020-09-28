@@ -30,8 +30,7 @@ int main(void){
 	SYS_init();			//initialisation du systeme (horloge...)
 	GPIO_Configure();
 
-	//* UART DU BLUETOOTH
-	BLUETOOTH_init();
+
 
 
 	//* dialog
@@ -55,7 +54,8 @@ int main(void){
 	drone.target_values.roll_target = 0.0f;
 	drone.target_values.yaw_target = 0.0f;
 
-
+	//* UART DU BLUETOOTH
+	BLUETOOTH_init(&drone);
 	//TESTS MOTEUR
 	MC_init_pwm_tim1_tim3(&drone);
 	MC_esc_calibration();
@@ -74,6 +74,8 @@ int main(void){
 	//MC_put_all_motors_off();
 
 	while (1){
+
+		main_bluetooth();
 
 
 	}

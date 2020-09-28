@@ -9,12 +9,14 @@
 
 
 #include "bluetooth.h"
-#include "drone_def.h"
-#include "motors_control.h"
 
 
-void BLUETOOTH_init(void){
+static drone_data_t * drone_data;
+
+
+void BLUETOOTH_init(drone_data_t * drone_data_){
 	UART_init(UART2_ID, 38400);
+	drone_data = drone_data_;
 }
 
 //envoie un caract�re
@@ -88,7 +90,7 @@ void BLUETOOTH_envoi_trame2(uint8_t info1, uint8_t info2){
 
 
 
-void main_bluetooth (void){
+void main_bluetooth (){
 	/* reception du caractere start et stop : analyse de la trame */
 
 	char c = BLUETOOTH_reception_caractere();
@@ -114,22 +116,6 @@ void main_bluetooth (void){
 	float roll_angle = drone_data->datas_sensors_pooling.roll_angle;
 	float pitch_angle = drone_data->datas_sensors_pooling.pitch_angle;
 	float yaw_angle = drone_data->datas_sensors_pooling.yaw_angle;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
