@@ -22,7 +22,7 @@ static PID_correction_t * PID_correction;
 static float PID_Settings_Roll[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
 static float PID_Settings_Pitch[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
 static float PID_Settings_Yaw[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
-static float PID_Settings_Z[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_DIST_FREQUENCY, PID_DIST_MAX_OUTPUT};
+static float PID_Settings_Z[PID_NB_SETTINGS] = {0.2f, 0.0f, 0.0f, PID_DIST_FREQUENCY, PID_DIST_MAX_OUTPUT};
 
 
 
@@ -52,7 +52,10 @@ void REGULATION_process_angle(void){
 }
 
 void REGULATION_process_dist(void){
-	 PID_correction->Z_pid  = PID_compute(&pids[PID_DIST_Z], target_values->z_target, datas_sensors_pooling->dist_0);
+	 //printf("dist z mes : %d\n",datas_sensors_pooling->dist_low_Z);
+	 //printf("dist z tar : %d\n",target_values->z_target);
+
+	 PID_correction->Z_pid  = PID_compute(&pids[PID_DIST_Z], target_values->z_target, datas_sensors_pooling->dist_low_Z);
 }
 
 
