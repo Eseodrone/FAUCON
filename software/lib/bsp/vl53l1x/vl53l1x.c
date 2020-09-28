@@ -1,6 +1,5 @@
 /*
  * VL53_becon.h
-
  *
  *  Created on: 3 nov. 2019
  *      Author: Guillaume D.
@@ -245,8 +244,7 @@ timeslot_e VL53L1X_process_it(void){
 	return ret;
 }
 
-void VL53L1X_process_main(void)
-{
+void VL53L1X_process_main(void){
 	char buf[100];
 	uint8_t index = 0;
 	if(flag_send_can_msg)
@@ -267,8 +265,7 @@ void VL53L1X_process_main(void)
 }
 
 
-uint16_t VL53L1X_get_distance(uint8_t id)
-{
+uint16_t VL53L1X_get_distance(uint8_t id){
 	assert(id<VL53_NB);
 	return sensors[id].distance;
 }

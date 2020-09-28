@@ -52,8 +52,6 @@ void REGULATION_process_angle(void){
 }
 
 void REGULATION_process_dist(void){
-	 //printf("dist z mes : %d\n",datas_sensors_pooling->dist_low_Z);
-	 //printf("dist z tar : %d\n",target_values->z_target);
 
 	 PID_correction->Z_pid  = PID_compute(&pids[PID_DIST_Z], target_values->z_target, datas_sensors_pooling->dist_low_Z);
 }
