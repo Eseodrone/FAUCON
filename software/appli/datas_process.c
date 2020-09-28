@@ -61,6 +61,7 @@ void TIMER5_user_handler_it_1ms(void)
 					compteur_no_pooling_mpu = 0;
 				}
 				REGULATION_process_angle();
+				REGULATION_process_dist();
 
 				MC_PID_correction();
 				MC_update_motors();

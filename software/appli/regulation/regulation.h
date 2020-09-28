@@ -22,7 +22,7 @@ typedef enum{
 	PID_ANGLE_ROLL,
 	PID_ANGLE_PITCH,
 	PID_ANGLE_YAW,
-
+	PID_DIST_Z,
 	PID_COUNT
 }PID_names_t;
 
@@ -33,6 +33,7 @@ void REGULATION_init(datas_sensors_pooling_t * datas_sensors_pooling_,target_val
 //Process des pids et mise à jour structures pid_outputs_t
 void REGULATION_process_angle(void);
 
+void REGULATION_process_dist(void);
 
 
 #endif /* APPLI_REGULATION_REGULATION_H_ */

@@ -25,12 +25,14 @@ typedef struct{
 	float roll_pid;
 	float pitch_pid;
 	float yaw_pid;
+	uint16_t Z_pid;
 }PID_correction_t;
 
 typedef struct{
 	float roll_target;
 	float pitch_target;
 	float yaw_target;
+	uint16_t z_target;
 }target_values_t;
 
 typedef struct{
