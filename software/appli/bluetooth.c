@@ -91,6 +91,14 @@ void BLUETOOTH_envoi_trame2(uint8_t info1, uint8_t info2){
 
 
 
+//48.8 => 49 | 48.3 => 48
+#define FLOAT_TO_UINT8(x) ((x)>=0?(int)((x)+0.5):(int)((x)-0.5))
+
+#define TOF_DATAS			5
+#define MPU_DATAS			0
+#define SIZE_BYTE_BUFFER_TRAME	(TOF_DATAS*2)+(MPU_DATAS*2)
+
+
 
 void main_bluetooth (){
 	/* reception du caractere start et stop : analyse de la trame */
@@ -119,6 +127,47 @@ void main_bluetooth (){
 	float pitch_angle = drone_data->datas_sensors_pooling.pitch_angle;
 	float yaw_angle = drone_data->datas_sensors_pooling.yaw_angle;
 
+//	roll_angle = (int16_t) FLOAT_TO_UINT8(roll_angle);
+//	pitch_angle	= (int16_t) FLOAT_TO_UINT8(pitch_angle);
+//	yaw_angle	= (int16_t) FLOAT_TO_UINT8(yaw_angle);
+
+
+	roll_angle = (int16_t) (roll_angle);
+	pitch_angle	= (int16_t) (pitch_angle);
+	yaw_angle	= (int16_t) (yaw_angle);
+
+	//uint8_t data[2] = {data16, (data16 >> 8)}; // {lower byte, upper byte)
+
+	uint8_t buffer_uint8_to_send[SIZE_BYTE_BUFFER_TRAME];
+	uint16_t size_ocets = SIZE_BYTE_BUFFER_TRAME;
+
+	buffer_uint8_to_send[0] = (backward_X);
+	buffer_uint8_to_send[1] = (backward_X >> 8);
+
+	buffer_uint8_to_send[2] = (side_Y);
+	buffer_uint8_to_send[3] = (side_Y >> 8);
+
+	buffer_uint8_to_send[4] = (forward_X);
+	buffer_uint8_to_send[5] = (forward_X >> 8);
+
+	buffer_uint8_to_send[6] = (low_Z);
+	buffer_uint8_to_send[7] = (low_Z >> 8);
+
+	buffer_uint8_to_send[8] = (high_Z);
+	buffer_uint8_to_send[9] = (high_Z >> 8);
+//_______________________________________________
+
+//	buffer_uint8_to_send[10] = (roll_angle);
+//	buffer_uint8_to_send[11] = (roll_angle >> 8);
+//
+//	buffer_uint8_to_send[10] = (pitch_angle);
+//	buffer_uint8_to_send[11] = (pitch_angle >> 8);
+//
+//	buffer_uint8_to_send[10] = (yaw_angle);
+//	buffer_uint8_to_send[11] = (yaw_angle >> 8);
+
+
+	DIALOG_send_packet(size_ocets, buffer_uint8_to_send);
 
 
 

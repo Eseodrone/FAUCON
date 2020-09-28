@@ -14,6 +14,7 @@
 #include "stm32f4_sys.h"
 #include "dialog.h"
 #include "drone_def.h"
+#include "motors_control.h"
 
 
 
