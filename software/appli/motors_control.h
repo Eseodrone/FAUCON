@@ -61,6 +61,7 @@ void MC_update_motors(void);
 void MC_PID_correction(void);
 void MC_test_progressive_pwm(void);
 void MC_test_all_motors(void);
+void MC_test_props(void);
 
 #endif /*MOTORS_CONTROL_H*/
 

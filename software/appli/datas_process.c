@@ -63,7 +63,6 @@ void TIMER5_user_handler_it_1ms(void)
 				}
 				REGULATION_process_angle();
 				REGULATION_process_dist();
-
 				MC_PID_correction();
 				MC_update_motors();
 			}else{

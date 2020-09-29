@@ -319,3 +319,24 @@ void test_moteur_PC6(uint16_t TIME){
 	TIME = MIN(TIME, PWM_LIMIT);
 	MC_pwm_timer_set_duty(TimHandle_3, TIM_CHANNEL_1, TIME);
 }
+
+void MC_test_props(void)
+{
+	uint16_t val = 1200;
+	MC_f1_m1_PE9(val);
+	MC_f1_m2_PE11(val);
+	HAL_Delay(3000);
+	MC_put_all_motors_off();
+	MC_f1_m3_PE13(val);
+	MC_f1_m4_PE14(val);
+	HAL_Delay(3000);
+	MC_put_all_motors_off();
+	MC_f2_m1_PC6(val);
+	MC_f2_m2_PC7(val);
+	HAL_Delay(3000);
+	MC_put_all_motors_off();
+	MC_f2_m3_PC8(val);
+	MC_f2_m4_PC9(val);
+	HAL_Delay(3000);
+	MC_put_all_motors_off();
+}
