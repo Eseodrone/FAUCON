@@ -28,6 +28,7 @@ void TIMER5_run_1ms(void);
  */
 void TIMER2_user_handler_it_1ms(void);
 void TIMER5_user_handler_it_1ms(void);
+void TIMER5_stop(void);
 
 #endif
 #endif /* TIMER_H_ */

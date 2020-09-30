@@ -18,11 +18,17 @@ static PID_correction_t * PID_correction;
 #define PID_ANGLE_MAX_OUTPUT 200	//En admettant que mon signal moteur vari de 0 à 1000
 #define PID_DIST_FREQUENCY 250
 #define PID_DIST_MAX_OUTPUT 200
-//											P		I	  D			Frequence			Output Max
-static float PID_Settings_Roll[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
-static float PID_Settings_Pitch[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
-static float PID_Settings_Yaw[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
-static float PID_Settings_Z[PID_NB_SETTINGS] = {0.2f, 0.0f, 0.0f, PID_DIST_FREQUENCY, PID_DIST_MAX_OUTPUT};
+
+//pid par défaut									P		I	  D			Frequence			Output Max
+static float PID0_Settings_Roll[PID_NB_SETTINGS] = {2.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID0_Settings_Pitch[PID_NB_SETTINGS] = {2.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID0_Settings_Yaw[PID_NB_SETTINGS] = {2.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID0_Settings_Z[PID_NB_SETTINGS] = {0.2f, 0.0f, 0.0f, PID_DIST_FREQUENCY, PID_DIST_MAX_OUTPUT};
+
+static float PID1_Settings_Roll[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID1_Settings_Pitch[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID1_Settings_Yaw[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID1_Settings_Z[PID_NB_SETTINGS] = {0.1f, 0.0f, 0.0f, PID_DIST_FREQUENCY, PID_DIST_MAX_OUTPUT};
 
 
 
@@ -31,7 +37,7 @@ PID_t pids[PID_COUNT];
 
 
 //Init du module, on repère où sont les structures que l'on va utiliser par la suite
-void REGULATION_init(datas_sensors_pooling_t * datas_sensors_pooling_,target_values_t * target_values_,  PID_correction_t * PID_correction_){
+void REGULATION_init(datas_sensors_pooling_t * datas_sensors_pooling_,target_values_t * target_values_,  PID_correction_t * PID_correction_, uint8_t preset){
 	//On mémorise nos structures de données que l on va utiliser
 	datas_sensors_pooling = datas_sensors_pooling_;
 	target_values = target_values_;
@@ -39,10 +45,8 @@ void REGULATION_init(datas_sensors_pooling_t * datas_sensors_pooling_,target_val
 	PID_correction = PID_correction_;
 
 	//Configuration de nos pid
-	PID_init(&pids[PID_ANGLE_ROLL], PID_Settings_Roll);
-	PID_init(&pids[PID_ANGLE_PITCH], PID_Settings_Pitch);
-	PID_init(&pids[PID_ANGLE_YAW], PID_Settings_Yaw);
-	PID_init(&pids[PID_DIST_Z], PID_Settings_Z);
+	REGULATION_config_pids(preset);
+
 }
 
 void REGULATION_process_angle(void){
@@ -56,6 +60,27 @@ void REGULATION_process_dist(void){
 	 //printf("dist z tar : %d\n",target_values->z_target);
 
 	 PID_correction->Z_pid  = PID_compute(&pids[PID_DIST_Z], target_values->z_target, datas_sensors_pooling->dist_low_Z);
+}
+
+
+//preset doit être un chiffre entre 0 et ?
+void REGULATION_config_pids(uint8_t preset){
+	if(preset == 0){
+		PID_init(&pids[PID_ANGLE_ROLL], PID0_Settings_Roll);
+		PID_init(&pids[PID_ANGLE_PITCH], PID0_Settings_Pitch);
+		PID_init(&pids[PID_ANGLE_YAW], PID0_Settings_Yaw);
+		PID_init(&pids[PID_DIST_Z], PID0_Settings_Z);
+	}else if (preset == 1){
+		PID_init(&pids[PID_ANGLE_ROLL], PID1_Settings_Roll);
+		PID_init(&pids[PID_ANGLE_PITCH], PID1_Settings_Pitch);
+		PID_init(&pids[PID_ANGLE_YAW], PID1_Settings_Yaw);
+		PID_init(&pids[PID_DIST_Z], PID1_Settings_Z);
+	}else{
+		PID_init(&pids[PID_ANGLE_ROLL], PID0_Settings_Roll);
+		PID_init(&pids[PID_ANGLE_PITCH], PID0_Settings_Pitch);
+		PID_init(&pids[PID_ANGLE_YAW], PID0_Settings_Yaw);
+		PID_init(&pids[PID_DIST_Z], PID0_Settings_Z);
+	}
 }
 
 

@@ -92,17 +92,26 @@ void BLUETOOTH_envoi_trame2(uint8_t info1, uint8_t info2){
 
 
 
-void main_bluetooth (){
+void main_bluetooth(){
 	/* reception du caractere start et stop : analyse de la trame */
 
+
 	char c = BLUETOOTH_reception_caractere();
+
+	/* Selection du preset : Attention, impossible de changer de preset pendant l'execution du programme !!! */
 	if(c=='s'){
-		data_process_start();
-		//mettre fonction pour allumer le drone
-	}
-	if(c=='u'){
+		if(drone_data->process_data == 1){
+			drone_data->preset_pid = 0;
+			data_process_init(drone_data); //init de la lecture des capteurs, utilise TIMER5
+		}
+
+	} else if(c=='d'){
+		if(drone_data->process_data == 1){
+			drone_data->preset_pid = 1; //on change la valeur
+			data_process_init(drone_data); //init de la lecture des capteurs, utilise TIMER5
+		}
+	} else if(c=='u'){
 		data_process_stop();
-		//mettre foncion pour éteindre le drone
 	}
 
 

@@ -53,22 +53,17 @@ void TIMER5_user_handler_it_1ms(void)
 				}
 
 			}
-			if(drone_data->process_data == 1){
-				if(compteur_no_pooling_mpu <= TIME_MS_POOLING_MPU){
-					compteur_no_pooling_mpu++;
-				}
-				else{
-					MPU_angle_computer();
-					compteur_no_pooling_mpu = 0;
-				}
-				REGULATION_process_angle();
-				REGULATION_process_dist();
-				MC_PID_correction();
-				MC_update_motors();
-			}else{
-				MC_put_all_motors_off();
+			if(compteur_no_pooling_mpu <= TIME_MS_POOLING_MPU){
+				compteur_no_pooling_mpu++;
 			}
-
+			else{
+				MPU_angle_computer();
+				compteur_no_pooling_mpu = 0;
+			}
+			REGULATION_process_angle();
+			REGULATION_process_dist();
+			MC_PID_correction();
+			MC_update_motors();
 }
 
 
@@ -77,7 +72,7 @@ void data_process_init(drone_data_t * drone){
 	drone_data = drone;
 	MPU_init(drone_data);
 	VL53L1X_init();
-	REGULATION_init(&(drone->datas_sensors_pooling),&(drone->target_values),&(drone->pid_correction));
+	REGULATION_init(&(drone->datas_sensors_pooling),&(drone->target_values),&(drone->pid_correction),drone->preset_pid);
 	TIMER5_run_1ms();
 }
 
@@ -90,14 +85,12 @@ void datas_tof_maj(){
 	drone_data->datas_sensors_pooling.dist_high_Z = VL53L1X_get_distance(4);
 }
 
-void data_process_start(){
-	drone_data->process_data = 1;
-}
-
 void data_process_stop(){
+	MC_put_all_motors_off();
+	TIMER5_stop();
 	drone_data->process_data = 0;
+	MC_put_all_motors_off();
+
 }
-
-
 
 

@@ -54,8 +54,8 @@ int main(void){
 	drone.target_values.roll_target = 0.0f;
 	drone.target_values.yaw_target = 0.0f;
 	drone.target_values.z_target = 1000;
-
-	drone.process_data = 1;
+	drone.preset_pid = 0; //par défaut
+	drone.process_data = 1; //on autorise le programme à se mettre en fonctionnement nominal
 
 
 	//* UART DU BLUETOOTH
@@ -67,19 +67,11 @@ int main(void){
 	//MC_test_motor_one_by_one();
 	//MC_f1_m1_PE9(1100);
 	//MC_test_progressive_pwm();
-
-
-	//TESTS MOTEUR
-	//* init de la lecture des capteurs, utilise TIMER2
-	data_process_init(&drone);
-
-
 	//MC_test_all_motors();
 	//MC_put_all_motors_off();
 
 	while (1){
 		main_bluetooth();
-		//test_tofs();
 		HAL_Delay(4);
 	}
 }

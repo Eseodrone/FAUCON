@@ -22,7 +22,7 @@ float PID_compute(PID_t * pid, float consigne, float measurement){
 
 
 	//On somme le tout
-	pid->output = pid->P + pid->I + pid->D ;
+	pid->output = pid->P + pid->I + pid->D;
 
 	//Check mid and max
 	pid->output = MIN(pid->settings[PID_MAX_OUTPUT], pid->output);

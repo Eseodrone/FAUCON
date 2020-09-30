@@ -52,6 +52,7 @@ typedef struct{
 	target_values_t target_values;
 	motor_cmd_t motor_cmd;
 	bool_e process_data;
+	uint8_t preset_pid;
 }drone_data_t;
 
 
