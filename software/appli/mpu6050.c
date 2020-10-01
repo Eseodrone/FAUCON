@@ -22,7 +22,7 @@ bool_e MPU_init(drone_data_t* drone){
 	drone_data = drone;
 	//on init le mpu, structure et boolean de .h
 	if(MPU6050_Init(&MPU6050_Data, MPU6050_VCC_GPIO, MPU6050_VCC_PIN, MPU6050_Device_0, MPU6050_Accelerometer_8G, MPU6050_Gyroscope_2000s) == MPU6050_Result_Ok)
-		mpu_init_OK = TRUE; //A revoir du coup
+		mpu_init_OK = TRUE;
 	AVERAGE_X = 36;
 	AVERAGE_Y = 8;
 	AVERAGE_Z = 16; //normalement OK

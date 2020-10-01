@@ -18,6 +18,8 @@ static PID_correction_t * PID_correction;
 #define PID_ANGLE_MAX_OUTPUT 200	//En admettant que mon signal moteur vari de 0 à 1000
 #define PID_DIST_FREQUENCY 250
 #define PID_DIST_MAX_OUTPUT 200
+//Paramètre pour la correction des angles
+#define ANGLE_CORRECTION_AMOUNT 42
 //											P		I	  D			Frequence			Output Max
 static float PID_Settings_Roll[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
 static float PID_Settings_Pitch[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
@@ -58,4 +60,16 @@ void REGULATION_process_dist(void){
 	 PID_correction->Z_pid  = PID_compute(&pids[PID_DIST_Z], target_values->z_target, datas_sensors_pooling->dist_low_Z);
 }
 
+float REGULATION_update_angle(void){
+	static float angle_value [ANGLE_CORRECTION_AMOUNT] = {37.5952, 35.9033, 34.1455, 32.2778, 30.3003, 28.2568, 26.2134, 24.0601, 21.9946, 19.9731, 17.9297, \
+			15.7983 , 13.5352 , 11.1401 , 8.6353 , 6.0425 , 3.3618 , 0.6592 , -1.9995 , -4.79 , -7.4487 , -10.0635 , -12.5903 , -15.0732 , -16.9849 , -19.9292, \
+			-22.3022 , -24.6313 , -26.9604 , -29.2236 , -31.355 , -33.3545 , -35.2222 , -36.936 , -38.562 , -40.1221 , -41.6821 , -43.2861 , -44.9121 , -46.5381, \
+			-48.0542 , -49.1089 };
+	static uint8_t time_round = 0;
+	time_round++;
+	if (time_round==ANGLE_CORRECTION_AMOUNT){
+		time_round=0;
+	}
+	return angle_value[time_round];
+}
 
