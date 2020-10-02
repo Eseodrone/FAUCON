@@ -63,19 +63,6 @@ static bool_e initialized = FALSE;
 static uint8_t datas[DIALOG_BUFFER_SIZE];
 static uint16_t index = 0;
 
-/*
- * packet = trame à envoyer de "size" octets
- */
-void run_dialog_send_trame(uint8_t* pData, uint16_t size){
-
-	uint8_t packet[size];
-	size = (uint16_t)sprintf((char*)packet, "I love microprocessors\n");
-
-	DIALOG_send_packet(size, packet);
-
-
-}
-
 
 /**
  * @brief	Cette fonction permet l'envoi d'un message sur la liaison série.

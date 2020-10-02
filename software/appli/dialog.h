@@ -25,8 +25,6 @@ void DIALOG_callback_send_byte(uint8_t c);
 
 HAL_StatusTypeDef DIALOG_process_byte(uint8_t c, uint8_t ** pdatas);
 
-void run_dialog_send_trame(uint8_t* pData, uint16_t size);
-
 
 /**
  * @brief	Cette fonction permet l'envoi d'un message sur la liaison série.
