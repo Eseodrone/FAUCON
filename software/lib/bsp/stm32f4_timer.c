@@ -125,7 +125,9 @@ void TIMER5_run_1ms(void){
 	__HAL_TIM_ENABLE(&Tim5_Handle);
 }
 
-
+void TIMER5_stop(void){
+	__HAL_TIM_DISABLE(&Tim5_Handle);
+}
 
 
 

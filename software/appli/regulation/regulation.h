@@ -28,7 +28,7 @@ typedef enum{
 
 
 //Init du module, on repère où sont les structures que l'on va utiliser par la suite
-void REGULATION_init(datas_sensors_pooling_t * datas_sensors_pooling_,target_values_t * target_values_,  PID_correction_t * PID_correction_);
+void REGULATION_init(datas_sensors_pooling_t * datas_sensors_pooling_,target_values_t * target_values_,  PID_correction_t * PID_correction_, uint8_t preset);
 
 //Process des pids et mise à jour structures pid_outputs_t
 void REGULATION_process_angle(void);
