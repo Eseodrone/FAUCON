@@ -25,7 +25,7 @@ bool_e MPU_init(drone_data_t* drone){
 		mpu_init_OK = TRUE;
 	AVERAGE_X = 35;
 	AVERAGE_Y = 3;
-	AVERAGE_Z = 16; //normalement OK
+	AVERAGE_Z = 16;
 	return mpu_init_OK;
 }
 
@@ -35,56 +35,11 @@ void MPU_angle_computer(void)
 	MPU6050_ReadGyroscope(&MPU6050_Data);
 	//printf("Brut value (int) X : %d\n",MPU6050_Data.Gyroscope_X);
 	angular_speed.Gyro_X += ((float)(MPU6050_Data.Gyroscope_X+AVERAGE_X)*INT_TIME);
-	angular_speed.Gyro_Y += ((float)(MPU6050_Data.Gyroscope_Y+AVERAGE_Y)*INT_TIME); //Average negatif
+	angular_speed.Gyro_Y += ((float)(MPU6050_Data.Gyroscope_Y+AVERAGE_Y)*INT_TIME);
 	angular_speed.Gyro_Z += ((float)(MPU6050_Data.Gyroscope_Z+AVERAGE_Z )*INT_TIME);
 	//printf("int�gration (float) X : %d\n",(int)angular_speed.Gyro_X);
 	drone_data->datas_sensors_pooling.roll_angle = (float)(angular_speed.Gyro_Y/MPU_RANGE_X*360);
 	drone_data->datas_sensors_pooling.pitch_angle = (float)(angular_speed.Gyro_X/MPU_RANGE_X*360);
 	drone_data->datas_sensors_pooling.yaw_angle = -(float)(angular_speed.Gyro_Z/MPU_RANGE_X*360);
 	//printf("Roll angle : %d\n",(int)drone_data->datas_sensors_pooling.roll_angle);
-}
-
-/*
-void MPU_angle_computer(void)
-{
-	//Le MPU doit �tre pr�alablement initialis�
-	MPU6050_ReadGyroscope(&MPU6050_Data);
-	//Conversion en vitesse angulaire
-	printf("Brut value (int) X : %d\n",MPU6050_Data.Gyroscope_X);
-	angular_speed.Gyro_X = (((float)MPU6050_Data.Gyroscope_X-AVERAGE_X)*MPU6050_GYRO_SENS_500*RAD_TO_DEG);
-	angular_speed.Gyro_Y = (((float)MPU6050_Data.Gyroscope_Y+AVERAGE_Y)*MPU6050_GYRO_SENS_500*RAD_TO_DEG); //Average negatif
-	angular_speed.Gyro_Z = (((float)MPU6050_Data.Gyroscope_Z+AVERAGE_Z)*MPU6050_GYRO_SENS_500*RAD_TO_DEG);
-	//Intégration de la vitesse angulaire par rapport au TIM2 (Fréquence d'appel de l'IT) --> /f = *T car f=1/T
-	printf("Angular speed (float) X : %d\n",(int)angular_speed.Gyro_X);
-	drone_data->datas_sensors_pooling.roll_angle += (float)(angular_speed.Gyro_X/FREQUENCY);
-	drone_data->datas_sensors_pooling.pitch_angle += (float)(angular_speed.Gyro_Y/FREQUENCY);
-	drone_data->datas_sensors_pooling.yaw_angle += (float)(angular_speed.Gyro_Z/FREQUENCY);
-	printf("Roll angle : %d\n",(int)drone_data->datas_sensors_pooling.roll_angle);
-}*/
-
-void MPU_demo(void)
-{
-	MPU6050_t MPU6050_Data;
-	int32_t gyro_x = 0;
-	int32_t gyro_y = 0;
-	int32_t gyro_z = 0;
-	/* Initialize MPU6050 sensor */
-		if (MPU6050_Init(&MPU6050_Data, GPIOA, GPIO_PIN_0, MPU6050_Device_0, MPU6050_Accelerometer_8G, MPU6050_Gyroscope_500s) != MPU6050_Result_Ok) {
-			/* Display error to user */
-			debug_printf("MPU6050 Error\n");
-
-			/* Infinite loop */
-			while (1);
-		}
-
-		while (1) {
-			/* Read all data from sensor */
-			MPU6050_ReadGyroscope(&MPU6050_Data);
-			gyro_x = MPU6050_Data.Gyroscope_X;
-			gyro_y = MPU6050_Data.Gyroscope_Y;
-			gyro_z = MPU6050_Data.Gyroscope_Z;
-			printf("Gyro z : %d\n",MPU6050_Data.Gyroscope_Z);
-			/* Little delay */
-			HAL_Delay(2);
-		}
 }
