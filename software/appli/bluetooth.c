@@ -149,48 +149,11 @@ void main_bluetooth (){
 	uint16_t motor_inf_3 = drone_data->motor_cmd.m23;
 	uint16_t motor_inf_4 = drone_data->motor_cmd.m24;
 
+	//Négatif ==>> complément à deux (Changer en opposé jusqu'au dernier bit à 1, puis laisser le rste à 0)
+
 	//convertir en paquet de 8 bits : uint8_t data[2] = {data16, (data16 >> 8)}; // {lower byte, upper byte)
 	uint8_t buffer_uint8_to_send[SIZE_BYTE_BUFFER_TRAME];
 	uint16_t size_ocets = SIZE_BYTE_BUFFER_TRAME;
-
-	/* TEST DATAS MPU */
-	/*
-		buffer_uint8_to_send[0] = (roll_angle >> 8);
-		buffer_uint8_to_send[1] = (roll_angle);
-
-		buffer_uint8_to_send[2] = (pitch_angle >> 8);
-		buffer_uint8_to_send[3] = (pitch_angle);
-
-		buffer_uint8_to_send[5] = (yaw_angle);
-		buffer_uint8_to_send[4] = (yaw_angle >> 8);
-	 */
-
-	/* TEST DATAS MOTORS */
-/*
-	buffer_uint8_to_send[0] = (motor_sup_1 >> 8);
-	buffer_uint8_to_send[1] = (motor_sup_1);
-
-	buffer_uint8_to_send[2] = (motor_sup_2 >> 8);
-	buffer_uint8_to_send[3] = (motor_sup_2);
-
-	buffer_uint8_to_send[5] = (motor_sup_3);
-	buffer_uint8_to_send[4] = (motor_sup_3 >> 8);
-
-	buffer_uint8_to_send[7] = (motor_sup_4);
-	buffer_uint8_to_send[6] = (motor_sup_4 >> 8);
-
-	buffer_uint8_to_send[9] = (motor_inf_1);
-	buffer_uint8_to_send[8] = (motor_inf_1 >> 8);
-
-	buffer_uint8_to_send[11] = (motor_inf_2);
-	buffer_uint8_to_send[10] = (motor_inf_2 >> 8);
-
-	buffer_uint8_to_send[13] = (motor_inf_3);
-	buffer_uint8_to_send[12] = (motor_inf_3 >> 8);
-
-	buffer_uint8_to_send[15] = (motor_inf_4);
-	buffer_uint8_to_send[14] = (motor_inf_4 >> 8);
-*/
 
 
 	/* SEND ALL DATAS TRUE CODE */
@@ -267,7 +230,6 @@ void main_bluetooth (){
 
 	buffer_uint8_to_send[45] = (motor_inf_4);
 	buffer_uint8_to_send[46] = (motor_inf_4 >> 8);
-
 
 
 	DIALOG_send_packet(size_ocets, buffer_uint8_to_send);
