@@ -98,21 +98,60 @@ void main_bluetooth(){
 
 	char c = BLUETOOTH_reception_caractere();
 
-	/* Selection du preset : Attention, impossible de changer de preset pendant l'execution du programme !!! */
-	if(c=='s'){
-		if(drone_data->process_data == 1){
-			drone_data->preset_pid = 0;
+	/* Selection du preset : Attention, impossible de changer de preset pendant l'execution du programme !!!
+	 *  a : selection du pid 1
+	 * 	z : selection du pid 2
+	 *  e : selection du pid 3
+	 *
+	 *  i : on active la correction sur le pitch
+	 *  o : on active la régulation sur z
+	 *  p : on active la régulation sur x
+	 *
+	 *  s : démarrage de la régulation
+	 *  d : arrêt de la régulation !!! Il faut relancer le programme pour relancer la régul !!!
+	 *
+	 * */
+	switch(c){
+		case ('a') :
+			if(drone_data->block_config == 0){
+				drone_data->preset_pid = 0; //on change la valeur
+			}
+			break;
+		case ('z') :
+			if(drone_data->block_config == 0){
+				drone_data->preset_pid = 1; //on change la valeur
+			}
+			break;
+		case ('e') :
+			if(drone_data->block_config == 0){
+				drone_data->preset_pid = 2; //on change la valeur
+			}
+			break;
+		case ('o') :
+			if(drone_data->block_config == 0){
+				drone_data->z_correction = 1; //on change la valeur
+			}
+			break;
+		case ('p') :
+			if(drone_data->block_config == 0){
+				drone_data->x_correction = 1; //on change la valeur
+			}
+			break;
+		case ('i') :
+			if(drone_data->block_config == 0){
+				drone_data->pitch_correction = 1; //on change la valeur
+			}
+			break;
+		case ('s') :
 			data_process_init(drone_data); //init de la lecture des capteurs, utilise TIMER5
-		}
-
-	} else if(c=='d'){
-		if(drone_data->process_data == 1){
-			drone_data->preset_pid = 1; //on change la valeur
-			data_process_init(drone_data); //init de la lecture des capteurs, utilise TIMER5
-		}
-	} else if(c=='u'){
-		data_process_stop();
+			break;
+		case ('d') :
+			data_process_stop();
+			break;
+		default :
+			break;
 	}
+
 
 
 

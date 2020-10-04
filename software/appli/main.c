@@ -55,7 +55,7 @@ int main(void){
 	drone.target_values.yaw_target = 0.0f;
 	drone.target_values.z_target = 1000;
 	drone.preset_pid = 0; //par défaut
-	drone.process_data = 1; //on autorise le programme à se mettre en fonctionnement nominal
+	drone.process_data = 0;
 
 
 	//* UART DU BLUETOOTH

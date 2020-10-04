@@ -33,7 +33,14 @@ void REGULATION_init(datas_sensors_pooling_t * datas_sensors_pooling_,target_val
 //Process des pids et mise à jour structures pid_outputs_t
 void REGULATION_process_angle(void);
 
-void REGULATION_process_dist(void);
+void REGULATION_process_z(void);
+
+void REGULATION_process_x(void);
+
+void REGULATION_config_pids(uint8_t preset);
+
+float REGULATION_update_angle(void);
+
 
 
 #endif /* APPLI_REGULATION_REGULATION_H_ */

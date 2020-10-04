@@ -32,6 +32,11 @@ static float PID1_Settings_Pitch[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE
 static float PID1_Settings_Yaw[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
 static float PID1_Settings_Z[PID_NB_SETTINGS] = {0.1f, 0.0f, 0.0f, PID_DIST_FREQUENCY, PID_DIST_MAX_OUTPUT};
 
+static float PID2_Settings_Roll[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID2_Settings_Pitch[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID2_Settings_Yaw[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID2_Settings_Z[PID_NB_SETTINGS] = {0.1f, 0.0f, 0.0f, PID_DIST_FREQUENCY, PID_DIST_MAX_OUTPUT};
+
 
 
 //Tableaux pids
@@ -57,11 +62,12 @@ void REGULATION_process_angle(void){
 	PID_correction->yaw_pid = PID_compute(&pids[PID_ANGLE_YAW], target_values->yaw_target, datas_sensors_pooling->yaw_angle);
 }
 
-void REGULATION_process_dist(void){
-	 //printf("dist z mes : %d\n",datas_sensors_pooling->dist_low_Z);
-	 //printf("dist z tar : %d\n",target_values->z_target);
-
+void REGULATION_process_z(void){
 	 PID_correction->Z_pid  = PID_compute(&pids[PID_DIST_Z], target_values->z_target, datas_sensors_pooling->dist_low_Z);
+}
+
+void REGULATION_process_x(void){
+	 //TODO a faire
 }
 
 float REGULATION_update_angle(void){
@@ -77,7 +83,7 @@ float REGULATION_update_angle(void){
 	return angle_value[time_round];
 }
 
-//preset doit être un chiffre entre 0 et ?
+//preset doit être un chiffre entre 0 et 2
 void REGULATION_config_pids(uint8_t preset){
 	if(preset == 0){
 		PID_init(&pids[PID_ANGLE_ROLL], PID0_Settings_Roll);
@@ -89,6 +95,11 @@ void REGULATION_config_pids(uint8_t preset){
 		PID_init(&pids[PID_ANGLE_PITCH], PID1_Settings_Pitch);
 		PID_init(&pids[PID_ANGLE_YAW], PID1_Settings_Yaw);
 		PID_init(&pids[PID_DIST_Z], PID1_Settings_Z);
+	}else if (preset == 2){
+		PID_init(&pids[PID_ANGLE_ROLL], PID2_Settings_Roll);
+		PID_init(&pids[PID_ANGLE_PITCH], PID2_Settings_Pitch);
+		PID_init(&pids[PID_ANGLE_YAW], PID2_Settings_Yaw);
+		PID_init(&pids[PID_DIST_Z], PID2_Settings_Z);
 	}else{
 		PID_init(&pids[PID_ANGLE_ROLL], PID0_Settings_Roll);
 		PID_init(&pids[PID_ANGLE_PITCH], PID0_Settings_Pitch);

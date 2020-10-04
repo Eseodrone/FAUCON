@@ -44,12 +44,13 @@ void TIMER5_user_handler_it_1ms(void)
 
 				timeslot = VL53L1X_process_it();
 
+				//TODO if() encore utile ?
 				if(timeslot == TIMESLOT_ASK_END){ //Si fin de com avec les ToFs
 					TOF_OK = 1; //Alors TOF_OK = 1, on peut alors parler en I2C au gyro et lire les valeurs des tofs
 					datas_tof_maj();
 				}
 				else{
-					TOF_OK = 0; //sinon communication pas finie =>
+					TOF_OK = 0; //sinon communication pas finie
 				}
 
 			}
@@ -60,8 +61,14 @@ void TIMER5_user_handler_it_1ms(void)
 				MPU_angle_computer();
 				compteur_no_pooling_mpu = 0;
 			}
+			if(drone_data->pitch_correction){
+				//TODO ajouter compteur pour 500ms
+				REGULATION_update_angle();
+			}
 			REGULATION_process_angle();
-			REGULATION_process_dist();
+			if(drone_data->z_correction){
+				REGULATION_process_z();
+			}
 			MC_PID_correction();
 			MC_update_motors();
 }
@@ -70,6 +77,8 @@ void TIMER5_user_handler_it_1ms(void)
 
 void data_process_init(drone_data_t * drone){
 	drone_data = drone;
+	drone_data->block_config = 1;
+	drone_data->process_data = 1;
 	MPU_init(drone_data);
 	VL53L1X_init();
 	REGULATION_init(&(drone->datas_sensors_pooling),&(drone->target_values),&(drone->pid_correction),drone->preset_pid);

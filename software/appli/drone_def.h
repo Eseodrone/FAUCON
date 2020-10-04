@@ -51,8 +51,14 @@ typedef struct{
 	PID_correction_t pid_correction;
 	target_values_t target_values;
 	motor_cmd_t motor_cmd;
-	bool_e process_data;
+	bool_e process_data; // 0 inactif, 1 actif : indique quand le timer5 est actif
 	uint8_t preset_pid;
+	uint8_t z_correction; // 0 inactif, 1 actif
+	uint8_t x_correction; // 0 inactif, 1 actif
+	uint8_t pitch_correction; // 0 inactif, 1 actif
+	uint8_t block_config; // 0 débloquée, 1 bloquée
+
+
 }drone_data_t;
 
 
