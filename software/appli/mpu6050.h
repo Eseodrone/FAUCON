@@ -11,7 +11,7 @@
 #define INT_TIME		((float)0.004) //4ms
 #define MPU_RANGE_X		((float)2500)
 #define MPU_RANGE_Y		((float)1100)
-#define MPU_RANGE_Z		((float)1000)
+#define MPU_RANGE_Z		((float)2500)
 
 
 extern bool_e mpu_init_OK;
