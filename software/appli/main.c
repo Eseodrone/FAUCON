@@ -41,10 +41,24 @@ int main(void){
 
 	drone_data_t drone;
 
+	drone.pid_correction.Z_pid = 0.0f;
+	drone.pid_correction.pitch_pid = 0.0f;
+	drone.pid_correction.roll_pid = 0.0f;
+	drone.pid_correction.yaw_pid = 0.0f;
+	drone.motor_cmd.m11 = 0;
+	drone.motor_cmd.m12 = 0;
+	drone.motor_cmd.m13 = 0;
+	drone.motor_cmd.m14 = 0;
+	drone.motor_cmd.m21 = 0;
+	drone.motor_cmd.m22 = 0;
+	drone.motor_cmd.m23 = 0;
+	drone.motor_cmd.m24 = 0;
 	drone.target_values.pitch_target = 0.0f;
 	drone.target_values.roll_target = 0.0f;
 	drone.target_values.yaw_target = 0.0f;
 	drone.target_values.z_target = 1000;
+	drone.x_correction = 0;
+	drone.z_correction = 0;
 	drone.block_config = 0;
 	drone.preset_pid = 0; //par défaut
 	drone.process_data = 0;
