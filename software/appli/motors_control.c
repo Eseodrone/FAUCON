@@ -188,15 +188,15 @@ void MC_f2_m4_PC9(uint16_t TIME){
 void MC_PID_correction(void){
 	//TODO revoir les signes en fonction du positionnement moteur
 	//TODO ajouter les pid tofs.
-	drone_data->motor_cmd.m11 = -drone_data->pid_correction.Z_pid; //drone_data->pid_correction.yaw_pid - drone_data->pid_correction.roll_pid + drone_data->pid_correction.pitch_pid;
-	drone_data->motor_cmd.m12 = -drone_data->pid_correction.Z_pid;// -drone_data->pid_correction.yaw_pid - drone_data->pid_correction.roll_pid - drone_data->pid_correction.pitch_pid;
-	drone_data->motor_cmd.m13 = -drone_data->pid_correction.Z_pid; // -drone_data->pid_correction.yaw_pid + drone_data->pid_correction.roll_pid + drone_data->pid_correction.pitch_pid;
-	drone_data->motor_cmd.m14 = -drone_data->pid_correction.Z_pid;// drone_data->pid_correction.yaw_pid + drone_data->pid_correction.roll_pid - drone_data->pid_correction.pitch_pid;
+	drone_data->motor_cmd.m11 = -drone_data->pid_correction.Z_pid + drone_data->pid_correction.yaw_pid - drone_data->pid_correction.roll_pid + drone_data->pid_correction.pitch_pid;
+	drone_data->motor_cmd.m12 = -drone_data->pid_correction.Z_pid - drone_data->pid_correction.yaw_pid - drone_data->pid_correction.roll_pid - drone_data->pid_correction.pitch_pid;
+	drone_data->motor_cmd.m13 = -drone_data->pid_correction.Z_pid - drone_data->pid_correction.yaw_pid + drone_data->pid_correction.roll_pid + drone_data->pid_correction.pitch_pid;
+	drone_data->motor_cmd.m14 = -drone_data->pid_correction.Z_pid + drone_data->pid_correction.yaw_pid + drone_data->pid_correction.roll_pid - drone_data->pid_correction.pitch_pid;
 
-	drone_data->motor_cmd.m21 = +drone_data->pid_correction.Z_pid;//drone_data->pid_correction.yaw_pid + drone_data->pid_correction.roll_pid + drone_data->pid_correction.pitch_pid;
-	drone_data->motor_cmd.m22 = +drone_data->pid_correction.Z_pid;//-drone_data->pid_correction.yaw_pid + drone_data->pid_correction.roll_pid - drone_data->pid_correction.pitch_pid;
-	drone_data->motor_cmd.m23 = +drone_data->pid_correction.Z_pid;//-drone_data->pid_correction.yaw_pid - drone_data->pid_correction.roll_pid + drone_data->pid_correction.pitch_pid;
-	drone_data->motor_cmd.m24 = +drone_data->pid_correction.Z_pid; //drone_data->pid_correction.yaw_pid - drone_data->pid_correction.roll_pid - drone_data->pid_correction.pitch_pid;
+	drone_data->motor_cmd.m21 = +drone_data->pid_correction.Z_pid + drone_data->pid_correction.yaw_pid + drone_data->pid_correction.roll_pid + drone_data->pid_correction.pitch_pid;
+	drone_data->motor_cmd.m22 = +drone_data->pid_correction.Z_pid - drone_data->pid_correction.yaw_pid + drone_data->pid_correction.roll_pid - drone_data->pid_correction.pitch_pid;
+	drone_data->motor_cmd.m23 = +drone_data->pid_correction.Z_pid - drone_data->pid_correction.yaw_pid - drone_data->pid_correction.roll_pid + drone_data->pid_correction.pitch_pid;
+	drone_data->motor_cmd.m24 = +drone_data->pid_correction.Z_pid + drone_data->pid_correction.yaw_pid - drone_data->pid_correction.roll_pid - drone_data->pid_correction.pitch_pid;
 
 }
 
