@@ -59,6 +59,7 @@ int main(void){
 	drone.target_values.z_target = 1000;
 	drone.x_correction = 0;
 	drone.z_correction = 0;
+	drone.pitch_correction = 0;
 	drone.block_config = 0;
 	drone.preset_pid = 0; //par défaut
 	drone.process_data = 0;
@@ -81,6 +82,9 @@ int main(void){
 	//MC_put_all_motors_off();
 
 	while (1){
+		printf("angle pitch : %d   ",(int) drone.datas_sensors_pooling.pitch_angle);
+		printf("target pitch : %d\n",(int) drone.target_values.pitch_target);
+
 		main_bluetooth();
 		HAL_Delay(200);
 	}
