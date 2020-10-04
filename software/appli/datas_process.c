@@ -57,12 +57,14 @@ void TIMER5_user_handler_it_1ms(void)
 				}
 
 			}
-
-			if(drone_data->pitch_correction == 1){
-				if(counter_pitch_correction < TIME_MS_UPDATE_PITCH_COR){
-					counter_pitch_correction += 1;
-				}else{
-					REGULATION_update_angle();
+			if(drone_data->process_data == 1){
+				if(drone_data->pitch_correction == 1){
+					if(counter_pitch_correction < TIME_MS_UPDATE_PITCH_COR){
+						counter_pitch_correction += 1;
+					}else{
+						counter_pitch_correction = 0;
+						REGULATION_update_angle();
+					}
 				}
 			}
 
@@ -73,14 +75,15 @@ void TIMER5_user_handler_it_1ms(void)
 			else{
 				MPU_angle_computer();
 				compteur_no_pooling_mpu = 0;
-			}
-			if(drone_data->process_data == 1){
-				REGULATION_process_angle();
-				if(drone_data->z_correction == 1){
-					REGULATION_process_z();
+
+				if(drone_data->process_data == 1){
+					REGULATION_process_angle();
+					if(drone_data->z_correction == 1){
+						REGULATION_process_z();
+					}
+					MC_PID_correction();
+					MC_update_motors();
 				}
-				MC_PID_correction();
-				MC_update_motors();
 			}
 
 }

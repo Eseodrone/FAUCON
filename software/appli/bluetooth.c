@@ -15,6 +15,7 @@
 
 
 static drone_data_t * drone_data;
+static ctr_send_data = 0;
 
 
 void BLUETOOTH_init(drone_data_t * drone_data_){
@@ -165,6 +166,8 @@ void main_bluetooth(){
 			break;
 	}
 
+	if(0){//drone_data->process_data == 1 && ctr_send_data == 3){
+	ctr_send_data = 0;
 	uint16_t backward_X = drone_data->datas_sensors_pooling.dist_backward_X;
 	uint16_t side_Y = drone_data->datas_sensors_pooling.dist_side_Y;
 	uint16_t forward_X = drone_data->datas_sensors_pooling.dist_forward_X;
@@ -277,6 +280,9 @@ void main_bluetooth(){
 
 
 	DIALOG_send_packet(size_ocets, buffer_uint8_to_send);
+	}else if(drone_data->process_data == 1){
+		ctr_send_data++;
+	}
 }
 
 

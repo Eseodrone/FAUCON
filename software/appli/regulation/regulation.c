@@ -21,6 +21,9 @@ static PID_correction_t * PID_correction;
 //Paramètre pour la correction des angles
 #define ANGLE_CORRECTION_AMOUNT 42
 
+static uint8_t time_round = 0;
+
+
 //pid par défaut									P		I	  D			Frequence			Output Max
 static float PID0_Settings_Roll[PID_NB_SETTINGS] = {2.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
 static float PID0_Settings_Pitch[PID_NB_SETTINGS] = {2.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
@@ -77,13 +80,12 @@ void REGULATION_update_angle(void){
 			15.7983 , 13.5352 , 11.1401 , 8.6353 , 6.0425 , 3.3618 , 0.6592 , -1.9995 , -4.79 , -7.4487 , -10.0635 , -12.5903 , -15.0732 , -16.9849 , -19.9292, \
 			-22.3022 , -24.6313 , -26.9604 , -29.2236 , -31.355 , -33.3545 , -35.2222 , -36.936 , -38.562 , -40.1221 , -41.6821 , -43.2861 , -44.9121 , -46.5381, \
 			-48.0542 , -49.1089 };
-	static uint8_t time_round = 0;
 	static float correction=0;
-	if (time_round<ANGLE_CORRECTION_AMOUNT-1){
+	if (time_round<ANGLE_CORRECTION_AMOUNT-2){
 		time_round++;
-		correction=angle_value[time_round]-angle_value[time_round+1];
+		correction=-(angle_value[time_round]-angle_value[time_round+1]);
+		target_values->pitch_target=target_values->pitch_target+correction;
 	}
-	target_values->pitch_target=target_values->pitch_target+correction;
 }
 
 //preset doit être un chiffre entre 0 et 2
