@@ -58,7 +58,7 @@ void TIMER5_user_handler_it_1ms(void)
 
 			}
 
-			if(drone_data->pitch_correction){
+			if(drone_data->pitch_correction == 1){
 				if(counter_pitch_correction < TIME_MS_UPDATE_PITCH_COR){
 					counter_pitch_correction += 1;
 				}else{
@@ -74,7 +74,7 @@ void TIMER5_user_handler_it_1ms(void)
 				MPU_angle_computer();
 				compteur_no_pooling_mpu = 0;
 				REGULATION_process_angle();
-				if(drone_data->z_correction){
+				if(drone_data->z_correction == 1){
 					REGULATION_process_z();
 				}
 				MC_PID_correction();
