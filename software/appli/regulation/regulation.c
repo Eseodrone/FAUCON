@@ -7,21 +7,24 @@
 
 #include "regulation.h"
 #include "drone_def.h"
+#include <stdbool.h>
+
+static drone_data_t * drone_data;
 
 
-//Pointeurs sur les structure utilisées par la régulation
+//Pointeurs sur les structure utilisï¿½es par la rï¿½gulation
 static datas_sensors_pooling_t * datas_sensors_pooling;
 static target_values_t * target_values;
 static PID_correction_t * PID_correction;
-//Paramètres pour les pid
+//Paramï¿½tres pour les pid
 #define PID_ANGLE_FREQUENCY 250
-#define PID_ANGLE_MAX_OUTPUT 200	//En admettant que mon signal moteur vari de 0 à 1000
+#define PID_ANGLE_MAX_OUTPUT 200	//En admettant que mon signal moteur vari de 0 ï¿½ 1000
 #define PID_DIST_FREQUENCY 250
 #define PID_DIST_MAX_OUTPUT 200
-//Paramètre pour la correction des angles
+//Paramï¿½tre pour la correction des angles
 #define ANGLE_CORRECTION_AMOUNT 42
 
-//pid par défaut									P		I	  D			Frequence			Output Max
+//pid par dï¿½faut									P		I	  D			Frequence			Output Max
 static float PID0_Settings_Roll[PID_NB_SETTINGS] = {2.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
 static float PID0_Settings_Pitch[PID_NB_SETTINGS] = {2.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
 static float PID0_Settings_Yaw[PID_NB_SETTINGS] = {2.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
@@ -43,9 +46,9 @@ static float PID2_Settings_Z[PID_NB_SETTINGS] = {0.1f, 0.0f, 0.0f, PID_DIST_FREQ
 PID_t pids[PID_COUNT];
 
 
-//Init du module, on repère où sont les structures que l'on va utiliser par la suite
+//Init du module, on repï¿½re oï¿½ sont les structures que l'on va utiliser par la suite
 void REGULATION_init(datas_sensors_pooling_t * datas_sensors_pooling_,target_values_t * target_values_,  PID_correction_t * PID_correction_, uint8_t preset){
-	//On mémorise nos structures de données que l on va utiliser
+	//On mï¿½morise nos structures de donnï¿½es que l on va utiliser
 	datas_sensors_pooling = datas_sensors_pooling_;
 	target_values = target_values_;
 	//printf("Init Angle target: %d\n",(int) target_values->pitch_target);
@@ -67,11 +70,34 @@ void REGULATION_process_z(void){
 }
 
 void REGULATION_process_x(void){
-	 //TODO a faire
+	static bool CORRECTION_IN_PROGRESS = FALSE;
+	static bool PITCH_90 = FALSE;
+	static bool PITCH_RETURN = FALSE;
+	if(drone_data->datas_sensors_pooling.dist_backward_X<=550 || drone_data->datas_sensors_pooling.dist_backward_X>=1150){
+		drone_data->target_values.pitch_target = 90;
+		CORRECTION_IN_PROGRESS = TRUE;
+	}
+	if(CORRECTION_IN_PROGRESS){ //Si on a demandÃ© une correction d'angle
+		if((drone_data->datas_sensors_pooling.pitch_angle>=(float)85 && drone_data->datas_sensors_pooling.pitch_angle<=(float)95)){ //Rotation Ã  90 ok
+			PITCH_90 = TRUE;
+			drone_data->target_values.z_target = 920;
+			REGULATION_process_z();
+		}
+		if((drone_data->datas_sensors_pooling.dist_low_Z>=870 && drone_data->datas_sensors_pooling.dist_low_Z<=970) && PITCH_90){ //DÃ©placement sur x ok
+			drone_data->target_values.pitch_target = 0; //Rotation inverse
+			PITCH_90 = FALSE;
+			PITCH_RETURN = TRUE;
+		}
+		if((drone_data->datas_sensors_pooling.pitch_angle>=(float)-10 && drone_data->datas_sensors_pooling.pitch_angle<=(float)10) && PITCH_RETURN){
+			drone_data->target_values.z_target = 850;
+			REGULATION_process_z();
+			CORRECTION_IN_PROGRESS = FALSE;
+		}
+	}
 }
 
-//modifie la valeur de consigne du pitch en corrigant l'angle visé selon les données de Novespace
-//Doit être appelée toutes les 500ms
+//modifie la valeur de consigne du pitch en corrigant l'angle visï¿½ selon les donnï¿½es de Novespace
+//Doit ï¿½tre appelï¿½e toutes les 500ms
 void REGULATION_update_angle(void){
 	static float angle_value [ANGLE_CORRECTION_AMOUNT] = {37.5952, 35.9033, 34.1455, 32.2778, 30.3003, 28.2568, 26.2134, 24.0601, 21.9946, 19.9731, 17.9297, \
 			15.7983 , 13.5352 , 11.1401 , 8.6353 , 6.0425 , 3.3618 , 0.6592 , -1.9995 , -4.79 , -7.4487 , -10.0635 , -12.5903 , -15.0732 , -16.9849 , -19.9292, \
@@ -86,7 +112,7 @@ void REGULATION_update_angle(void){
 	target_values->pitch_target=target_values->pitch_target+correction;
 }
 
-//preset doit être un chiffre entre 0 et 2
+//preset doit ï¿½tre un chiffre entre 0 et 2
 void REGULATION_config_pids(uint8_t preset){
 	if(preset == 0){
 		PID_init(&pids[PID_ANGLE_ROLL], PID0_Settings_Roll);
