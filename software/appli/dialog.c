@@ -54,27 +54,14 @@ void DIALOG_callback_send_byte(uint8_t c)
 }
 
 
-#define PACKET_SIZE_TRAME	50
+
+
 
 
 static callback_dialog_send_byte_t callback_send_byte = 0;
 static bool_e initialized = FALSE;
 static uint8_t datas[DIALOG_BUFFER_SIZE];
 static uint16_t index = 0;
-
-/*
- * packet = trame à envoyer de "size" octets
- */
-void run_dialog_send_trame(uint8_t* pData){
-
-	uint8_t packet[PACKET_SIZE_TRAME];
-	uint16_t size;
-	size = (uint16_t)sprintf((char*)packet, "I love microprocessors\n");
-
-	DIALOG_send_packet(size, packet);
-
-
-}
 
 
 /**

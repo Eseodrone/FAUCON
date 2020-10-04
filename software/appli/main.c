@@ -30,21 +30,12 @@ int main(void){
 	SYS_init();			//initialisation du systeme (horloge...)
 	GPIO_Configure();
 
-
-
-
-	//* dialog
-	DIALOG_init(&DIALOG_callback_send_byte);
-
-
 	//* UART DU PRINTF ==> Activation SEULEMENT si on utilise pas le bluetooth
 	SYS_set_std_usart(UART2_ID, UART2_ID, UART2_ID);
 
 	//* LEDs F4
 	BSP_GPIO_PinCfg(LEDS_GPIO, LED_GREEN_PIN | LED_ORANGE_PIN | LED_RED_PIN | LED_BLUE_PIN, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
 	BSP_GPIO_PinCfg(GPIOA, GPIO_PIN_7, GPIO_MODE_OUTPUT_PP, GPIO_NOPULL, GPIO_SPEED_FAST, 0);
-
-
 
 	Systick_init();
 
@@ -61,6 +52,10 @@ int main(void){
 
 	//* UART DU BLUETOOTH
 	BLUETOOTH_init(&drone);
+
+	//* dialog
+	DIALOG_init(&DIALOG_callback_send_byte);
+
 	//TESTS MOTEUR
 	MC_init_pwm_tim1_tim3(&drone);
 	MC_esc_calibration();

@@ -2,9 +2,10 @@
  * bluetooth.c
 
 
+
  *
  *  Created on: 22 mars 2020
- *      Author: Martin ARONDEL
+ *      Author: Martin ARONDEL & Arnaud HINCELIN
  */
 
 
@@ -19,6 +20,7 @@ static drone_data_t * drone_data;
 void BLUETOOTH_init(drone_data_t * drone_data_){
 	UART_init(UART2_ID, 38400);
 	drone_data = drone_data_;
+
 }
 
 //envoie un caractï¿½re
@@ -91,13 +93,24 @@ void BLUETOOTH_envoi_trame2(uint8_t info1, uint8_t info2){
 
 
 
+//48.8 => 49 | 48.3 => 48
+#define FLOAT_TO_UINT8(x) ((x)>=0?(int)((x)+0.5):(int)((x)-0.5))
+
+#define TOF_DATAS			0
+#define MPU_DATAS			3
+#define MOTOR_DATAS			0
+#define PID_DATAS			0
+#define TARGET_DATAS		0
+
+//1 octet = 1 byte = 8 bits
+#define SIZE_BYTE_BUFFER_TRAME	(TOF_DATAS+MPU_DATAS+MOTOR_DATAS+PID_DATAS+TARGET_DATAS)*2
+
 
 void main_bluetooth(){
 	/* reception du caractere start et stop : analyse de la trame */
 
 
 	char c = BLUETOOTH_reception_caractere();
-
 	/* Selection du preset : Attention, impossible de changer de preset pendant l'execution du programme !!!
 	 *  a : selection du pid 1
 	 * 	z : selection du pid 2
@@ -152,63 +165,118 @@ void main_bluetooth(){
 			break;
 	}
 
-
-
-
-
 	uint16_t backward_X = drone_data->datas_sensors_pooling.dist_backward_X;
 	uint16_t side_Y = drone_data->datas_sensors_pooling.dist_side_Y;
 	uint16_t forward_X = drone_data->datas_sensors_pooling.dist_forward_X;
 	uint16_t low_Z = drone_data->datas_sensors_pooling.dist_low_Z;
-	uint16_t high_Z = drone_data->datas_sensors_pooling.dist_high_Z;
+
+	int16_t roll_angle = (int16_t) drone_data->datas_sensors_pooling.roll_angle;
+	int16_t pitch_angle = (int16_t) drone_data->datas_sensors_pooling.pitch_angle;
+	int16_t yaw_angle = (int16_t) drone_data->datas_sensors_pooling.yaw_angle;
+
+	int16_t roll_pid = (int16_t) drone_data->pid_correction.roll_pid;
+	int16_t pitch_pid = (int16_t) drone_data->pid_correction.pitch_pid;
+	int16_t yaw_pid = (int16_t) drone_data->pid_correction.yaw_pid;
+	int16_t Z_pid = (int16_t) drone_data->pid_correction.Z_pid;
+
+	int16_t roll_target = (int16_t) drone_data->target_values.roll_target;
+	int16_t pitch_target = (int16_t) drone_data->target_values.pitch_target;
+	int16_t yaw_target = (int16_t) drone_data->target_values.yaw_target;
+	int16_t z_target = (int16_t) drone_data->target_values.z_target;
+
+	uint16_t motor_sup_1 = drone_data->motor_cmd.m11;
+	uint16_t motor_sup_2 = drone_data->motor_cmd.m12;
+	uint16_t motor_sup_3 = drone_data->motor_cmd.m13;
+	uint16_t motor_sup_4 = drone_data->motor_cmd.m14;
+	uint16_t motor_inf_1 = drone_data->motor_cmd.m21;
+	uint16_t motor_inf_2 = drone_data->motor_cmd.m22;
+	uint16_t motor_inf_3 = drone_data->motor_cmd.m23;
+	uint16_t motor_inf_4 = drone_data->motor_cmd.m24;
+
+	//Négatif ==>> complément à deux (Changer en opposé jusqu'au dernier bit à 1, puis laisser le rste à 0)
+
+	//convertir en paquet de 8 bits : uint8_t data[2] = {data16, (data16 >> 8)}; // {lower byte, upper byte)
+	uint8_t buffer_uint8_to_send[SIZE_BYTE_BUFFER_TRAME];
+	uint16_t size_ocets = SIZE_BYTE_BUFFER_TRAME;
 
 
-	float roll_angle = drone_data->datas_sensors_pooling.roll_angle;
-	float pitch_angle = drone_data->datas_sensors_pooling.pitch_angle;
-	float yaw_angle = drone_data->datas_sensors_pooling.yaw_angle;
+	/* SEND ALL DATAS TRUE CODE */
+	buffer_uint8_to_send[0] = (backward_X >> 8);
+	buffer_uint8_to_send[1] = (backward_X);
+
+	buffer_uint8_to_send[3] = (side_Y);
+	buffer_uint8_to_send[2] = (side_Y >> 8);
+
+	buffer_uint8_to_send[5] = (forward_X);
+	buffer_uint8_to_send[4] = (forward_X >> 8);
+
+	buffer_uint8_to_send[7] = (low_Z);
+	buffer_uint8_to_send[6] = (low_Z >> 8);
+
+	buffer_uint8_to_send[9] = (roll_angle);
+	buffer_uint8_to_send[8] = (roll_angle >> 8);
+
+	buffer_uint8_to_send[11] = (pitch_angle);
+	buffer_uint8_to_send[10] = (pitch_angle >> 8);
+
+	buffer_uint8_to_send[13] = (yaw_angle);
+	buffer_uint8_to_send[12] = (yaw_angle >> 8);
+
+	//_________________________________________________________
+
+	buffer_uint8_to_send[15] = (roll_pid);
+	buffer_uint8_to_send[14] = (roll_pid >> 8);
+
+	buffer_uint8_to_send[17] = (pitch_pid);
+	buffer_uint8_to_send[16] = (pitch_pid >> 8);
+
+	buffer_uint8_to_send[19] = (yaw_pid);
+	buffer_uint8_to_send[18] = (yaw_pid >> 8);
+
+	buffer_uint8_to_send[21] = (Z_pid);
+	buffer_uint8_to_send[20] = (Z_pid >> 8);
+
+	//____________________________________________________________
+
+	buffer_uint8_to_send[23] = (roll_target);
+	buffer_uint8_to_send[22] = (roll_target >> 8);
+
+	buffer_uint8_to_send[25] = (pitch_target);
+	buffer_uint8_to_send[24] = (pitch_target >> 8);
+
+	buffer_uint8_to_send[27] = (yaw_target);
+	buffer_uint8_to_send[26] = (yaw_target >> 8);
+
+	buffer_uint8_to_send[29] = (z_target);
+	buffer_uint8_to_send[28] = (z_target >> 8);
+	//____________________________________________________________
+
+	buffer_uint8_to_send[31] = (motor_sup_1);
+	buffer_uint8_to_send[30] = (motor_sup_1 >> 8);
+
+	buffer_uint8_to_send[33] = (motor_sup_2);
+	buffer_uint8_to_send[32] = (motor_sup_2 >> 8);
+
+	buffer_uint8_to_send[35] = (motor_sup_3);
+	buffer_uint8_to_send[34] = (motor_sup_3 >> 8);
+
+	buffer_uint8_to_send[37] = (motor_sup_4);
+	buffer_uint8_to_send[36] = (motor_sup_4 >> 8);
+
+	buffer_uint8_to_send[39] = (motor_inf_1);
+	buffer_uint8_to_send[38] = (motor_inf_1 >> 8);
+
+	buffer_uint8_to_send[41] = (motor_inf_2);
+	buffer_uint8_to_send[40] = (motor_inf_2 >> 8);
+
+	buffer_uint8_to_send[43] = (motor_inf_3);
+	buffer_uint8_to_send[40] = (motor_inf_3 >> 8);
+
+	buffer_uint8_to_send[45] = (motor_inf_4);
+	buffer_uint8_to_send[46] = (motor_inf_4 >> 8);
 
 
-
-
-
-/*
-	drone_data_t info_envoie;
-
-	info_envoie.datas_sensors_pooling.roll_angle;
-	info_envoie.datas_sensors_pooling.pitch_angle;
-	info_envoie.datas_sensors_pooling.yaw_angle;
-
-	info_envoie.datas_sensors_pooling.dist_0 = 4000;
-	info_envoie.datas_sensors_pooling.dist_1 = 2000;
-	info_envoie.datas_sensors_pooling.dist_2 = 1000;
-	info_envoie.datas_sensors_pooling.dist_3 = 500;
-	info_envoie.datas_sensors_pooling.dist_4 = 10;
-
-
-	float info1 = info_envoie.datas_sensors_pooling.roll_angle;
-	float info2 = info_envoie.datas_sensors_pooling.pitch_angle;
-	float info3 = info_envoie.datas_sensors_pooling.yaw_angle;
-
-	uint16_t info4 = info_envoie.datas_sensors_pooling.dist_0;
-	uint16_t info5 = info_envoie.datas_sensors_pooling.dist_1;
-	uint16_t info6 = info_envoie.datas_sensors_pooling.dist_2;
-	uint16_t info7 = info_envoie.datas_sensors_pooling.dist_3;
-	uint16_t info8 = info_envoie.datas_sensors_pooling.dist_4;
-
-
-
-	//convert en 0 à 250
-
-	info1 = info1/1,44;
-	info2 = info2/1,44;
-	info3 = info3/1,44;
-
-	info4 = info4/16;
-	info5 = info5/16;
-	info6 = info6/16;
-	info7 = info7/16;
-	info8 = info8/16;
-*/
+	DIALOG_send_packet(size_ocets, buffer_uint8_to_send);
 }
 
 
