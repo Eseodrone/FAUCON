@@ -9,9 +9,9 @@
 #define FREQUENCY 		((float)250)
 
 #define INT_TIME		((float)0.004) //4ms
-#define MPU_RANGE_X		((float)2500)
-#define MPU_RANGE_Y		((float)1100)
-#define MPU_RANGE_Z		((float)2500)
+#define MPU_RANGE_X		((float)3800)
+#define MPU_RANGE_Y		((float)3800)
+#define MPU_RANGE_Z		((float)3800)
 
 
 extern bool_e mpu_init_OK;

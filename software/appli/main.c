@@ -82,11 +82,8 @@ int main(void){
 	//MC_put_all_motors_off();
 
 	while (1){
-		printf("angle pitch : %d   ",(int) drone.datas_sensors_pooling.pitch_angle);
-		printf("target pitch : %d\n",(int) drone.target_values.pitch_target);
-
 		main_bluetooth();
-		HAL_Delay(200);
+		//HAL_Delay(200);
 	}
 }
 
