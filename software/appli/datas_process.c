@@ -73,6 +73,8 @@ void TIMER5_user_handler_it_1ms(void)
 			else{
 				MPU_angle_computer();
 				compteur_no_pooling_mpu = 0;
+			}
+			if(drone_data->process_data == 1){
 				REGULATION_process_angle();
 				if(drone_data->z_correction == 1){
 					REGULATION_process_z();

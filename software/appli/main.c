@@ -54,6 +54,7 @@ int main(void){
 	drone.target_values.roll_target = 0.0f;
 	drone.target_values.yaw_target = 0.0f;
 	drone.target_values.z_target = 1000;
+	drone.block_config = 0;
 	drone.preset_pid = 0; //par défaut
 	drone.process_data = 0;
 
@@ -72,7 +73,7 @@ int main(void){
 
 	while (1){
 		main_bluetooth();
-		HAL_Delay(4);
+		HAL_Delay(200);
 	}
 }
 
