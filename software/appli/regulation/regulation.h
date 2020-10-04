@@ -39,7 +39,7 @@ void REGULATION_process_x(void);
 
 void REGULATION_config_pids(uint8_t preset);
 
-float REGULATION_update_angle(void);
+void REGULATION_update_angle(void);
 
 
 

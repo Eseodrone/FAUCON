@@ -18,11 +18,14 @@ static drone_data_t * drone_data;
 bool_e TOF_OK = 0;
 uint32_t compteur_no_pooling_tof = 0;
 uint32_t compteur_no_pooling_mpu = 0;
+uint16_t counter_pitch_correction = 0;
 
 
 
 /// INTERROGATION AVEC IT DE TIMER 2   ///
 //IT 1ms, de plus basse prioritï¿½ que l'IT du systick !
+//TODO mettre un seul compteur pour les tofs et le mpu
+//TODO c'est encore très lourd
 void TIMER5_user_handler_it_1ms(void)
 {
 	static timeslot_e timeslot;
@@ -54,23 +57,30 @@ void TIMER5_user_handler_it_1ms(void)
 				}
 
 			}
+
+			if(drone_data->pitch_correction){
+				if(counter_pitch_correction < TIME_MS_UPDATE_PITCH_COR){
+					counter_pitch_correction += 1;
+				}else{
+					REGULATION_update_angle();
+				}
+			}
+
+			//on utilise le compteur du mpu pour le traitement des données toutes les 4ms
 			if(compteur_no_pooling_mpu <= TIME_MS_POOLING_MPU){
 				compteur_no_pooling_mpu++;
 			}
 			else{
 				MPU_angle_computer();
 				compteur_no_pooling_mpu = 0;
+				REGULATION_process_angle();
+				if(drone_data->z_correction){
+					REGULATION_process_z();
+				}
+				MC_PID_correction();
+				MC_update_motors();
 			}
-			if(drone_data->pitch_correction){
-				//TODO ajouter compteur pour 500ms
-				REGULATION_update_angle();
-			}
-			REGULATION_process_angle();
-			if(drone_data->z_correction){
-				REGULATION_process_z();
-			}
-			MC_PID_correction();
-			MC_update_motors();
+
 }
 
 

@@ -26,6 +26,7 @@
 
 #define TIME_MS_POOLING_TOF 4 //frequence de 250Hz
 #define TIME_MS_POOLING_MPU 4
+#define TIME_MS_UPDATE_PITCH_COR 500
 
 
 #define MESURE_HAUEUR_DRONE_CM 10

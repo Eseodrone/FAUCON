@@ -70,6 +70,8 @@ void REGULATION_process_x(void){
 	 //TODO a faire
 }
 
+//modifie la valeur de consigne du pitch en corrigant l'angle visé selon les données de Novespace
+//Doit être appelée toutes les 500ms
 void REGULATION_update_angle(void){
 	static float angle_value [ANGLE_CORRECTION_AMOUNT] = {37.5952, 35.9033, 34.1455, 32.2778, 30.3003, 28.2568, 26.2134, 24.0601, 21.9946, 19.9731, 17.9297, \
 			15.7983 , 13.5352 , 11.1401 , 8.6353 , 6.0425 , 3.3618 , 0.6592 , -1.9995 , -4.79 , -7.4487 , -10.0635 , -12.5903 , -15.0732 , -16.9849 , -19.9292, \
