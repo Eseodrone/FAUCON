@@ -84,7 +84,7 @@ int main(void){
 
 	while (1){
 		main_bluetooth();
-		HAL_Delay(500);
+		HAL_Delay(100);
 	}
 }
 
