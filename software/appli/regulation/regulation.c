@@ -105,6 +105,8 @@ void REGULATION_process_x(void){
 	static bool PITCH_RETURN = FALSE;
 	if(drone_data->datas_sensors_pooling.dist_backward_X<=550 || drone_data->datas_sensors_pooling.dist_backward_X>=1150){
 		drone_data->target_values.pitch_target = 90;
+		//printf("pitch target %d\n",(int)drone_data->target_values.pitch_target);
+		//printf("%d\n",drone_data->datas_sensors_pooling.dist_backward_X);
 		CORRECTION_IN_PROGRESS = TRUE;
 	}
 	if(CORRECTION_IN_PROGRESS){ //Si on a demandé une correction d'angle
@@ -114,7 +116,7 @@ void REGULATION_process_x(void){
 			REGULATION_process_z();
 		}
 		if((drone_data->datas_sensors_pooling.dist_low_Z>=870 && drone_data->datas_sensors_pooling.dist_low_Z<=970) && PITCH_90){ //Déplacement sur x ok
-			drone_data->target_values.pitch_target = 0; //Rotation inverse
+			drone_data->target_values.pitch_target = 0.0f; //Rotation inverse
 			PITCH_90 = FALSE;
 			PITCH_RETURN = TRUE;
 		}
