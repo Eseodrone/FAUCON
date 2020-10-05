@@ -11,6 +11,7 @@
 #include "stm32f4_timer.h"
 #include "regulation/regulation.h"
 #include "motors_control.h"
+#include <stdbool.h>
 
 static drone_data_t * drone_data;
 
@@ -25,7 +26,7 @@ uint16_t counter_pitch_correction = 0;
 /// INTERROGATION AVEC IT DE TIMER 2   ///
 //IT 1ms, de plus basse prioritï¿½ que l'IT du systick !
 //TODO mettre un seul compteur pour les tofs et le mpu
-//TODO c'est encore très lourd
+//TODO c'est encore trï¿½s lourd
 void TIMER5_user_handler_it_1ms(void)
 {
 	static timeslot_e timeslot;
@@ -68,7 +69,7 @@ void TIMER5_user_handler_it_1ms(void)
 				}
 			}
 
-			//on utilise le compteur du mpu pour le traitement des données toutes les 4ms
+			//on utilise le compteur du mpu pour le traitement des donnï¿½es toutes les 4ms
 			if(compteur_no_pooling_mpu <= TIME_MS_POOLING_MPU){
 				compteur_no_pooling_mpu++;
 			}
@@ -87,6 +88,11 @@ void TIMER5_user_handler_it_1ms(void)
 					MC_PID_correction();
 					MC_update_motors();
 				}
+				if(drone_data->x_correction == 1){
+					REGULATION_process_x();
+				}
+				MC_PID_correction();
+				MC_update_motors();
 			}
 
 }
@@ -119,5 +125,3 @@ void data_process_stop(){
 	MC_put_all_motors_off();
 
 }
-
-
