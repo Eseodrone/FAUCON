@@ -97,11 +97,11 @@ void BLUETOOTH_envoi_trame2(uint8_t info1, uint8_t info2){
 //48.8 => 49 | 48.3 => 48
 #define FLOAT_TO_UINT8(x) ((x)>=0?(int)((x)+0.5):(int)((x)-0.5))
 
-#define TOF_DATAS			0
+#define TOF_DATAS			4
 #define MPU_DATAS			3
-#define MOTOR_DATAS			0
-#define PID_DATAS			0
-#define TARGET_DATAS		0
+#define MOTOR_DATAS			8
+#define PID_DATAS			4
+#define TARGET_DATAS		4
 
 //1 octet = 1 byte = 8 bits
 #define SIZE_BYTE_BUFFER_TRAME	(TOF_DATAS+MPU_DATAS+MOTOR_DATAS+PID_DATAS+TARGET_DATAS)*2
@@ -273,10 +273,10 @@ void main_bluetooth(){
 	buffer_uint8_to_send[40] = (motor_inf_2 >> 8);
 
 	buffer_uint8_to_send[43] = (motor_inf_3);
-	buffer_uint8_to_send[40] = (motor_inf_3 >> 8);
+	buffer_uint8_to_send[42] = (motor_inf_3 >> 8);
 
 	buffer_uint8_to_send[45] = (motor_inf_4);
-	buffer_uint8_to_send[46] = (motor_inf_4 >> 8);
+	buffer_uint8_to_send[44] = (motor_inf_4 >> 8);
 
 
 	DIALOG_send_packet(size_ocets, buffer_uint8_to_send);
