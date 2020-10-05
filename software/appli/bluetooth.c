@@ -118,6 +118,9 @@ void main_bluetooth(){
 	 *  e : selection du pid 3
 	 *  r : selection du pid 4
 	 *  t : selection du pid 5
+	 *  y : selection du pid 6
+	 *  g : selection du pid 7
+	 *  h : selection du pid 8
 	 *
 	 *
 	 *  u : on DESACTIVE la regulation sur le yaw
@@ -155,6 +158,21 @@ void main_bluetooth(){
 				drone_data->preset_pid = 4; //on change la valeur
 			}
 			break;
+		case ('y') :
+			if(drone_data->block_config == 0){
+				drone_data->preset_pid = 5; //on change la valeur
+			}
+			break;
+		case ('g') :
+			if(drone_data->block_config == 0){
+		     	drone_data->preset_pid = 6; //on change la valeur
+			}
+			break;
+		case ('h') :
+			if(drone_data->block_config == 0){
+				drone_data->preset_pid = 7; //on change la valeur
+			}
+		    break;
 		case ('o') :
 			if(drone_data->block_config == 0){
 				drone_data->z_correction = 1; //on change la valeur
