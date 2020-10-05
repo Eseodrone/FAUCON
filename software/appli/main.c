@@ -60,6 +60,7 @@ int main(void){
 	drone.x_correction = 0;
 	drone.z_correction = 0;
 	drone.pitch_correction = 0;
+	drone.yaw_regulation = 1;
 	drone.block_config = 0;
 	drone.preset_pid = 0; //par défaut
 	drone.process_data = 0;
@@ -83,7 +84,7 @@ int main(void){
 
 	while (1){
 		main_bluetooth();
-		//HAL_Delay(200);
+		HAL_Delay(500);
 	}
 }
 

@@ -25,22 +25,30 @@ static uint8_t time_round = 0;
 
 
 //pid par défaut									P		I	  D			Frequence			Output Max
-static float PID0_Settings_Roll[PID_NB_SETTINGS] = {2.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
-static float PID0_Settings_Pitch[PID_NB_SETTINGS] = {2.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
-static float PID0_Settings_Yaw[PID_NB_SETTINGS] = {2.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID0_Settings_Roll[PID_NB_SETTINGS] = {10.0f, 6.0f, 6.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID0_Settings_Pitch[PID_NB_SETTINGS] = {10.0f, 6.0f, 6.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID0_Settings_Yaw[PID_NB_SETTINGS] = {5.0f, 3.0f, 3.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
 static float PID0_Settings_Z[PID_NB_SETTINGS] = {0.2f, 0.0f, 0.0f, PID_DIST_FREQUENCY, PID_DIST_MAX_OUTPUT};
 
-static float PID1_Settings_Roll[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
-static float PID1_Settings_Pitch[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
-static float PID1_Settings_Yaw[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID1_Settings_Roll[PID_NB_SETTINGS] = {7.0f, 3.0f, 3.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID1_Settings_Pitch[PID_NB_SETTINGS] = {7.0f, 3.0f, 3.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID1_Settings_Yaw[PID_NB_SETTINGS] = {4.0f, 2.0f, 2.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
 static float PID1_Settings_Z[PID_NB_SETTINGS] = {0.1f, 0.0f, 0.0f, PID_DIST_FREQUENCY, PID_DIST_MAX_OUTPUT};
 
-static float PID2_Settings_Roll[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
-static float PID2_Settings_Pitch[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
-static float PID2_Settings_Yaw[PID_NB_SETTINGS] = {4.0f, 0.0f, 0.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID2_Settings_Roll[PID_NB_SETTINGS] = {4.0f, 4.0f, 1.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID2_Settings_Pitch[PID_NB_SETTINGS] = {4.0f, 4.0f, 1.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID2_Settings_Yaw[PID_NB_SETTINGS] = {2.0f, 2.0f, 2.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
 static float PID2_Settings_Z[PID_NB_SETTINGS] = {0.1f, 0.0f, 0.0f, PID_DIST_FREQUENCY, PID_DIST_MAX_OUTPUT};
 
+static float PID3_Settings_Roll[PID_NB_SETTINGS] = {2.0f, 1.0f, 1.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID3_Settings_Pitch[PID_NB_SETTINGS] = {2.0f, 1.0f, 1.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID3_Settings_Yaw[PID_NB_SETTINGS] = {2.0f, 1.0f, 1.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID3_Settings_Z[PID_NB_SETTINGS] = {0.1f, 0.0f, 0.0f, PID_DIST_FREQUENCY, PID_DIST_MAX_OUTPUT};
 
+static float PID4_Settings_Roll[PID_NB_SETTINGS] = {14.0f, 3.0f, 3.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID4_Settings_Pitch[PID_NB_SETTINGS] = {14.0f, 3.0f, 3.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID4_Settings_Yaw[PID_NB_SETTINGS] = {5.0f, 3.0f, 3.0f, PID_ANGLE_FREQUENCY, PID_ANGLE_MAX_OUTPUT};
+static float PID4_Settings_Z[PID_NB_SETTINGS] = {0.2f, 0.0f, 0.0f, PID_DIST_FREQUENCY, PID_DIST_MAX_OUTPUT};
 
 //Tableaux pids
 PID_t pids[PID_COUNT];
@@ -62,6 +70,9 @@ void REGULATION_init(datas_sensors_pooling_t * datas_sensors_pooling_,target_val
 void REGULATION_process_angle(void){
 	PID_correction->roll_pid = PID_compute(&pids[PID_ANGLE_ROLL], target_values->roll_target, datas_sensors_pooling->roll_angle);
 	PID_correction->pitch_pid = PID_compute(&pids[PID_ANGLE_PITCH], target_values->pitch_target, datas_sensors_pooling->pitch_angle);
+}
+
+void REGULATION_process_yaw(void){
 	PID_correction->yaw_pid = PID_compute(&pids[PID_ANGLE_YAW], target_values->yaw_target, datas_sensors_pooling->yaw_angle);
 }
 
@@ -105,6 +116,16 @@ void REGULATION_config_pids(uint8_t preset){
 		PID_init(&pids[PID_ANGLE_PITCH], PID2_Settings_Pitch);
 		PID_init(&pids[PID_ANGLE_YAW], PID2_Settings_Yaw);
 		PID_init(&pids[PID_DIST_Z], PID2_Settings_Z);
+	}else if (preset == 3){
+		PID_init(&pids[PID_ANGLE_ROLL], PID3_Settings_Roll);
+		PID_init(&pids[PID_ANGLE_PITCH], PID3_Settings_Pitch);
+		PID_init(&pids[PID_ANGLE_YAW], PID3_Settings_Yaw);
+		PID_init(&pids[PID_DIST_Z], PID3_Settings_Z);
+	}else if (preset == 4){
+		PID_init(&pids[PID_ANGLE_ROLL], PID4_Settings_Roll);
+		PID_init(&pids[PID_ANGLE_PITCH], PID4_Settings_Pitch);
+		PID_init(&pids[PID_ANGLE_YAW], PID4_Settings_Yaw);
+		PID_init(&pids[PID_DIST_Z], PID4_Settings_Z);
 	}else{
 		PID_init(&pids[PID_ANGLE_ROLL], PID0_Settings_Roll);
 		PID_init(&pids[PID_ANGLE_PITCH], PID0_Settings_Pitch);

@@ -55,6 +55,7 @@ typedef struct{
 	uint8_t preset_pid;
 	uint8_t z_correction; // 0 inactif, 1 actif
 	uint8_t x_correction; // 0 inactif, 1 actif
+	uint8_t yaw_regulation; // 0 inactif, 1 actif
 	uint8_t pitch_correction; // 0 inactif, 1 actif
 	uint8_t block_config; // 0 débloquée, 1 bloquée
 

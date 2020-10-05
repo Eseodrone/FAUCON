@@ -81,6 +81,9 @@ void TIMER5_user_handler_it_1ms(void)
 					if(drone_data->z_correction == 1){
 						REGULATION_process_z();
 					}
+					if(drone_data->yaw_regulation == 1){
+						REGULATION_process_yaw();
+					}
 					MC_PID_correction();
 					MC_update_motors();
 				}

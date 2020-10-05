@@ -116,7 +116,11 @@ void main_bluetooth(){
 	 *  a : selection du pid 1
 	 * 	z : selection du pid 2
 	 *  e : selection du pid 3
+	 *  r : selection du pid 4
+	 *  t : selection du pid 5
 	 *
+	 *
+	 *  u : on DESACTIVE la regulation sur le yaw
 	 *  i : on active la correction sur le pitch
 	 *  o : on active la régulation sur z
 	 *  p : on active la régulation sur x
@@ -141,9 +145,24 @@ void main_bluetooth(){
 				drone_data->preset_pid = 2; //on change la valeur
 			}
 			break;
+		case ('r') :
+			if(drone_data->block_config == 0){
+				drone_data->preset_pid = 3; //on change la valeur
+			}
+			break;
+		case ('t') :
+			if(drone_data->block_config == 0){
+				drone_data->preset_pid = 4; //on change la valeur
+			}
+			break;
 		case ('o') :
 			if(drone_data->block_config == 0){
 				drone_data->z_correction = 1; //on change la valeur
+			}
+			break;
+		case ('u') :
+			if(drone_data->block_config == 0){
+				drone_data->yaw_regulation = 0; //on change la valeur
 			}
 			break;
 		case ('p') :
@@ -166,7 +185,7 @@ void main_bluetooth(){
 			break;
 	}
 
-	if(0){//drone_data->process_data == 1 && ctr_send_data == 3){
+	if(drone_data->process_data == 1 && ctr_send_data == 3){
 	ctr_send_data = 0;
 	uint16_t backward_X = drone_data->datas_sensors_pooling.dist_backward_X;
 	uint16_t side_Y = drone_data->datas_sensors_pooling.dist_side_Y;
